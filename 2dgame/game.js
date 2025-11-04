@@ -9,6 +9,7 @@ class mainScene {
     this.load.image('coin', 'assets/coin.png');
   }
   create() {
+    
     // This method is called once, just after preload()
     // It will initialize our scene, like the positions of the sprites
     this.player = this.physics.add.sprite(100, 100, 'player');
@@ -28,6 +29,11 @@ this.arrow = this.input.keyboard.createCursorKeys();
     
   }
   update() {
+    // If the player is overlapping with the coin
+if (this.physics.overlap(this.player, this.coin)) {
+  // Call the new hit() method
+  this.hit();
+}
     
     // This method is called 60 times per second after create() 
     // It will handle all the game's logic, like movements
@@ -47,6 +53,25 @@ if (this.arrow.down.isDown) {
   this.player.y -= 3;
 } 
   }
+  hit() {
+  // Change the position x and y of the coin randomly
+  this.coin.x = Phaser.Math.Between(100, 600);
+  this.coin.y = Phaser.Math.Between(100, 300);
+
+  // Increment the score by 10
+  this.score += 10;
+
+  // Display the updated score on the screen
+  this.scoreText.setText('score: ' + this.score);
+  // Create a new tween 
+this.tweens.add({
+  targets: this.player, // on the player 
+  duration: 200, // for 200ms 
+  scaleX: 1.2, // that scale vertically by 20% 
+  scaleY: 1.2, // and scale horizontally by 20% 
+  yoyo: true, // at the end, go back to original scale 
+});
+}
 }
 
 new Phaser.Game({
