@@ -5,8 +5,8 @@ class mainScene {
   preload() {
     // This method is called once at the beginning
     // It will load all the assets, like sprites and sounds  
-    this.load.image('player', 'assets/player.png');
-    this.load.image('coin', 'assets/coin.png');
+    this.load.image('player', '2dgame/assets/player.png');
+    this.load.image('coin', '2dgame/assets/coin.png');
   }
   create() {
     
