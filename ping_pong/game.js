@@ -1,3 +1,5 @@
+// created by following https://www.youtube.com/watch?v=f7c9mM7w2fc&t=256s tutorial
+
 // Create the mainScene
 class mainScene {
   // The three methods currently empty
@@ -6,12 +8,6 @@ class mainScene {
     /*     
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
-    
-    use this line of code to 'preload' your sprites:
-    this.load.image('player', 'game_template/assets/player.png'); 
-
-    give it a name, which is 'player' in this instance
-    don't forget to change the directory (folder/folder/file.png)
     */
   }
 
@@ -19,26 +15,27 @@ class mainScene {
     /* 
     This method is called once, just after preload()
     It will initialize our scene, like the positions of the sprites
-    
-    use this line of code to 'create' your sprites at a certain position: 
-    this.player = this.physics.add.sprite(100, 100, 'player');
     */
 
+    const ball = this.add.circle(400,250,10, 0xffffff,1) // creates circle
+    this.physics.add.existing(ball) // adds physics to ball
+
+    ball.body.setBounceX(1)
+    ball.body.setBounceY(1)
+
+    ball.body.setCollideWorldBounds() // allows ball to bounce/ collide with bounds
+
+    ball.body.setVelocity(200,200) // gives the ball basic velocity
   }
   update() {
+
+
     /* 
     This method is called 60 times per second after create() 
     It will handle all the game's logic, like movements
     */
 
     /* Handle horizontal and vertical movements of "this.player"
-    if (this.arrow.right.isDown) {
-      // If the right arrow is pressed, move to the right
-      this.player.x += 3;
-    } else if (this.arrow.left.isDown) {
-      // If the left arrow is pressed, move to the left
-      this.player.x -= 3;
-    }
     if (this.arrow.down.isDown) {
       this.player.y += 3;
     } else if (this.arrow.up.isDown) {
@@ -56,9 +53,14 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#919191ff', // The background color (grey)
+  backgroundColor: '#7c805f', // The background color (grey)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade' }, // The physics engine to use
+  physics: { default: 'arcade' ,
+    arcade: {
+      gravity: {y:0},
+      debug: true // debug is true.
+    }
+  }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 

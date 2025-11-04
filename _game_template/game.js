@@ -6,12 +6,6 @@ class mainScene {
     /*     
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
-    
-    use this line of code to 'preload' your sprites:
-    this.load.image('player', 'game_template/assets/player.png'); 
-
-    give it a name, which is 'player' in this instance
-    don't forget to change the directory (folder/folder/file.png)
     */
   }
 
@@ -19,9 +13,6 @@ class mainScene {
     /* 
     This method is called once, just after preload()
     It will initialize our scene, like the positions of the sprites
-    
-    use this line of code to 'create' your sprites at a certain position: 
-    this.player = this.physics.add.sprite(100, 100, 'player');
     */
 
   }
