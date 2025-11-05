@@ -27,13 +27,25 @@ class mainScene {
     this.player = this.physics.add.sprite(100, 100, 'player');
     */
     this.player = this.physics.add.sprite(300, 200, 'snakeHead');
-    this.body = this.physics.add.sprite(300, 243, 'snakeBody');
+    this.body = this.physics.add.sprite(300, 240, 'snakeBody');
     this.apple = this.physics.add.sprite(100, 100, 'apple');
 
     this.arrow = this.input.keyboard.createCursorKeys(); 
 
     this.player.setCollideWorldBounds(true);
+    this.physics.add.collider(this.body, this.apple)
+
+    this.score = 2;
+
+    // The style of the text 
+    // A lot of options are available, these are the most important ones
+    let style = { font: '20px Arial', fill: '#fff' };
+
+    // Display the score in the top left corner
+    // Parameters: x position, y position, text, style
+    this.scoreText = this.add.text(20, 20, 'score: ' + this.score, style);
   }
+
   update() {
     /* 
     This method is called 60 times per second after create() 
@@ -69,6 +81,8 @@ class mainScene {
     eaten(){
       this.apple.x = Phaser.Math.Between(100, 600);
       this.apple.y = Phaser.Math.Between(100, 300);
+      this.score += 1
+      this.scoreText.setText('score: ' + this.score);
     }
 }
 
