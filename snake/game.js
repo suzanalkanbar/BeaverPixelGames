@@ -26,14 +26,17 @@ class mainScene {
     use this line of code to 'create' your sprites at a certain position: 
     this.player = this.physics.add.sprite(100, 100, 'player');
     */
+    this.velocity = 50
     this.player = this.physics.add.sprite(300, 200, 'snakeHead');
     this.body = this.physics.add.sprite(300, 240, 'snakeBody');
     this.apple = this.physics.add.sprite(100, 100, 'apple');
 
     this.arrow = this.input.keyboard.createCursorKeys(); 
 
+    this.player.setVelocityY(-this.velocity) 
+    this.body.setVelocityY(-this.velocity) 
+
     this.player.setCollideWorldBounds(true);
-    this.physics.add.collider(this.body, this.apple)
 
     this.score = 2;
 
@@ -51,31 +54,36 @@ class mainScene {
     This method is called 60 times per second after create() 
     It will handle all the game's logic, like movements
     */
+   
 
    /* VVV Put any other functions and code down here VVV */
+
     if (this.arrow.right.isDown) {
         // If the right arrow is pressed, move to the right
-        this.player.x += 3;
-        this.body.x += 3;
+        this.resetVelocity();
+        this.player.setVelocityX(this.velocity);
+        this.body.setVelocityX(this.velocity);
       } else if (this.arrow.left.isDown) {
         // If the left arrow is pressed, move to the left
-        this.player.x -= 3;
-        this.body.x -= 3;
+        this.resetVelocity();
+        this.player.setVelocityX(-this.velocity);
+        this.body.setVelocityX(-this.velocity);
       } 
        // Do the same for vertical movements
       if (this.arrow.down.isDown) {
-        this.player.y += 3;
-        this.body.y += 3;
+        this.resetVelocity();
+        this.player.setVelocityY(this.velocity);
+        this.body.setVelocityY(this.velocity);
       } else if (this.arrow.up.isDown) {
-        this.player.y -= 3;
-        this.body.y -= 3;
+        this.resetVelocity();
+        this.player.setVelocityY(-this.velocity);
+        this.body.setVelocityY(-this.velocity);
       } 
 
       if (this.physics.overlap(this.player, this.apple)) {
         // Call the new hit() method
         this.eaten();
       }
-      
     }
 
     eaten(){
@@ -83,6 +91,20 @@ class mainScene {
       this.apple.y = Phaser.Math.Between(100, 300);
       this.score += 1
       this.scoreText.setText('score: ' + this.score);
+      if(this.score == 5){
+        this.velocity = 80
+      }else if (this.score == 10){
+        this.velocity = 100
+      }else if (this.score == 15){
+        this.velocity == 140
+      }
+    }
+
+    resetVelocity(){
+      this.player.setVelocityX(0);
+      this.player.setVelocityY(0);
+      this.body.setVelocityX(0);
+      this.body.setVelocityY(0);
     }
 }
 
@@ -92,7 +114,7 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#ecdf7b', // The background color (light yellow)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade' }, // The physics engine to use
+  physics: {default: 'arcade',}, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
