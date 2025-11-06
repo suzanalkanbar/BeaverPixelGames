@@ -1,5 +1,5 @@
 // created by following https://www.youtube.com/playlist?list=PLNwtXgWIx3rg_fv93PMDFfXahzhXxGe5Z tutorial
-// progress: [####      ] 40%
+// progress: [#######   ] 70%
 
 // Create the mainScene
 class mainScene {
@@ -7,7 +7,6 @@ class mainScene {
 
   init() {
     this.paddleRightVelocity = new Phaser.Math.Vector2(0, 0)
-
     this.leftScore = 0
     this.rightScore = 0
   }
@@ -25,9 +24,17 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
-    this.physics.world.setBounds(-100,0,900,400)
+    // constants
+    const whiteColor = 0xffffff
 
-    this.ball = this.add.circle(350, 200, 10, 0xffffff, 1) // creates circle
+    // create background
+    this.add.line(350, 200, 0, 0, 0, 400, whiteColor, 1).setLineWidth(2)
+    this.add.circle(350, 200, 50).setStrokeStyle(4, whiteColor, 1)
+
+    // create world stuffs
+    this.physics.world.setBounds(-100, 0, 900, 400)
+
+    this.ball = this.add.circle(350, 200, 10, whiteColor, 1) // creates circle
     this.physics.add.existing(this.ball) // adds physics to ball
 
     this.ball.body.setBounceX(1) // add bounce to ball
@@ -37,29 +44,29 @@ class mainScene {
     this.resetBall()
 
     // add left paddle
-    this.paddleLeft = this.add.rectangle(50, 200, 30, 100, 0xffffff, 1)
+    this.paddleLeft = this.add.rectangle(50, 200, 30, 100, whiteColor, 1)
     this.physics.add.existing(this.paddleLeft, true)
 
     // add right paddle
-    this.paddleRight = this.add.rectangle(650, 200, 30, 100, 0xffffff, 1)
+    this.paddleRight = this.add.rectangle(650, 200, 30, 100, whiteColor, 1)
     this.physics.add.existing(this.paddleRight, true)
 
     // add collider to ball n paddle
     this.physics.add.collider(this.paddleLeft, this.ball)
     this.physics.add.collider(this.paddleRight, this.ball)
 
-    // create scoreboard
-    this.leftScoreLabel = this.add.text(100,25, '0', {
+    // create scoreboard left n right
+    this.leftScoreLabel = this.add.text(100, 25, '0', {
       fontSize: 48
-    }).setOrigin(0.5,0.5)
+    }).setOrigin(0.5, 0.5)
 
-    this.rightScoreLabel = this.add.text(550,375, '0', {
+    this.rightScoreLabel = this.add.text(550, 375, '0', {
       fontSize: 48
-    }).setOrigin(0.5,0.5) 
+    }).setOrigin(0.5, 0.5)
 
-    this.cursors = this.input.keyboard.createCursorKeys() // add keyboard input
+    // add keyboard input
+    this.cursors = this.input.keyboard.createCursorKeys() 
   }
-
 
   update() {
     /* 
@@ -67,6 +74,13 @@ class mainScene {
     It will handle all the game's logic, like movements
     */
 
+    this.processPlayerInput()
+    this.updateAi()
+    this.checkScore()
+
+  }
+
+  processPlayerInput() {
     if (this.cursors.up.isDown) {
       this.paddleLeft.y -= 3
       this.paddleLeft.body.updateFromGameObject()
@@ -74,7 +88,21 @@ class mainScene {
       this.paddleLeft.y += 3
       this.paddleLeft.body.updateFromGameObject()
     }
+  }
 
+  checkScore() {
+    if (this.ball.x < -30) {
+      // scored on left side
+      this.resetBall()
+      this.incrementLeftScore()
+    } if (this.ball.x > 730) {
+      // scored on right side
+      this.resetBall()
+      this.incrementRightScore()
+    }
+  }
+
+  updateAi() {
     const diff = this.ball.y - this.paddleRight.y
     if (Math.abs(diff) < 10) {
       return
@@ -97,20 +125,9 @@ class mainScene {
 
     this.paddleRight.y += this.paddleRightVelocity.y
     this.paddleRight.body.updateFromGameObject()
-
-    if (this.ball.x < -30) {
-      // scored on left side
-      this.resetBall()
-      this.incrementLeftScore()
-    } if (this.ball.x > 730) {
-      // scored on right side
-      this.resetBall()
-      this.incrementRightScore()
-    }
-
   }
 
-  incrementLeftScore(){
+  incrementLeftScore() {
     this.leftScore += 1
     this.leftScoreLabel.text = this.leftScore
   }
@@ -123,7 +140,7 @@ class mainScene {
   resetBall() {
     this.ball.setPosition(350, 200)
 
-    const angle = Phaser.Math.Between(0, 360) // pick an angle
+    const angle = Phaser.Math.Between(0, 359) // pick an angle
     const vec = this.physics.velocityFromAngle(angle, 200)
 
     this.ball.body.setVelocity(vec.x, vec.y) // gives the ball basic velocity
@@ -137,7 +154,7 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#7c805f', // The background color (grey)
+  backgroundColor: '#000000', // The background color (black)
   scene: mainScene, // The name of the scene we created
   physics: {
     default: 'arcade',
@@ -148,4 +165,3 @@ new Phaser.Game({
   }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
-
