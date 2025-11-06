@@ -1,5 +1,4 @@
 // created by following https://www.youtube.com/playlist?list=PLNwtXgWIx3rg_fv93PMDFfXahzhXxGe5Z tutorial
-// progress: [########  ] 80%
 
 // Create the mainScene
 class mainScene {
@@ -32,12 +31,13 @@ class mainScene {
     this.add.line(350, 200, 0, 0, 0, 400, whiteColor, 1).setLineWidth(2)
     this.add.circle(350, 200, 50).setStrokeStyle(4, whiteColor, 1)
 
-    // create world stuffs
+    // create world stuffs, allows ball to go off screen on the left and right
     this.physics.world.setBounds(-100, 0, 900, 400)
 
     this.ball = this.add.circle(350, 200, 10, whiteColor, 1) // creates circle
     this.physics.add.existing(this.ball) // adds physics to ball
     this.ball.body.setCircle(10)
+    this.ball.body.setMaxVelocity(400, 400)
 
     this.ball.body.setBounceX(1) // add bounce to ball
     this.ball.body.setBounceY(1)
@@ -51,9 +51,9 @@ class mainScene {
     this.paddleRight = this.add.rectangle(650, 200, 30, 100, whiteColor, 1)
     this.physics.add.existing(this.paddleRight, true)
 
-    // add collider to ball n paddle + add function that adds sound on collision
-    this.physics.add.collider(this.paddleLeft, this.ball)
-    this.physics.add.collider(this.paddleRight, this.ball)
+    // add collider to ball n paddle + add function that adds acceleration on collision
+    this.physics.add.collider(this.paddleLeft, this.ball, this.handlePaddleBallCollision, undefined, this)
+    this.physics.add.collider(this.paddleRight, this.ball, this.handlePaddleBallCollision, undefined, this)
 
     // create scoreboard left n right
     this.leftScoreLabel = this.add.text(100, 25, '0', {
@@ -88,6 +88,16 @@ class mainScene {
 
   }
 
+  /* VVV Put any other functions and code down here VVV */
+
+  handlePaddleBallCollision() {
+    const vel = this.ball.body.velocity
+    vel.x *= 1.05
+    vel.y *= 1.05
+
+    this.ball.body.setVelocity(vel.x, vel.y)
+  }
+
   processPlayerInput() {
     if (this.cursors.up.isDown) {
       this.paddleLeft.y -= 3
@@ -115,7 +125,7 @@ class mainScene {
       this.incrementLeftScore()
     }
 
-    const maxScore = 1
+    const maxScore = 7
     if (this.leftScore >= maxScore) {
       // player won
       this.paused = true
@@ -178,28 +188,25 @@ class mainScene {
   resetBall() {
     this.ball.setPosition(350, 200)
 
-    const angle = Phaser.Math.Between(0, 359) // pick an angle
+    const angle = Phaser.Math.Between(60, 300) // pick an angle
     const vec = this.physics.velocityFromAngle(angle, 200)
 
     this.ball.body.setVelocity(vec.x, vec.y) // gives the ball basic velocity
   }
-
-  /* VVV Put any other functions and code down here VVV */
-
 }
 
 // Create the game
 new Phaser.Game({
-  width: 700, // Width of the game in pixels
-  height: 400, // Height of the game in pixels
+  width: 700,                   // Width of the game in pixels
+  height: 400,                  // Height of the game in pixels
   backgroundColor: '#000000', // The background color (black)
-  scene: mainScene, // The name of the scene we created
-  physics: {
+  scene: mainScene,             // The name of the scene we created
+  physics: {                    // The physics engine to use
     default: 'arcade',
     arcade: {
       gravity: { y: 0 },
-      debug: true // debug is true.
+      debug: false              // debug is true.
     }
-  }, // The physics engine to use
-  parent: 'game', // Create the game inside the <div id="game"> 
+  },                            
+  parent: 'game',               // Create the game inside the <div id="game"> 
 });
