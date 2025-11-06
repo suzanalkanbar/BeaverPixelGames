@@ -1,5 +1,5 @@
 // created by following https://www.youtube.com/playlist?list=PLNwtXgWIx3rg_fv93PMDFfXahzhXxGe5Z tutorial
-// progress: [#######   ] 70%
+// progress: [########  ] 80%
 
 // Create the mainScene
 class mainScene {
@@ -9,6 +9,7 @@ class mainScene {
     this.paddleRightVelocity = new Phaser.Math.Vector2(0, 0)
     this.leftScore = 0
     this.rightScore = 0
+    this.paused = false
   }
 
   preload() {
@@ -16,6 +17,8 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
+    this.load.audio('pong-beep','ping_pong/assets/pong_beep.wav')
+    this.load.audio('pong-plop','ping_pong/assets/pong_plop.wav')
   }
 
   create() {
@@ -36,12 +39,11 @@ class mainScene {
 
     this.ball = this.add.circle(350, 200, 10, whiteColor, 1) // creates circle
     this.physics.add.existing(this.ball) // adds physics to ball
+    this.ball.body.setCircle(10)
 
     this.ball.body.setBounceX(1) // add bounce to ball
     this.ball.body.setBounceY(1)
     this.ball.body.setCollideWorldBounds() // allows ball to collide with bounds
-
-    this.resetBall()
 
     // add left paddle
     this.paddleLeft = this.add.rectangle(50, 200, 30, 100, whiteColor, 1)
@@ -65,7 +67,11 @@ class mainScene {
     }).setOrigin(0.5, 0.5)
 
     // add keyboard input
-    this.cursors = this.input.keyboard.createCursorKeys() 
+    this.cursors = this.input.keyboard.createCursorKeys()
+
+    this.time.delayedCall(1000, () => { // delays ball moving
+      this.resetBall()
+    })
   }
 
   update() {
@@ -73,6 +79,10 @@ class mainScene {
     This method is called 60 times per second after create() 
     It will handle all the game's logic, like movements
     */
+
+    if (this.paused) {
+      return
+    }
 
     this.processPlayerInput()
     this.updateAi()
@@ -91,14 +101,44 @@ class mainScene {
   }
 
   checkScore() {
-    if (this.ball.x < -30) {
+
+    const x = this.ball.x
+    const leftBound = -30
+    const rightBound = 730
+    if (x >= leftBound && x <= rightBound) {
+      return
+    }
+
+    if (this.ball.x < leftBound) {
       // scored on left side
-      this.resetBall()
-      this.incrementLeftScore()
-    } if (this.ball.x > 730) {
-      // scored on right side
-      this.resetBall()
       this.incrementRightScore()
+    } if (this.ball.x > rightBound) {
+      // scored on right side
+      this.incrementLeftScore()
+    }
+
+    const maxScore = 1
+    if (this.leftScore >= maxScore) {
+      // player won
+      this.paused = true
+      this.add.text(350, 200, 'Player won!', {
+        fontSize: 48
+      }).setOrigin(0.5, 0.5)
+
+    } else if (this.rightScore >= maxScore) {
+      // AI won
+      this.paused = true
+      this.add.text(350, 200, 'AI won!', {
+        fontSize: 48
+      }).setOrigin(0.5, 0.5)
+    }
+
+    if (!this.paused) {
+      this.resetBall()
+    }
+    else {
+      this.ball.active = false
+      this.physics.world.remove(this.ball.body)
     }
   }
 
