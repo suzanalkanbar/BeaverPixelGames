@@ -17,8 +17,6 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
-    this.load.audio('pong-beep','ping_pong/assets/pong_beep.wav')
-    this.load.audio('pong-plop','ping_pong/assets/pong_plop.wav')
   }
 
   create() {
@@ -53,7 +51,7 @@ class mainScene {
     this.paddleRight = this.add.rectangle(650, 200, 30, 100, whiteColor, 1)
     this.physics.add.existing(this.paddleRight, true)
 
-    // add collider to ball n paddle
+    // add collider to ball n paddle + add function that adds sound on collision
     this.physics.add.collider(this.paddleLeft, this.ball)
     this.physics.add.collider(this.paddleRight, this.ball)
 
