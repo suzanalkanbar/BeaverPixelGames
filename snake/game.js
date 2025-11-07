@@ -18,11 +18,13 @@ class mainScene {
     this.load.image('apple', 'snake/assets/apple.png');
 
     this.load.audio('applecrunch', 'snake/assets/apple_bite.wav');
+    this.load.audio('snakeHiss', 'snake/assets/snake-hissing-6092.wav');
   }
 
   create() {
 
     this.ateApple = this.sound.add('applecrunch');
+    this.snakeHiss = this.sound.add('snakeHiss');
 
     this.borders = this.physics.add.staticGroup();
 
@@ -31,7 +33,8 @@ class mainScene {
     this.borders.create(-24, 260, "verborder");
     this.borders.create(784, 260, "verborder");
 
-    this.velocity = 50 //the speed at which the snake moves. also change this at the function resetGame()
+    this.ogVelocity = 80 //the speed at which the snake moves
+    this.velocity = this.ogVelocity 
 
 
     player = this.physics.add.sprite(300,200, 'snakeSheet', 0);
@@ -41,6 +44,7 @@ class mainScene {
     this.arrow = this.input.keyboard.createCursorKeys(); 
 
     player.setVelocityY(-this.velocity) 
+    player.setMaxVelocity(175,175);
     //this.body.setVelocityY(-this.velocity) 
 
     this.physics.add.collider(player, this.borders, this.borderHit)
@@ -61,6 +65,9 @@ class mainScene {
   update() {
 
   if(!gameover){ 
+    if(Phaser.Math.Between(0, 240) == 1){
+      this.snakeHiss.play()
+    }
     if (this.arrow.right.isDown && this.direction != "left") {
         // If the right arrow is pressed, move to the right
         this.resetVelocity();
@@ -102,12 +109,13 @@ class mainScene {
         player.y = 200;
         this.apple.x = 100;
         this.apple.y = 100;
-        this.velocity = 50;
+        this.velocity = this.ogVelocity;
         this.score = 2;
         player.setVelocityY(-this.velocity);
         this.speedText.setText(this.velocity);
         this.scoreText.setText('score: ' + this.score);
         player.disableInteractive()
+        this.direction = "up"
         gameover = false;
       }, this)
     }
@@ -118,15 +126,13 @@ class mainScene {
 
     eaten(){
       this.ateApple.play();
-      this.apple.x = Phaser.Math.Between(100, 600);
-      this.apple.y = Phaser.Math.Between(100, 300);
+      this.apple.x = Phaser.Math.Between(40, 720);
+      this.apple.y = Phaser.Math.Between(40, 480);
       this.score += 1
       this.scoreText.setText('score: ' + this.score);
       // slowly speeds up the snake (until reaching a velocity of 150 when using if)
-      // if(this.score < 29){
-        this.velocity = 50 + (25 * (this.score/7)); 
+        this.velocity = this.velocity + (25/7); 
         this.speedText.setText(this.velocity);
-      // }
     }
 
     resetVelocity(){
@@ -134,20 +140,6 @@ class mainScene {
       player.setVelocityY(0);
       //this.body.setVelocityX(0);
       //this.body.setVelocityY(0);
-    }
-
-    resetGame(){
-      player.setFrame(0);
-      player.x = 300;
-      player.y = 200;
-      this.apple.x = 100;
-      this.apple.y = 100;
-      this.velocity = 50;
-      this.score = 2;
-      player.setVelocityY(-this.velocity);
-      this.speedText.setText(this.velocity);
-      this.scoreText.setText('score: ' + this.score);
-      player.disableInteractive()
     }
 
     borderHit(){
