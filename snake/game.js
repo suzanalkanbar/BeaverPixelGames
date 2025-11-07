@@ -1,4 +1,5 @@
-var borders;
+var player;
+var gameover = false;
 
 // Create the mainScene
 class mainScene {
@@ -23,28 +24,29 @@ class mainScene {
 
     this.ateApple = this.sound.add('applecrunch');
 
-    borders = this.physics.add.staticGroup();
+    this.borders = this.physics.add.staticGroup();
 
-    borders.create(380, -33.5, "horborder");
-    borders.create(380, 553.5, "horborder");
-    borders.create(-24, 260, "verborder");
-    borders.create(784, 260, "verborder");
+    this.borders.create(380, -33.5, "horborder");
+    this.borders.create(380, 553.5, "horborder");
+    this.borders.create(-24, 260, "verborder");
+    this.borders.create(784, 260, "verborder");
 
     this.velocity = 50 //the speed at which the snake moves
 
 
-    this.player = this.physics.add.sprite(300,200, 'snakeSheet', 0);
+    player = this.physics.add.sprite(300,200, 'snakeSheet', 0);
     //this.body = this.physics.add.sprite(300, 240, 'snakeBody');
     this.apple = this.physics.add.sprite(100, 100, 'apple');
 
     this.arrow = this.input.keyboard.createCursorKeys(); 
 
-    this.player.setVelocityY(-this.velocity) 
+    player.setVelocityY(-this.velocity) 
     //this.body.setVelocityY(-this.velocity) 
 
-    this.physics.add.collider(this.player, borders, this.borderHit)
+    this.physics.add.collider(player, this.borders, this.borderHit)
 
     this.score = 2;
+    this.direction = "up";
 
     // The style of the text 
     // A lot of options are available, these are the most important ones
@@ -58,36 +60,42 @@ class mainScene {
 
   update() {
 
-    if (this.arrow.right.isDown) {
+  if(!gameover){    
+    if (this.arrow.right.isDown && this.direction != "left") {
         // If the right arrow is pressed, move to the right
         this.resetVelocity();
-        this.player.setVelocityX(this.velocity);
-        this.player.setFrame(1);
+        player.setVelocityX(this.velocity);
+        player.setFrame(1);
+        this.direction = "right"
         //this.body.setVelocityX(this.velocity);
-      } else if (this.arrow.left.isDown) {
+      } else if (this.arrow.left.isDown && this.direction != "right") {
         // If the left arrow is pressed, move to the left
         this.resetVelocity();
-        this.player.setVelocityX(-this.velocity);
-        this.player.setFrame(3);
+        player.setVelocityX(-this.velocity);
+        player.setFrame(3);
+        this.direction = "left"
         //this.body.setVelocityX(-this.velocity);
       } 
        // Do the same for vertical movements
-      if (this.arrow.down.isDown) {
+      if (this.arrow.down.isDown && this.direction != "up") {
         this.resetVelocity();
-        this.player.setVelocityY(this.velocity);
-        this.player.setFrame(2);
+        player.setVelocityY(this.velocity);
+        player.setFrame(2);
+        this.direction = "down"
         //this.body.setVelocityY(this.velocity);
-      } else if (this.arrow.up.isDown) {
+      } else if (this.arrow.up.isDown && this.direction != "down") {
         this.resetVelocity();
-        this.player.setVelocityY(-this.velocity);
-        this.player.setFrame(0);
+        player.setVelocityY(-this.velocity);
+        player.setFrame(0);
+        this.direction = "up"
         //this.body.setVelocityY(-this.velocity);
       } 
 
-      if (this.physics.overlap(this.player, this.apple)) {
+      if (this.physics.overlap(player, this.apple)) {
         // call the apple eaten function
         this.eaten();
       }
+    }
     }
 
 
@@ -99,23 +107,29 @@ class mainScene {
       this.apple.y = Phaser.Math.Between(100, 300);
       this.score += 1
       this.scoreText.setText('score: ' + this.score);
-      // slowly speeds up the snake until reaching a velocity of 150
-      if(this.score < 29){
+      // slowly speeds up the snake (until reaching a velocity of 150 when using if)
+      // if(this.score < 29){
         this.velocity = 50 + (25 * (this.score/7)); 
         this.speedText.setText(this.velocity);
-      }
+      // }
     }
 
     resetVelocity(){
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
+      player.setVelocityX(0);
+      player.setVelocityY(0);
       //this.body.setVelocityX(0);
       //this.body.setVelocityY(0);
     }
 
     borderHit(){
+      player.setFrame(4);
+      player.setVelocityX(0);
+      player.setVelocityY(0);
+      gameover = true;
       alert("game over!");
-    }
+      //this.body.setVelocityX(0);
+      //this.body.setVelocityY(0);
+      }
 }
 
 // Create the game
