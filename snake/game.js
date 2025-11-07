@@ -15,9 +15,13 @@ class mainScene {
     this.load.image('verborder', 'snake/assets/vertical border.png');
     this.load.image('snakeBody', 'snake/assets/snakebody.png');
     this.load.image('apple', 'snake/assets/apple.png');
+
+    this.load.audio('applecrunch', 'snake/assets/apple_bite.wav');
   }
 
   create() {
+
+    this.ateApple = this.sound.add('applecrunch');
 
     borders = this.physics.add.staticGroup();
 
@@ -90,6 +94,7 @@ class mainScene {
        /* VVV Put any other functions and code down here VVV */
 
     eaten(){
+      this.ateApple.play();
       this.apple.x = Phaser.Math.Between(100, 600);
       this.apple.y = Phaser.Math.Between(100, 300);
       this.score += 1
