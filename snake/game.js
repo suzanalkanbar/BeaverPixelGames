@@ -31,7 +31,7 @@ class mainScene {
     this.borders.create(-24, 260, "verborder");
     this.borders.create(784, 260, "verborder");
 
-    this.velocity = 50 //the speed at which the snake moves
+    this.velocity = 50 //the speed at which the snake moves. also change this at the function resetGame()
 
 
     player = this.physics.add.sprite(300,200, 'snakeSheet', 0);
@@ -60,7 +60,7 @@ class mainScene {
 
   update() {
 
-  if(!gameover){    
+  if(!gameover){ 
     if (this.arrow.right.isDown && this.direction != "left") {
         // If the right arrow is pressed, move to the right
         this.resetVelocity();
@@ -95,6 +95,21 @@ class mainScene {
         // call the apple eaten function
         this.eaten();
       }
+    }else{ 
+      player.setInteractive().on('pointerdown', function(){
+        player.setFrame(0);
+        player.x = 300;
+        player.y = 200;
+        this.apple.x = 100;
+        this.apple.y = 100;
+        this.velocity = 50;
+        this.score = 2;
+        player.setVelocityY(-this.velocity);
+        this.speedText.setText(this.velocity);
+        this.scoreText.setText('score: ' + this.score);
+        player.disableInteractive()
+        gameover = false;
+      }, this)
     }
     }
 
@@ -119,6 +134,20 @@ class mainScene {
       player.setVelocityY(0);
       //this.body.setVelocityX(0);
       //this.body.setVelocityY(0);
+    }
+
+    resetGame(){
+      player.setFrame(0);
+      player.x = 300;
+      player.y = 200;
+      this.apple.x = 100;
+      this.apple.y = 100;
+      this.velocity = 50;
+      this.score = 2;
+      player.setVelocityY(-this.velocity);
+      this.speedText.setText(this.velocity);
+      this.scoreText.setText('score: ' + this.score);
+      player.disableInteractive()
     }
 
     borderHit(){
