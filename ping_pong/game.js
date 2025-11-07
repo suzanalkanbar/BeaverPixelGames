@@ -16,6 +16,8 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
+    this.load.audio('pong-beep','ping_pong/assets/pong_beep.wav')
+    this.load.audio('pong-plop','ping_pong/assets/pong_plop.wav')
   }
 
   create() {
@@ -23,6 +25,9 @@ class mainScene {
     This method is called once, just after preload()
     It will initialize our scene, like the positions of the sprites
     */
+
+    // create sounds
+    //this.beep = this.sound.add('pong-beep')
 
     // constants
     const whiteColor = 0xffffff
@@ -91,6 +96,10 @@ class mainScene {
   /* VVV Put any other functions and code down here VVV */
 
   handlePaddleBallCollision() {
+
+    //this.sound.play('pong-beep')
+    console.log("hit")
+
     const vel = this.ball.body.velocity
     vel.x *= 1.05
     vel.y *= 1.05
