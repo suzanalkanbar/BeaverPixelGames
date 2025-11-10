@@ -16,6 +16,7 @@ class mainScene {
     this.load.image('verborder', 'snake/assets/vertical border.png');
     this.load.image('snakeBody', 'snake/assets/snakebody.png');
     this.load.image('apple', 'snake/assets/apple.png');
+    this.load.image('reset', 'snake/assets/restart.png');
 
     this.load.audio('applecrunch', 'snake/assets/apple_bite.wav');
     this.load.audio('snakeHiss', 'snake/assets/snake-hissing-6092.wav');
@@ -32,6 +33,9 @@ class mainScene {
     this.borders.create(380, 553.5, "horborder");
     this.borders.create(-24, 260, "verborder");
     this.borders.create(784, 260, "verborder");
+
+    this.resetButton = this.physics.add.sprite(380, 260, 'reset')
+    this.resetButton.depth = 1;
 
     player = this.physics.add.sprite(300,340, 'snakeSheet', 0);
     this.body = []
@@ -54,12 +58,13 @@ class mainScene {
     // Display the score in the top left corner
     // Parameters: x position, y position, text, style
     this.scoreText = this.add.text(20, 20, 'score: ' + this.score, style);
-    this.applecords = this.add.text(40, 40, "x: "+ this.apple.x + 'y: ' + this.apple.y, style);
+    this.scoreText.depth = 1;
   }
 
   update() {
 
   if(!gameover){ 
+    this.resetButton.visible = false;
     if(Phaser.Math.Between(0, 300) == 1){
       this.snakeHiss.play()
     }
@@ -74,20 +79,34 @@ class mainScene {
         this.direction = "up"
       } 
 
-
-      if(this.staggered == (30 - (1 * this.score))){
+      if(this.score < 18){
+      this.faster = 1* this.score
+      }
+      
+      if(this.staggered == (30 - this.faster)){
       this.move();
       this.staggered = 0;
       }
 
       this.staggered += 1
+      
 
       if (this.physics.overlap(player, this.apple)) {
         // call the apple eaten function
         this.eaten();
       }
+      if(this.physics.overlap(this.body, this.apple)){
+        alert('overlap');
+        this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length - 1)];
+        this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length - 1)];
+      }
+
     }else{ 
-      player.setInteractive().on('pointerdown', function(){
+      this.resetButton.visible = true;
+      this.resetButton.setInteractive().on('pointerdown', function(){
+        for(this.i = 0; this.i < this.body.length; this.i++){
+          this.body[this.i].destroy()
+        }
         player.setFrame(0);
         this.body = []
         Phaser.Utils.Array.Add(this.body, this.physics.add.sprite(300, 380, 'snakeBody'));
@@ -97,8 +116,8 @@ class mainScene {
         this.apple.y = 100;
         this.score = 0;
         this.scoreText.setText('score: ' + this.score);
-        this.applecords.setText("x: "+ this.apple.x + 'y: ' + this.apple.y);
-        player.disableInteractive()
+        this.resetButton.disableInteractive()
+        this.resetButton.visible = false;
         this.direction = "up"
         gameover = false;
       }, this)
@@ -141,25 +160,42 @@ class mainScene {
         }
       }
       for(this.i = 0; this.i < this.body.length; this.i++){
-        this.moveToX = this.previousX
-        this.moveToY = this.previousY
-        this.previousX = this.body[this.i].x
-        this.previousY = this.body[this.i].y
-        this.body[this.i].x = this.moveToX
-        this.body[this.i].y = this.moveToY
-        
+        if(player.x == this.body[this.i].x && player.y == this.body[this.i].y){
+          if(this.direction == 'up'){
+              player.y += 40
+              this.borderHit()
+          }else if(this.direction == 'down'){
+              player.y = player.y - 40
+              this.borderHit()
+          }else if(this.direction == 'left'){
+              player.x += 40
+              this.borderHit()
+          }else if(this.direction == 'right'){
+              player.x = player.x - 40
+              this.borderHit()
+          }
+        }
       }
+      if(!gameover){
+        for(this.i = 0; this.i < this.body.length; this.i++){
+          this.moveToX = this.previousX
+          this.moveToY = this.previousY
+          this.previousX = this.body[this.i].x
+          this.previousY = this.body[this.i].y
+          this.body[this.i].x = this.moveToX
+          this.body[this.i].y = this.moveToY
+        }
+      }
+      
     }
 
     eaten(){
       this.ateApple.play();
-      this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length)];
-      this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length)];
+      this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length - 1)];
+      this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length - 1)];
       this.score += 1
       this.scoreText.setText('score: ' + this.score);
-      this.applecords.setText("x: "+ this.apple.x + 'y: ' + this.apple.y);
       Phaser.Utils.Array.Add(this.body, this.physics.add.sprite(this.previousX, this.previousY, 'snakeBody'));
-      console.log(this.body);
     }
 
     borderHit(){
