@@ -33,24 +33,21 @@ class mainScene {
     this.borders.create(-24, 260, "verborder");
     this.borders.create(784, 260, "verborder");
 
-    this.ogVelocity = 80 //the speed at which the snake moves
-    this.velocity = this.ogVelocity 
-
-
-    player = this.physics.add.sprite(300,200, 'snakeSheet', 0);
-    //this.body = this.physics.add.sprite(300, 240, 'snakeBody');
+    player = this.physics.add.sprite(300,340, 'snakeSheet', 0);
+    this.bodyparts = this.physics.add.group();
+    this.body = []
+    this.bodyparts.create('snakeBody')
+    this.body.push({x: 300, y: 340})
     this.apple = this.physics.add.sprite(100, 100, 'apple');
+
+    this.xApple = [20, 60, 100, 140, 180, 220, 260, 300, 340, 380, 420, 460, 500, 540, 580, 620, 660, 700, 740]
+    this.yApple = [20, 60, 100, 140, 180, 220, 260, 300, 340, 380, 420, 460, 500]
 
     this.arrow = this.input.keyboard.createCursorKeys(); 
 
-    player.setVelocityY(-this.velocity) 
-    player.setMaxVelocity(175,175);
-    //this.body.setVelocityY(-this.velocity) 
-
-    this.physics.add.collider(player, this.borders, this.borderHit)
-
-    this.score = 2;
+    this.score = 0;
     this.direction = "up";
+    this.staggered = 0;
 
     // The style of the text 
     // A lot of options are available, these are the most important ones
@@ -65,38 +62,27 @@ class mainScene {
   update() {
 
   if(!gameover){ 
-    if(Phaser.Math.Between(0, 240) == 1){
+    if(Phaser.Math.Between(0, 300) == 1){
       this.snakeHiss.play()
     }
+
     if (this.arrow.right.isDown && this.direction != "left") {
-        // If the right arrow is pressed, move to the right
-        this.resetVelocity();
-        player.setVelocityX(this.velocity);
-        player.setFrame(1);
         this.direction = "right"
-        //this.body.setVelocityX(this.velocity);
       } else if (this.arrow.left.isDown && this.direction != "right") {
-        // If the left arrow is pressed, move to the left
-        this.resetVelocity();
-        player.setVelocityX(-this.velocity);
-        player.setFrame(3);
         this.direction = "left"
-        //this.body.setVelocityX(-this.velocity);
-      } 
-       // Do the same for vertical movements
-      if (this.arrow.down.isDown && this.direction != "up") {
-        this.resetVelocity();
-        player.setVelocityY(this.velocity);
-        player.setFrame(2);
+      } else if (this.arrow.down.isDown && this.direction != "up") {
         this.direction = "down"
-        //this.body.setVelocityY(this.velocity);
       } else if (this.arrow.up.isDown && this.direction != "down") {
-        this.resetVelocity();
-        player.setVelocityY(-this.velocity);
-        player.setFrame(0);
         this.direction = "up"
-        //this.body.setVelocityY(-this.velocity);
       } 
+
+
+      if(this.staggered == (30 - (1 * this.score))){
+      this.move();
+      this.staggered = 0;
+      }
+
+      this.staggered += 1
 
       if (this.physics.overlap(player, this.apple)) {
         // call the apple eaten function
@@ -106,13 +92,10 @@ class mainScene {
       player.setInteractive().on('pointerdown', function(){
         player.setFrame(0);
         player.x = 300;
-        player.y = 200;
+        player.y = 340;
         this.apple.x = 100;
         this.apple.y = 100;
-        this.velocity = this.ogVelocity;
         this.score = 2;
-        player.setVelocityY(-this.velocity);
-        this.speedText.setText(this.velocity);
         this.scoreText.setText('score: ' + this.score);
         player.disableInteractive()
         this.direction = "up"
@@ -124,32 +107,59 @@ class mainScene {
 
        /* VVV Put any other functions and code down here VVV */
 
-    eaten(){
-      this.ateApple.play();
-      this.apple.x = Phaser.Math.Between(40, 720);
-      this.apple.y = Phaser.Math.Between(40, 480);
-      this.score += 1
-      this.scoreText.setText('score: ' + this.score);
-      // slowly speeds up the snake (until reaching a velocity of 150 when using if)
-        this.velocity = this.velocity + (25/7); 
-        this.speedText.setText(this.velocity);
+    move(){
+      this.previousX = player.x
+      this.previousY = player.y
+      if(this.direction == 'up'){
+        player.setFrame(0);
+        player.y = player.y - 40
+        if(player.y <= 0){
+          player.y += 40
+          this.borderHit()
+        }
+      }else if(this.direction == 'down'){
+        player.setFrame(2);
+        player.y += 40
+        if(player.y >= 520){
+          player.y = player.y - 40
+          this.borderHit()
+        }
+      }else if(this.direction == 'left'){
+        player.setFrame(3);
+        player.x = player.x - 40
+        if(player.x <= 0){
+          player.x += 40
+          this.borderHit()
+        }
+      }else if(this.direction == 'right'){
+        player.setFrame(1);
+        player.x += 40
+        if(player.x >= 760){
+          player.x = player.x - 40
+          this.borderHit()
+        }
+      }
+      this.body.x = this.previousX
+      this.body.y = this.previousY
     }
 
-    resetVelocity(){
-      player.setVelocityX(0);
-      player.setVelocityY(0);
-      //this.body.setVelocityX(0);
-      //this.body.setVelocityY(0);
+    eaten(){
+      this.ateApple.play();
+      this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length)];
+      this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length)];
+      this.score += 1
+      this.scoreText.setText('score: ' + this.score);
+      this.addBody()
+    }
+
+    addBody(){
+      Phaser.Utils.Array.Add()
     }
 
     borderHit(){
       player.setFrame(4);
-      player.setVelocityX(0);
-      player.setVelocityY(0);
       gameover = true;
       alert("game over!");
-      //this.body.setVelocityX(0);
-      //this.body.setVelocityY(0);
       }
 }
 
