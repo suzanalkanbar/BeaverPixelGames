@@ -34,10 +34,8 @@ class mainScene {
     this.borders.create(784, 260, "verborder");
 
     player = this.physics.add.sprite(300,340, 'snakeSheet', 0);
-    this.bodyparts = this.physics.add.group();
     this.body = []
-    this.bodyparts.create('snakeBody')
-    this.body.push({x: 300, y: 340})
+    Phaser.Utils.Array.Add(this.body, this.physics.add.sprite(300, 380, 'snakeBody'));
     this.apple = this.physics.add.sprite(100, 100, 'apple');
 
     this.xApple = [20, 60, 100, 140, 180, 220, 260, 300, 340, 380, 420, 460, 500, 540, 580, 620, 660, 700, 740]
@@ -56,7 +54,7 @@ class mainScene {
     // Display the score in the top left corner
     // Parameters: x position, y position, text, style
     this.scoreText = this.add.text(20, 20, 'score: ' + this.score, style);
-    this.speedText = this.add.text(40, 40, this.velocity, style);
+    this.applecords = this.add.text(40, 40, "x: "+ this.apple.x + 'y: ' + this.apple.y, style);
   }
 
   update() {
@@ -91,12 +89,15 @@ class mainScene {
     }else{ 
       player.setInteractive().on('pointerdown', function(){
         player.setFrame(0);
+        this.body = []
+        Phaser.Utils.Array.Add(this.body, this.physics.add.sprite(300, 380, 'snakeBody'));
         player.x = 300;
         player.y = 340;
         this.apple.x = 100;
         this.apple.y = 100;
-        this.score = 2;
+        this.score = 0;
         this.scoreText.setText('score: ' + this.score);
+        this.applecords.setText("x: "+ this.apple.x + 'y: ' + this.apple.y);
         player.disableInteractive()
         this.direction = "up"
         gameover = false;
@@ -139,8 +140,15 @@ class mainScene {
           this.borderHit()
         }
       }
-      this.body.x = this.previousX
-      this.body.y = this.previousY
+      for(this.i = 0; this.i < this.body.length; this.i++){
+        this.moveToX = this.previousX
+        this.moveToY = this.previousY
+        this.previousX = this.body[this.i].x
+        this.previousY = this.body[this.i].y
+        this.body[this.i].x = this.moveToX
+        this.body[this.i].y = this.moveToY
+        
+      }
     }
 
     eaten(){
@@ -149,11 +157,9 @@ class mainScene {
       this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length)];
       this.score += 1
       this.scoreText.setText('score: ' + this.score);
-      this.addBody()
-    }
-
-    addBody(){
-      Phaser.Utils.Array.Add()
+      this.applecords.setText("x: "+ this.apple.x + 'y: ' + this.apple.y);
+      Phaser.Utils.Array.Add(this.body, this.physics.add.sprite(this.previousX, this.previousY, 'snakeBody'));
+      console.log(this.body);
     }
 
     borderHit(){
