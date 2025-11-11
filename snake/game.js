@@ -12,11 +12,10 @@ class mainScene {
         'snake/assets/snakesheet.png',
         { frameWidth: 20, frameHeight: 20,}
     );
-    this.load.image('horborder', 'snake/assets/horizontal border.png');
-    this.load.image('verborder', 'snake/assets/vertical border.png');
     this.load.image('snakeBody', 'snake/assets/snakebody.png');
     this.load.image('apple', 'snake/assets/apple.png');
     this.load.image('reset', 'snake/assets/restart.png');
+    this.load.image('winner', 'snake/assets/win slangetje.png');
 
     this.load.audio('applecrunch', 'snake/assets/apple_bite.wav');
     this.load.audio('snakeHiss', 'snake/assets/snake-hissing-6092.wav');
@@ -29,6 +28,8 @@ class mainScene {
 
     this.resetButton = this.physics.add.sprite(350, 200, 'reset')
     this.resetButton.depth = 1;
+    this.winner = this.physics.add.sprite(350, 170, 'winner')
+    this.winner.depth = 1;
 
     player = this.physics.add.sprite(290,350, 'snakeSheet', 0);
     this.body = []
@@ -56,12 +57,19 @@ class mainScene {
     this.scoreText.depth = 1;
     this.highScoreText = this.add.text(20, 40, 'highscore: ' + this.highScore, style);
     this.highScoreText.depth = 1;
+
+    this.style = {font: '50px Arial', fill: '#fff' };
+    this.winnerText = this.add.text(250, 300, 'WINNER!', this.style);
+    this.winnerText.depth = 1;
+    
   }
 
   update() {
 
   if(!gameover){ 
     this.resetButton.visible = false;
+    this.winner.visible = false;
+    this.winnerText.visible = false;
     if(Phaser.Math.Between(0, 300) == 1){
       this.snakeHiss.play()
     }
@@ -124,7 +132,27 @@ class mainScene {
 
     }else{ 
       if(this.score > 696){
-
+        this.winner.visible = true;
+        this.winnerText.visible = true
+        this.winner.setInteractive().on('pointerdown', function(){
+          for(this.i = 0; this.i < this.body.length; this.i++){
+              this.body[this.i].destroy()
+          }
+          player.setFrame(0);
+          this.body = []
+          Phaser.Utils.Array.Add(this.body, this.physics.add.sprite(290, 370, 'snakeBody'));
+          player.x = 290;
+          player.y = 350;
+          this.apple.x = 110;
+          this.apple.y = 110;
+          this.score = 0;
+          this.scoreText.setText('score: ' + this.score);
+          this.winner.disableInteractive()
+          this.winner.visible = false;
+          this.winnerText.visible = false;
+          this.direction = "up"
+          gameover = false;
+        }, this)
       }else{
         this.resetButton.visible = true;
         this.resetButton.setInteractive().on('pointerdown', function(){
