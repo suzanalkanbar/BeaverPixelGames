@@ -83,7 +83,7 @@ class mainScene {
       this.faster = 1* this.score
       }
       
-      if(this.staggered == (30 - this.faster)){
+      if(this.staggered == (28 - this.faster)){
       this.move();
       this.staggered = 0;
       }
@@ -189,7 +189,8 @@ class mainScene {
     }
 
     eaten(){
-      this.ateApple.play();
+      // this.ateApple.play();
+      this.sound.play('applecrunch');
       this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length - 1)];
       this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length - 1)];
       this.score += 1

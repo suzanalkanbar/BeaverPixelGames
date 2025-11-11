@@ -16,8 +16,8 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
-    this.load.audio('pong-beep','ping_pong/assets/pong_beep.wav')
-    this.load.audio('pong-plop','ping_pong/assets/pong_plop.wav')
+    this.load.audio('pong-beep','ping_pong/assets/ping_pong_8bit_beeep.wav')
+    this.load.audio('pong-plop','ping_pong/assets/ping_pong_8bit_plop.wav')
   }
 
   create() {
@@ -27,7 +27,7 @@ class mainScene {
     */
 
     // create sounds
-    //this.beep = this.sound.add('pong-beep')
+    // this.beep = this.sound.add('pong-beep')
 
     // constants
     const whiteColor = 0xffffff
@@ -97,7 +97,7 @@ class mainScene {
 
   handlePaddleBallCollision() {
 
-    //this.sound.play('pong-beep')
+    this.sound.play('pong-beep')
     console.log("hit")
 
     const vel = this.ball.body.velocity
