@@ -79,6 +79,10 @@ class mainScene {
         this.direction = "up"
       } 
 
+      this.xDiff = Math.abs(player.x - this.apple.x)
+      this.yDiff = Math.abs(player.y - this.apple.y) 
+
+
       if(this.score < 18){
       this.faster = 1* this.score
       }
@@ -89,6 +93,18 @@ class mainScene {
       }
 
       this.staggered += 1
+
+      if(this.xDiff < 41 && this.yDiff < 41){
+        if(this.direction == 'up'){
+      player.setFrame(8);
+      }else if(this.direction == 'left'){
+        player.setFrame(9)
+      }else if(this.direction == 'down'){
+        player.setFrame(10)
+      }else if(this.direction == 'right'){
+        player.setFrame(11)
+      }
+      }
       
 
       if (this.physics.overlap(player, this.apple)) {
@@ -189,8 +205,7 @@ class mainScene {
     }
 
     eaten(){
-      // this.ateApple.play();
-      this.sound.play('applecrunch');
+      this.ateApple.play();
       this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length - 1)];
       this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length - 1)];
       this.score += 1
@@ -199,7 +214,15 @@ class mainScene {
     }
 
     borderHit(){
+      if(this.direction == 'up'){
       player.setFrame(4);
+      }else if(this.direction == 'left'){
+        player.setFrame(5)
+      }else if(this.direction == 'down'){
+        player.setFrame(6)
+      }else if(this.direction == 'right'){
+        player.setFrame(7)
+      }
       gameover = true;
       alert("game over!");
       }
