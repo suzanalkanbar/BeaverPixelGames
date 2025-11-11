@@ -26,7 +26,7 @@ class mainScene {
     this.ateApple = this.sound.add('applecrunch');
     this.snakeHiss = this.sound.add('snakeHiss');
 
-    this.resetButton = this.physics.add.sprite(350, 200, 'reset')
+    this.resetButton = this.physics.add.sprite(350, 300, 'reset')
     this.resetButton.depth = 1;
     this.winner = this.physics.add.sprite(350, 170, 'winner')
     this.winner.depth = 1;
@@ -58,9 +58,17 @@ class mainScene {
     this.highScoreText = this.add.text(20, 40, 'highscore: ' + this.highScore, style);
     this.highScoreText.depth = 1;
 
-    this.style = {font: '50px Arial', fill: '#fff' };
-    this.winnerText = this.add.text(250, 300, 'WINNER!', this.style);
+    style = {font: '70px Arial', fill: '#e17e3b' };
+    this.gameoverText = this.add.text(130, 100, 'GAME OVER!', style);
+    this.gameoverText.depth = 1;
+
+    style = {font: '50px Arial', fill: '#e4a426' };
+    this.winnerText = this.add.text(250, 300, 'WINNER!', style);
     this.winnerText.depth = 1;
+
+    style = {font: '15px Arial', fill: '#e4a426' }
+    this.winnerResetText = this.add.text(270, 370, 'click the snake to restart', style);
+    this.winnerResetText.depth = 1;
     
   }
 
@@ -70,6 +78,9 @@ class mainScene {
     this.resetButton.visible = false;
     this.winner.visible = false;
     this.winnerText.visible = false;
+    this.winnerResetText.visible = false;
+    this.gameoverText.visible = false;
+
     if(Phaser.Math.Between(0, 300) == 1){
       this.snakeHiss.play()
     }
@@ -133,7 +144,8 @@ class mainScene {
     }else{ 
       if(this.score > 696){
         this.winner.visible = true;
-        this.winnerText.visible = true
+        this.winnerText.visible = true;
+        this.winnerResetText.visible = true;
         this.winner.setInteractive().on('pointerdown', function(){
           for(this.i = 0; this.i < this.body.length; this.i++){
               this.body[this.i].destroy()
@@ -150,11 +162,13 @@ class mainScene {
           this.winner.disableInteractive()
           this.winner.visible = false;
           this.winnerText.visible = false;
+          this.winnerResetText.visible = false;
           this.direction = "up"
           gameover = false;
         }, this)
       }else{
         this.resetButton.visible = true;
+        this.gameoverText.visible = true;
         this.resetButton.setInteractive().on('pointerdown', function(){
           for(this.i = 0; this.i < this.body.length; this.i++){
               this.body[this.i].destroy()
@@ -170,6 +184,7 @@ class mainScene {
           this.scoreText.setText('score: ' + this.score);
           this.resetButton.disableInteractive()
           this.resetButton.visible = false;
+          this.gameoverText.visible = false;
           this.direction = "up"
           gameover = false;
         }, this)
@@ -262,7 +277,6 @@ class mainScene {
         player.setFrame(7)
       }
       gameover = true;
-      alert("game over!");
       }
 }
 
