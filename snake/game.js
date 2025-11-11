@@ -96,7 +96,6 @@ class mainScene {
         this.eaten();
       }
       if(this.physics.overlap(this.body, this.apple)){
-        alert('overlap');
         this.apple.x = this.xApple[Phaser.Math.Between(0, this.xApple.length - 1)];
         this.apple.y = this.yApple[Phaser.Math.Between(0, this.yApple.length - 1)];
       }
