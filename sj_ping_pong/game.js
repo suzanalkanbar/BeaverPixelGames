@@ -16,8 +16,8 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
-    this.load.audio('pong-beep','ping_pong/assets/ping_pong_8bit_beeep.wav')
-    this.load.audio('pong-plop','ping_pong/assets/ping_pong_8bit_plop.wav')
+    this.load.audio('pong-beep','sj_ping_pong/assets/ping_pong_8bit_beeep.wav')
+    this.load.audio('pong-plop','sj_ping_pong/assets/ping_pong_8bit_plop.wav')
   }
 
   create() {

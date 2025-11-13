@@ -9,7 +9,7 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
-    this.load.image('player', 'bullet_hell_shooter/assets/bullet_hell_player_ship.png');
+    this.load.image('player', 'sj_asteroids/assets/bullet_hell_player_ship.png');
   }
 
   create() {
@@ -39,16 +39,22 @@ class mainScene {
       console.log(this.player.angle)
     }
 
-    
-
     if (this.arrow.up.isDown) {
-      this.player.setVelocity(this.player.angle)
+      if (0 >= this.player.angle <= 90) {
+        this.player.setVelocity(this.player.angle, -this.player.angle)
+      } else if (90 < this.player.angle <= 179) {
+        this.player.setVelocity(this.player.angle, this.player.angle)
+      } else if (-180 <= this.player.angle <= -90) {
+        this.player.setVelocity(this.player.angle, -this.player.angle)
+      } else if (-90 <= this.player.angle <= -1) {
+        this.player.setVelocity(this.player.angle, this.player.angle)
+      }
       console.log("Up arrow pressed")
     }
 
-  /* VVV Put any other functions and code down here VVV */
+    /* VVV Put any other functions and code down here VVV */
 
-} 
+  }
 }
 
 // Create the game
@@ -57,9 +63,10 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#000000', // The background color (black)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade',
-    arcade: {debug: true}
-   }, // The physics engine to use
+  physics: {
+    default: 'arcade',
+    arcade: { debug: true }
+  }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
