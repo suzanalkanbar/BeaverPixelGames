@@ -28,7 +28,6 @@
     font-size: 1.1rem;
 }
 
-/* actieve menu-link */
 .menu a.active {
     color: var(--gold);
     border-bottom: 2px solid var(--gold);
