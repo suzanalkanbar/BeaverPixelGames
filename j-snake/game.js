@@ -7,18 +7,18 @@ class mainScene {
 
   preload() {
 
-    this.load.image('snakeHead', 'snake/assets/snakehead.png');
+    this.load.image('snakeHead', 'j-snake/assets/snakehead.png');
     this.load.spritesheet('snakeSheet', 
-        'snake/assets/snakesheet.png',
+        'j-snake/assets/snakesheet.png',
         { frameWidth: 20, frameHeight: 20,}
     );
-    this.load.image('snakeBody', 'snake/assets/snakebody.png');
-    this.load.image('apple', 'snake/assets/apple.png');
-    this.load.image('reset', 'snake/assets/restart.png');
-    this.load.image('winner', 'snake/assets/win slangetje.png');
+    this.load.image('snakeBody', 'j-snake/assets/snakebody.png');
+    this.load.image('apple', 'j-snake/assets/apple.png');
+    this.load.image('reset', 'j-snake/assets/restart.png');
+    this.load.image('winner', 'j-snake/assets/win slangetje.png');
 
-    this.load.audio('applecrunch', 'snake/assets/apple_bite.wav');
-    this.load.audio('snakeHiss', 'snake/assets/snake-hissing-6092.wav');
+    this.load.audio('applecrunch', 'j-snake/assets/apple_bite.wav');
+    this.load.audio('snakeHiss', 'j-snake/assets/snake-hissing-6092.wav');
   }
 
   create() {
