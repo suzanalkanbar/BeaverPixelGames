@@ -2,9 +2,6 @@
 class mainScene {
   // The three methods currently empty
 
-  
-  
-
   preload() {
     /*     
     This method is called once at the beginning
@@ -36,8 +33,11 @@ class mainScene {
     this.green.body.setImmovable(true)
 
     // set the colors interactive
+
     this.yellow.setInteractive({useHandCursor: true})
     this.yellow.on('pointerdown', ()=>{
+      if (this.yellow.isAnimating) return
+      this.yellow.isAnimating = true
       console.log("yellow")
       this.tweens.add({
       targets: this.yellow,
@@ -45,11 +45,14 @@ class mainScene {
       scaleX: 1.2,
       scaleY: 1.2,
       yoyo: true,
+      onComplete: () => { this.yellow.isAnimating = false}
     })
   })
 
-        this.red.setInteractive({useHandCursor: true})
+    this.red.setInteractive({useHandCursor: true})
     this.red.on('pointerdown', ()=>{
+      if (this.red.isAnimating) return
+      this.red.isAnimating = true
       console.log("red")
       this.tweens.add({
       targets: this.red,
@@ -57,11 +60,14 @@ class mainScene {
       scaleX: 1.2,
       scaleY: 1.2,
       yoyo: true,
+      onComplete: () => { this.red.isAnimating = false}
     })
   })
 
-        this.blue.setInteractive({useHandCursor: true})
+    this.blue.setInteractive({useHandCursor: true})
     this.blue.on('pointerdown', ()=>{
+      if (this.blue.isAnimating) return
+      this.blue.isAnimating = true
       console.log("blue")
       this.tweens.add({
       targets: this.blue,
@@ -69,11 +75,13 @@ class mainScene {
       scaleX: 1.2,
       scaleY: 1.2,
       yoyo: true,
+      onComplete: () => { this.blue.isAnimating = false}
     })
   })
-
-        this.green.setInteractive({useHandCursor: true})
+    this.green.setInteractive({useHandCursor: true})
     this.green.on('pointerdown', ()=>{
+      if (this.green.isAnimating) return
+      this.green.isAnimating = true
       console.log("green")
       this.tweens.add({
       targets: this.green,
@@ -81,8 +89,9 @@ class mainScene {
       scaleX: 1.2,
       scaleY: 1.2,
       yoyo: true,
+      onComplete: () => { this.green.isAnimating = false}
     })
-    })
+  })
 
     this.colors = ['yellow', 'red', 'blue', 'green']
     this.pattern = [] // the pattern the AI is making
@@ -124,7 +133,7 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#167782', // The background color
+  backgroundColor: '#000000ff', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade' }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
