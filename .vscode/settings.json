@@ -1,3 +1,4 @@
 {
-    "workbench.externalBrowser": ""
+  "workbench.externalBrowser": "",
+  "liveServer.settings.port": 5501
 }
