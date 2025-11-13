@@ -29,27 +29,30 @@ class mainScene {
     It will handle all the game's logic, like movements
     */
 
-    this.player.setVelocity(0)
-
+    // fix hitbox not updating
     if (this.arrow.right.isDown) {
       this.player.angle += 1
-      console.log(this.player.angle)
     } else if (this.arrow.left.isDown) {
       this.player.angle -= 1
-      console.log(this.player.angle)
     }
 
+    this.player.setVelocity(0)
+
     if (this.arrow.up.isDown) {
-      if (0 >= this.player.angle <= 90) {
-        this.player.setVelocity(this.player.angle, -this.player.angle)
-      } else if (90 < this.player.angle <= 179) {
-        this.player.setVelocity(this.player.angle, this.player.angle)
-      } else if (-180 <= this.player.angle <= -90) {
-        this.player.setVelocity(this.player.angle, -this.player.angle)
-      } else if (-90 <= this.player.angle <= -1) {
-        this.player.setVelocity(this.player.angle, this.player.angle)
+
+      if (0 <= this.player.angle < 90) {
+        console.log("1")
+        this.player.setVelocity(Math.sin(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
+      } else if (90 <= this.player.angle < 180) {
+        console.log("2")
+        this.player.setVelocity(Math.cos(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
+      } else if (-180 <= this.player.angle > -90) {
+        console.log("3")
+        this.player.setVelocity(Math.cos(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
+      } else if (0 > this.player.angle >= -90) {
+        console.log("4")
+        this.player.setVelocity(Math.cos(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
       }
-      console.log("Up arrow pressed")
     }
 
     /* VVV Put any other functions and code down here VVV */
