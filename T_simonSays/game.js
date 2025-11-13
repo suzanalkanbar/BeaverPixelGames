@@ -8,10 +8,10 @@ class mainScene {
     It will load all the assets, like sprites and sounds
     */
 
-    this.load.image('red', 'T_simonSays/assets/red.jpg')
-    this.load.image('blue', 'T_simonSays/assets/blue.jpg')
-    this.load.image('yellow', 'T_simonSays/assets/yellow.jpg')
-    this.load.image('green', 'T_simonSays/assets/green.jpg')
+    this.load.image('red', 't_simonSays/assets/red.jpg')
+    this.load.image('blue', 't_simonSays/assets/blue.jpg')
+    this.load.image('yellow', 't_simonSays/assets/yellow.jpg')
+    this.load.image('green', 't_simonSays/assets/green.jpg')
   }
 
   create() {
