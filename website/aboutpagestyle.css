@@ -32,3 +32,32 @@
     color: var(--gold);
     border-bottom: 2px solid var(--gold);
 }
+
+
+.introductions-boxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  flex-wrap: wrap; /* meerdere regels mogelijk */
+  gap: 3rem; /* ruimte tussen de boxjes */
+  justify-content: center; /* centreren */
+  margin-top: 2rem;
+}
+
+.introduction {
+  background-color: #f7bd2ae8;
+  border: 2px solid #ddd; /* rand om de boxjes*/
+  border-radius: 12px; 
+  padding: 1rem 2rem; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+  font-weight: 500;
+  text-align: center;
+  min-width: 120px; /* min breedte per box */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.introduction:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-color: #aaa;
+}
