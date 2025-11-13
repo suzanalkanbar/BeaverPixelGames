@@ -1,3 +1,5 @@
+// https://freeasteroids.org/ <- inspiratie
+
 // Create the mainScene
 class mainScene {
   // The three methods currently empty
@@ -7,6 +9,7 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
+    this.load.image('player', 'bullet_hell_shooter/assets/bullet_hell_player_ship.png');
   }
 
   create() {
@@ -15,7 +18,8 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
-    
+    this.player = this.physics.add.sprite(110, 110, 'player')
+    this.arrow = this.input.keyboard.createCursorKeys()
 
   }
   update() {
@@ -24,21 +28,8 @@ class mainScene {
     It will handle all the game's logic, like movements
     */
 
-    /* Handle horizontal and vertical movements of "this.player"
-    if (this.arrow.right.isDown) {
-      // If the right arrow is pressed, move to the right
-      this.player.x += 3;
-    } else if (this.arrow.left.isDown) {
-      // If the left arrow is pressed, move to the left
-      this.player.x -= 3;
-    }
-    if (this.arrow.down.isDown) {
-      this.player.y += 3;
-    } else if (this.arrow.up.isDown) {
-      this.player.y -= 3;
-    }
-    */
-
+    if (this.arrow.right.isDown)
+      this.player.angle()
   }
 
   /* VVV Put any other functions and code down here VVV */
@@ -49,9 +40,11 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#919191ff', // The background color (grey)
+  backgroundColor: '#000000', // The background color (black)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade' }, // The physics engine to use
+  physics: { default: 'arcade',
+    arcade: {debug: true}
+   }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
