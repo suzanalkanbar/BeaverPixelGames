@@ -1,3 +1,5 @@
+// DEZE VERWIJDEREN?? TUTORIAL GAME
+
 // Create our only scene called mainScene, in the game.js file
 class mainScene {
   // The three methods currently empty
