@@ -11,7 +11,6 @@ class mainScene {
     // This method is called once at the beginning
     // It will load all the assets, like sprites and sounds  
     this.load.image('player', 'flappyBird/assets/player.png');
-    this.load.image('coin', 'flappyBird/assets/coin.png');
   }
   create() {
 
