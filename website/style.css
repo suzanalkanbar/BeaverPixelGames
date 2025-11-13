@@ -6,6 +6,7 @@
     --dun:#D5C9A8;
   
     --radius:14px;
+    --container: 1600px; 
   }
 
   * { box-sizing: border-box; }
@@ -18,6 +19,10 @@ html, body { margin: 0; padding: 0; }
     color: #fff;
     z-index: 10;
   }
+  main{
+    max-width: var(--container);
+    margin: 0 auto;
+  }
 
   .nav{
     display: flex;                 
@@ -26,7 +31,7 @@ html, body { margin: 0; padding: 0; }
     justify-content: space-between;
     gap: 16px;
     padding: 14px 20px;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto; 
   }
   .logo{
@@ -40,13 +45,122 @@ html, body { margin: 0; padding: 0; }
 
   /* menu */
 
+  .visually-hidden{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
 .menu{
     display: flex;
-    gap: 50px;
+    gap: 28px;
     align-items: center; 
     list-style: none;
     margin:0; 
     padding:0;
+}
+
+.burger-menu{
+  display: none;
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.burger-box{
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.burger-line{
+  width: 26px;
+  height: 2px;
+  background: #ffffff;
+  display: block;
+}
+
+@media (max-width: 900px){
+
+  .nav{
+      flex-wrap: wrap;
+      align-items: flex-start;
+      width: auto;
+  }
+
+  .logo{
+      order: 1;
+      flex: 1; 
+  }
+
+  .burger-menu{
+      display: inline-flex;
+      order: 2;
+      margin-left: 0;
+      align-self: flex-start;
+  }
+
+  .menu{
+      display: none;
+      width: 100%;
+      order: 3;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      padding-top: 8px;
+  }
+
+  .account{
+    order: 1;
+    display: inline-flex;     
+    gap: 12px;
+    margin-left: auto;         
+    align-self: flex-start;
+  }
+
+  .nav:has(.burger-menu[aria-expanded="true"]) .menu{
+      display: flex;
+      animation: fadeDown .18s ease-out;
+  }
+
+  .nav:has(.burger-menu[aria-expanded="true"]) .account{
+      display: flex;
+      animation: fadeDown .18s ease-out;
+  }
+
+  .burger-menu .burger-line{
+      transition: transform .15s ease, opacity .15s ease;
+  }
+
+  .burger-menu[aria-expanded="true"] .burger-line:nth-child(1){
+      transform: translateY(8px) rotate(45deg);
+      transform-origin: center;
+  }
+
+  .burger-menu[aria-expanded="true"] .burger-line:nth-child(2){
+      opacity: 0;
+  }
+
+  .burger-menu[aria-expanded="true"] .burger-line:nth-child(3){
+      transform: translateY(-8px) rotate(-45deg);
+      transform-origin: center;
+  }
+}
+
+@keyframes fadeDown{
+  from{
+      opacity: 0;
+      transform: translateY(-4px);
+  }
+  to{
+      opacity: 1;
+      transform: none;
+  }
 }
 
 .menu a{
@@ -86,7 +200,7 @@ html, body { margin: 0; padding: 0; }
     color: #FFFFFF;
     border-radius: 10px;
 }
-.signUp:hover {
+.signUp:hover{
     background: #c7901f;                 
   }
   
@@ -120,6 +234,7 @@ html, body { margin: 0; padding: 0; }
     align-items: center; justify-content: center;
     text-align: center; color: #fff;
     padding: 0 20px;
+    flex-wrap: wrap;
   }
 
 
@@ -141,34 +256,47 @@ html, body { margin: 0; padding: 0; }
 /********games cards******/
 .games {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 120px;
+    grid-template-columns: repeat(3, 1fr);    
+    gap: 24px;
     max-width: 1200px;
-    margin: 60px auto;
-    padding: 0 20px;
+    margin: 40px auto;
+    padding: 0 16px;
   }
+  
+  @media (max-width: 900px) {
+    .games {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+
   
   /* game card */
   .game {
     background: #E4A426;
+    flex-wrap: wrap;
     color: #FFFFFF;
     border-radius: 18px;
-    height: 350px;
-    width: 350px;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-  
     font-size: 20px;
     font-weight: 700;
     text-align: center;
-  
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width:100%;
+    aspect-ratio: 1 / 1;       /* vierkant maar flexibel */
+    min-height: 200px; 
   }
   
   .game:hover {
     transform: scale(1.08);
     box-shadow: 0px 10px 25px rgba(0,0,0,0.25);
   }
+
+
+  /*** de game***/
+
+  
 
