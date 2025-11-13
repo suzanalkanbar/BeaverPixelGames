@@ -36,31 +36,32 @@ class mainScene {
 
     this.dExtra = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive()
     this.dKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()  
-    this.dKey.input.hitArea.setTo(0, 0, 24, 204)
+    this.dKey.input.hitArea.setTo(13, 0, 10, 130)
     this.firstKeyX += 38
 
     this.eExtra = this.physics.add.sprite(this.firstKeyX - 12, this.firstKeyY + 65, 'whiteKeyLeft').setInteractive()
-    this.eKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()   
+    this.eKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()  
+    this.eKey.input.hitArea.setTo(11, 0, 24, 204) 
     this.firstKeyX += 38
 
     this.fExtra = this.physics.add.sprite(this.firstKeyX + 12, this.firstKeyY + 65, 'whiteKeyRight').setInteractive()
     this.fKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()  
-    this.cKey.input.hitArea.setTo(0, 0, 24, 204)
+    this.fKey.input.hitArea.setTo(0, 0, 24, 204)
     this.firstKeyX += 38
 
     this.gExtra = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive()
     this.gKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()
+    this.gKey.input.hitArea.setTo(13, 0, 10, 130)
     this.firstKeyX += 38
 
     this.aExtra = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive() 
     this.aKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()   
-    this.aKey.body.setSize(10, 130)
-    this.aKey.body.setOffset(14, 0)
+    this.aKey.input.hitArea.setTo(13, 0, 10, 130)
     this.firstKeyX += 38
 
     this.bExtra = this.physics.add.sprite(this.firstKeyX - 12, this.firstKeyY + 65, 'whiteKeyLeft').setInteractive()
     this.bKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()      
-    this.bKey.body.setSize(24, 204)
+    this.eKey.input.hitArea.setTo(11, 0, 24, 204) 
     this.bKey.body.setOffset(14, 0)
 
 
@@ -70,42 +71,61 @@ class mainScene {
     this.cKey.on('pointerdown', function(){
           this.cKey.sound.play();
         }, this);
+    this.SKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+
     this.dExtra.on('pointerdown', function(){
           this.dKey.sound.play();
         }, this); 
     this.dKey.on('pointerdown', function(){
           this.dKey.sound.play();
         }, this);
+    this.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+
     this.eExtra.on('pointerdown', function(){
           this.eKey.sound.play();
         }, this); 
     this.eKey.on('pointerdown', function(){
           this.eKey.sound.play();
         }, this);
+    this.FKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+
+
     this.fExtra.on('pointerdown', function(){
           this.fKey.sound.play();
         }, this); 
     this.fKey.on('pointerdown', function(){
           this.fKey.sound.play();
         }, this);
+    this.HKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
+
+        
     this.gExtra.on('pointerdown', function(){
           this.gKey.sound.play();
         }, this); 
     this.gKey.on('pointerdown', function(){
           this.gKey.sound.play();
         }, this);
+    this.JKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
+
+
     this.aExtra.on('pointerdown', function(){
           this.aKey.sound.play();
         }, this); 
     this.aKey.on('pointerdown', function(){
           this.aKey.sound.play();
         }, this);
+    this.KKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
+
+
     this.bExtra.on('pointerdown', function(){
           this.bKey.sound.play();
         }, this); 
     this.bKey.on('pointerdown', function(){
           this.bKey.sound.play();
         }, this);
+    this.LKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
 
     
     this.cBlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey');
@@ -130,7 +150,28 @@ class mainScene {
 
   }
   update() {
-    this.cExtra.input.alwaysEnabled = true;
+
+    if(this.SKey.isDown){
+      this.cKey.sound.play()
+    }
+    if(this.DKey.isDown){
+      this.dKey.sound.play()
+    }
+    if(this.FKey.isDown){
+      this.eKey.sound.play()
+    }
+    if(this.HKey.isDown){
+      this.fKey.sound.play()
+    }
+    if(this.JKey.isDown){
+      this.gKey.sound.play()
+    }
+    if(this.KKey.isDown){
+      this.aKey.sound.play()
+    }
+    if(this.LKey.isDown){
+      this.bKey.sound.play()
+    }
   }
 
   /* VVV Put any other functions and code down here VVV */
@@ -142,14 +183,9 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#167782', // The background color
+  backgroundColor: '#000000ff', // The background color
   scene: mainScene, // The name of the scene we created
-  physics: { 
-    default: 'arcade', 
-    arcade: {
-      debug: true
-    }
-  }, // The physics engine to use
+  physics: { default: 'arcade',}, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
