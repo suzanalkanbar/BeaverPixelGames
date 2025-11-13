@@ -18,7 +18,8 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
-    this.player = this.physics.add.sprite(110, 110, 'player')
+    this.player = this.physics.add.sprite(350, 200, 'player')
+
     this.arrow = this.input.keyboard.createCursorKeys()
 
   }
@@ -28,12 +29,26 @@ class mainScene {
     It will handle all the game's logic, like movements
     */
 
-    if (this.arrow.right.isDown)
-      this.player.angle()
-  }
+    this.player.setVelocity(0)
+
+    if (this.arrow.right.isDown) {
+      this.player.angle += 1
+      console.log(this.player.angle)
+    } else if (this.arrow.left.isDown) {
+      this.player.angle -= 1
+      console.log(this.player.angle)
+    }
+
+    
+
+    if (this.arrow.up.isDown) {
+      this.player.setVelocity(this.player.angle)
+      console.log("Up arrow pressed")
+    }
 
   /* VVV Put any other functions and code down here VVV */
 
+} 
 }
 
 // Create the game
