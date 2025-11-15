@@ -11,16 +11,16 @@ class mainScene {
 
   create() {
 
-    this.pikmin = this.physics.add.sprite(200, 200, 'walking')
+    this.pikmin = this.physics.add.sprite(200, 200, 'walking', 0)
 
     this.anims.create({
       key: 'walkRigth',
       frames: this.anims.generateFrameNumbers('walking', { start: 1, end: 2}),
-      framerate: 4,
+      framerate: 60,
       repeat: -1
     })
 
-    this.pikmin.play('walkRight')
+    this.pikmin.play('walkRigth')
 
   }
   update() {

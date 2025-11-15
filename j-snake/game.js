@@ -46,6 +46,7 @@ class mainScene {
     this.direction = "up";
     this.distance = 20;
     this.staggered = 0;
+    this.changedDirection = false;
 
     // The style of the text 
     // A lot of options are available, these are the most important ones
@@ -85,14 +86,19 @@ class mainScene {
       this.snakeHiss.play()
     }
 
-    if (this.arrow.right.isDown && this.direction != "left") {
+
+    if (this.arrow.right.isDown && this.direction != "left" && !this.changedDirection) {
         this.direction = "right"
-      } else if (this.arrow.left.isDown && this.direction != "right") {
+        this.changedDirection = true;
+      } else if (this.arrow.left.isDown && this.direction != "right" && !this.changedDirection) {
         this.direction = "left"
-      } else if (this.arrow.down.isDown && this.direction != "up") {
+        this.changedDirection = true;
+      } else if (this.arrow.down.isDown && this.direction != "up" && !this.changedDirection) {
         this.direction = "down"
-      } else if (this.arrow.up.isDown && this.direction != "down") {
+        this.changedDirection = true;
+      } else if (this.arrow.up.isDown && this.direction != "down" && !this.changedDirection) {
         this.direction = "up"
+        this.changedDirection = true;
       } 
 
       this.xDiff = Math.abs(player.x - this.apple.x)
@@ -105,6 +111,7 @@ class mainScene {
       
       if(this.staggered == (25 - this.faster)){
       this.move();
+      this.changedDirection = false;
       this.staggered = 0;
       }
 
