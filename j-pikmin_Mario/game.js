@@ -11,19 +11,37 @@ class mainScene {
 
   create() {
 
-    this.pikmin = this.physics.add.sprite(200, 200, 'walking', 0)
+    this.arrow = this.input.keyboard.createCursorKeys();
 
     this.anims.create({
       key: 'walkRigth',
-      frames: this.anims.generateFrameNumbers('walking', { start: 1, end: 2}),
-      framerate: 60,
+      frames: this.anims.generateFrameNumbers('walking', {start: 1, end: 2}),
+      frameRate: 4,
       repeat: -1
-    })
+    });
 
-    this.pikmin.play('walkRigth')
+    this.player = this.physics.add.sprite(200, 200, 'walking', 0);
+    this.player.setCollideWorldBounds(true);
+    this.player.body.setGravityY(300);
 
   }
   update() {
+
+    if (this.arrow.right.isDown) {
+      this.player.setVelocityX(160);
+      this.player.setFrame(1);
+      // this.player.play('walkRight', true);
+    }else if (this.arrow.left.isDown) {
+      this.player.setVelocityX(-160);
+      this.player.setFrame(3);
+    }else {
+      this.player.setVelocityX(0);
+      this.player.setFrame(0);
+    }
+
+    if (this.arrow.up.isDown) {
+      this.player.setVelocityY(-200);
+    }
 
   }
 
