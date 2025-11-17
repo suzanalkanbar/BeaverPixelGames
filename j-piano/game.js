@@ -52,6 +52,17 @@ class mainScene {
     this.aBOnce = false;
     this.bOnce = false;
     this.highCOnce = false;
+    this.highCBOnce = false;
+    this.highDOnce = false;
+    this.highDBOnce = false;
+    this.highEOnce = false;
+    this.highFOnce = false;
+    this.highFBOnce = false;
+    this.highGOnce = false;
+    this.highGBOnce = false;
+    this.highAOnce = false;
+    this.highABOnce = false;
+    this.highBOnce = false;
 
     this.style = { font: '30px Arial', fill: '#000000' };
     this.blackStyle = { font: '15px Arial', fill: '#ffffffff' };
@@ -115,37 +126,37 @@ class mainScene {
     this.highDExtra = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive()
     this.highDKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()  
     this.highDKey.input.hitArea.setTo(13, 0, 10, 130)
-    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, '?', this.style);
+    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, 'Z', this.style);
     this.firstKeyX += 38
 
     this.highEExtra = this.physics.add.sprite(this.firstKeyX - 12, this.firstKeyY + 65, 'whiteKeyLeft').setInteractive()
     this.highEKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()  
     this.highEKey.input.hitArea.setTo(11, 0, 24, 204) 
-    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, '?', this.style);
+    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, 'X', this.style);
     this.firstKeyX += 38
 
     this.highFExtra = this.physics.add.sprite(this.firstKeyX + 12, this.firstKeyY + 65, 'whiteKeyRight').setInteractive()
     this.highFKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()  
     this.highFKey.input.hitArea.setTo(0, 0, 24, 204)
-    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, '?', this.style);
+    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, 'C', this.style);
     this.firstKeyX += 38
 
     this.highGExtra = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive()
     this.highGKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()
     this.highGKey.input.hitArea.setTo(13, 0, 10, 130)
-    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, '?', this.style);
+    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, 'B', this.style);
     this.firstKeyX += 38
 
     this.highAExtra = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive() 
     this.highAKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()   
     this.highAKey.input.hitArea.setTo(13, 0, 10, 130)
-    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, '?', this.style);
+    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, 'N', this.style);
     this.firstKeyX += 38
 
     this.highBExtra = this.physics.add.sprite(this.firstKeyX - 12, this.firstKeyY + 65, 'whiteKeyLeft').setInteractive()
     this.highBKey = this.physics.add.sprite(this.firstKeyX, this.firstKeyY, 'whiteKey').setInteractive()      
     this.highBKey.input.hitArea.setTo(11, 0, 24, 204) 
-    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, '?', this.style);
+    this.Text = this.add.text(this.firstKeyX -10, this.firstKeyY + 50, 'M', this.style);
 
 
     this.cExtra.on('pointerdown', function(){
@@ -218,6 +229,54 @@ class mainScene {
         }, this);
     this.LKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
 
+    this.highDExtra.on('pointerdown', function(){
+          this.highDKey.sound.play();
+        }, this); 
+    this.highDKey.on('pointerdown', function(){
+          this.highDKey.sound.play();
+        }, this);
+    this.ZKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+
+    this.highEExtra.on('pointerdown', function(){
+          this.highEKey.sound.play();
+        }, this); 
+    this.highEKey.on('pointerdown', function(){
+          this.highEKey.sound.play();
+        }, this);
+    this.XKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+
+    this.highFExtra.on('pointerdown', function(){
+          this.highFKey.sound.play();
+        }, this); 
+    this.highFKey.on('pointerdown', function(){
+          this.highFKey.sound.play();
+        }, this);
+    this.CKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+
+    this.highGExtra.on('pointerdown', function(){
+          this.highGKey.sound.play();
+        }, this); 
+    this.highGKey.on('pointerdown', function(){
+          this.highGKey.sound.play();
+        }, this);
+    this.BKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+
+    this.highAExtra.on('pointerdown', function(){
+          this.highAKey.sound.play();
+        }, this); 
+    this.highAKey.on('pointerdown', function(){
+          this.highAKey.sound.play();
+        }, this);
+    this.NKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
+
+    this.highBExtra.on('pointerdown', function(){
+          this.highBKey.sound.play();
+        }, this); 
+    this.highBKey.on('pointerdown', function(){
+          this.highBKey.sound.play();
+        }, this);
+    this.MKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
     
     this.cBlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey').setInteractive();
     this.cBText = this.add.text(this.blackX -8, this.blackY + 40, 'W', this.blackStyle);
@@ -236,19 +295,19 @@ class mainScene {
     this.blackX += 76
 
     this.highCBlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey').setInteractive();
-    this.Text = this.add.text(this.blackX -6, this.blackY + 40, '?', this.blackStyle);
+    this.Text = this.add.text(this.blackX -6, this.blackY + 40, 'Q', this.blackStyle);
     this.blackX += 38
     this.highDBlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey').setInteractive();
-    this.Text = this.add.text(this.blackX -6, this.blackY + 40, '?', this.blackStyle);
+    this.Text = this.add.text(this.blackX -6, this.blackY + 40, 'R', this.blackStyle);
     this.blackX += 76
     this.highFBlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey').setInteractive();
-    this.Text = this.add.text(this.blackX -6, this.blackY + 40, '?', this.blackStyle);
+    this.Text = this.add.text(this.blackX -6, this.blackY + 40, 'V', this.blackStyle);
     this.blackX += 38
     this.highGBlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey').setInteractive();
-    this.Text = this.add.text(this.blackX -6, this.blackY + 40, '?', this.blackStyle);
+    this.Text = this.add.text(this.blackX -6, this.blackY + 40, 'T', this.blackStyle);
     this.blackX += 38
     this.highABlack = this.physics.add.sprite(this.blackX, this.blackY, 'blackKey').setInteractive();
-    this.Text = this.add.text(this.blackX -6, this.blackY + 40, '?', this.blackStyle);
+    this.Text = this.add.text(this.blackX -6, this.blackY + 40, 'P', this.blackStyle);
 
     this.cBlack.on('pointerdown', function(){
           this.cBlack.sound.play();
@@ -275,6 +334,31 @@ class mainScene {
         }, this);
     this.IKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
 
+    this.highCBlack.on('pointerdown', function(){
+          this.highCBlack.sound.play();
+        }, this);
+    this.QKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+
+    this.highDBlack.on('pointerdown', function(){
+          this.highDBlack.sound.play();
+        }, this);
+    this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
+    this.highFBlack.on('pointerdown', function(){
+          this.highFBlack.sound.play();
+        }, this);
+    this.VKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+
+    this.highGBlack.on('pointerdown', function(){
+          this.highGBlack.sound.play();
+        }, this);
+    this.TKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+
+    this.highABlack.on('pointerdown', function(){
+          this.highABlack.sound.play();
+        }, this);
+    this.PKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
 
 
     this.cKey.sound = this.sound.add('cNote', {volume: 20})
@@ -290,6 +374,17 @@ class mainScene {
     this.aBlack.sound = this.sound.add('aisNote', {volume: 20})
     this.bKey.sound = this.sound.add('bNote', {volume: 20})
     this.highCKey.sound = this.sound.add('^cNote', {volume: 20})
+    this.highCBlack.sound = this.sound.add('^cisNote', {volume: 20})
+    this.highDKey.sound = this.sound.add('^dNote', {volume: 20})
+    this.highDBlack.sound = this.sound.add('^disNote', {volume: 20})
+    this.highEKey.sound = this.sound.add('^eNote', {volume: 20})
+    this.highFKey.sound = this.sound.add('^fNote', {volume: 20})
+    this.highFBlack.sound = this.sound.add('^fisNote', {volume: 20})
+    this.highGKey.sound = this.sound.add('^gNote', {volume: 20})
+    this.highGBlack.sound = this.sound.add('^gisNote', {volume: 20})
+    this.highAKey.sound = this.sound.add('^aNote', {volume: 20})
+    this.highABlack.sound = this.sound.add('^aisNote', {volume: 20})
+    this.highBKey.sound = this.sound.add('^bNote', {volume: 20})
 
 
   }
@@ -405,6 +500,100 @@ class mainScene {
       }
     }else{
       this.highCOnce = false
+    }
+    if(this.QKey.isDown){
+      if(!this.highCBOnce){
+      this.highCBlack.sound.play()
+      this.highCBOnce = true
+      }
+    }else{
+      this.highCBOnce = false
+    }
+
+    if(this.ZKey.isDown){
+      if(!this.highDOnce){
+      this.highDKey.sound.play()
+      this.highDOnce = true
+      }
+    }else{
+      this.highDOnce = false
+    }
+    if(this.RKey.isDown){
+      if(!this.highDBOnce){
+      this.highDBlack.sound.play()
+      this.highDBOnce = true
+      }
+    }else{
+      this.highDBOnce = false
+    }
+
+    if(this.XKey.isDown){
+      if(!this.highEOnce){
+      this.highEKey.sound.play()
+      this.highEOnce = true
+      }
+    }else{
+      this.highEOnce = false
+    }
+
+    if(this.CKey.isDown){
+      if(!this.highFOnce){
+      this.highFKey.sound.play()
+      this.highFOnce = true
+      }
+    }else{
+      this.highFOnce = false
+    }
+    if(this.VKey.isDown){
+      if(!this.highFBOnce){
+      this.highFBlack.sound.play()
+      this.highFBOnce = true
+      }
+    }else{
+      this.highFBOnce = false
+    }
+
+    if(this.BKey.isDown){
+      if(!this.highGOnce){
+      this.highGKey.sound.play()
+      this.highGOnce = true
+      }
+    }else{
+      this.highGOnce = false
+    }
+    if(this.TKey.isDown){
+      if(!this.highGBOnce){
+      this.highGBlack.sound.play()
+      this.highGBOnce = true
+      }
+    }else{
+      this.highGBOnce = false
+    }
+
+    if(this.NKey.isDown){
+      if(!this.highAOnce){
+      this.highAKey.sound.play()
+      this.highAOnce = true
+      }
+    }else{
+      this.highAOnce = false
+    }
+    if(this.PKey.isDown){
+      if(!this.highABOnce){
+      this.highABlack.sound.play()
+      this.highABOnce = true
+      }
+    }else{
+      this.highABOnce = false
+    }
+
+    if(this.MKey.isDown){
+      if(!this.highBOnce){
+      this.highBKey.sound.play()
+      this.highBOnce = true
+      }
+    }else{
+      this.highBOnce = false
     }
   }
 
