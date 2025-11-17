@@ -2,6 +2,28 @@
 class mainScene {
   // The three methods currently empty
 
+      setupTile(colorName) {
+        if (this.playerInputIndex < this.pattern.size){
+      const tile = this[colorName]
+    tile.setInteractive({useHandCursor: true})
+    tile.on('pointerdown', ()=>{
+      if (tile.isAnimating) return
+      tile.isAnimating = true
+      this.tweens.add({
+      targets: tile,
+      duration: 200, 
+      scaleX: 1.2,
+      scaleY: 1.2,
+      yoyo: true,
+      onComplete: () => { tile.isAnimating = false}
+    })
+    this.playerPattern.push(colorName)
+    this.playerInputIndex++
+    console.log(this.playerInputIndex)
+    console.log(this.playerPattern)
+  })
+    }}
+
   preload() {
     /*     
     This method is called once at the beginning
@@ -20,6 +42,13 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
+    this.colors = ['yellow', 'red', 'blue', 'green']
+    this.pattern = [] // the pattern the AI is making
+    this.playerPattern = []
+    this.playerInputIndex = 0
+    this.aiTurn = false
+    this.playerTurn = false
+
     // starting positions of the tiles
     this.yellow = this.physics.add.sprite(280, 130, 'yellow')
     this.red = this.physics.add.sprite(420, 130, 'red')
@@ -33,73 +62,11 @@ class mainScene {
     this.green.body.setImmovable(true)
 
     // set the colors interactive
-
-    this.yellow.setInteractive({useHandCursor: true})
-    this.yellow.on('pointerdown', ()=>{
-      if (this.yellow.isAnimating) return
-      this.yellow.isAnimating = true
-      console.log("yellow")
-      this.tweens.add({
-      targets: this.yellow,
-      duration: 200, 
-      scaleX: 1.2,
-      scaleY: 1.2,
-      yoyo: true,
-      onComplete: () => { this.yellow.isAnimating = false}
-    })
-  })
-
-    this.red.setInteractive({useHandCursor: true})
-    this.red.on('pointerdown', ()=>{
-      if (this.red.isAnimating) return
-      this.red.isAnimating = true
-      console.log("red")
-      this.tweens.add({
-      targets: this.red,
-      duration: 200, 
-      scaleX: 1.2,
-      scaleY: 1.2,
-      yoyo: true,
-      onComplete: () => { this.red.isAnimating = false}
-    })
-  })
-
-    this.blue.setInteractive({useHandCursor: true})
-    this.blue.on('pointerdown', ()=>{
-      if (this.blue.isAnimating) return
-      this.blue.isAnimating = true
-      console.log("blue")
-      this.tweens.add({
-      targets: this.blue,
-      duration: 200, 
-      scaleX: 1.2,
-      scaleY: 1.2,
-      yoyo: true,
-      onComplete: () => { this.blue.isAnimating = false}
-    })
-  })
-    this.green.setInteractive({useHandCursor: true})
-    this.green.on('pointerdown', ()=>{
-      if (this.green.isAnimating) return
-      this.green.isAnimating = true
-      console.log("green")
-      this.tweens.add({
-      targets: this.green,
-      duration: 200, 
-      scaleX: 1.2,
-      scaleY: 1.2,
-      yoyo: true,
-      onComplete: () => { this.green.isAnimating = false}
-    })
-  })
-
-    this.colors = ['yellow', 'red', 'blue', 'green']
-    this.pattern = [] // the pattern the AI is making
-    this.playerPattern = []
-    this.playerInputIndex = 0
-    this.aiTurn = false
-    this.playerTurn = false
-
+    this.setupTile('yellow')
+    this.setupTile('red')
+    this.setupTile('blue')
+    this.setupTile('green')
+    
     // score
     this.score = 0
     let style = { font: '20px Arial', fill: '#ffffff'}
@@ -118,7 +85,6 @@ class mainScene {
     It will handle all the game's logic, like movements
   /* VVV Put any other functions and code down here VVV */
 
-  
 
     // add new color to the pattern of the AI
     const newColor = Phaser.Utils.Array.GetRandom(this.colors)
