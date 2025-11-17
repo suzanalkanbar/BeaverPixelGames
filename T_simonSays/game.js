@@ -2,27 +2,98 @@
 class mainScene {
   // The three methods currently empty
 
+    startGame () {
+      this.score = 0
+      this.pattern = []
+      this.aiTurn = true
+      this.time.delayedCall(1000, this.aiMakingPattern, [], this)
+    }
+
       setupTile(colorName) {
-        if (this.playerInputIndex < this.pattern.size){
       const tile = this[colorName]
     tile.setInteractive({useHandCursor: true})
+    tile.isAnimating = false
     tile.on('pointerdown', ()=>{
-      if (tile.isAnimating) return
-      tile.isAnimating = true
-      this.tweens.add({
-      targets: tile,
-      duration: 200, 
-      scaleX: 1.2,
-      scaleY: 1.2,
-      yoyo: true,
+      if (!this.playerTurn || tile.isAnimating) return
+
+
+        tile.isAnimating = true
+
+        this.playerPattern.push(colorName)
+        console.log(this.playerPattern)
+        this.checkPlayerPattern()
+        
+        this.tweens.add({
+        targets: tile,
+        duration: 200, 
+        scaleX: 1.2,
+        scaleY: 1.2,
+        yoyo: true,
       onComplete: () => { tile.isAnimating = false}
     })
-    this.playerPattern.push(colorName)
-    this.playerInputIndex++
-    console.log(this.playerInputIndex)
-    console.log(this.playerPattern)
+
   })
-    }}
+    }
+    
+
+     aiMakingPattern(){
+      if (this.aiTurn == true){    
+    const newColor = Phaser.Utils.Array.GetRandom(this.colors) // newColor is a random color
+    this.pattern.push(newColor) // add random color to the array
+    console.log(this.pattern)
+    this.patternIndex = 0
+    this.playerpattern = []
+    this.aiTurn = false
+
+    this.time.delayedCall(500, this.showAIPattern, [], this)
+      }
+    }
+
+    checkPlayerPattern() {
+      const currentInputIndex = this.playerPattern.length -1
+      const playerColor = this.playerPattern[currentInputIndex]
+      const correctColor = this.pattern[currentInputIndex]
+
+      if (playerColor !== correctColor){
+        console.log('Game Over')
+      }
+      else if(this.playerPattern.length == this.pattern.length){
+        this.score++
+        this.scoreText.setText('Score: ' + this.score)
+        this.playerTurn = false
+        this.aiTurn = true
+        this.time.delayedCall(2000, this.aiMakingPattern, [], this)
+      }
+    }
+
+    showAIPattern(){
+      if (this.patternIndex < this.pattern.length){
+        const colorName = this.pattern[this.patternIndex]
+        const tile = this[colorName]
+
+        this.tweens.add({
+        targets: tile,
+        duration: 300, 
+        scaleX: 1.2,
+        scaleY: 1.2,
+        yoyo: true,
+        onComplete: () => { 
+        tile.isAnimating = false
+        this.patternIndex++
+        this.time.delayedCall(500, this.showAIPattern, [], this)
+        }
+        
+        })
+    }
+    else {
+          this.playerTurn = true
+          this.playerPattern = []
+          this.playerInputIndex = 0
+        }
+  }
+
+
+
 
   preload() {
     /*     
@@ -44,10 +115,12 @@ class mainScene {
 
     this.colors = ['yellow', 'red', 'blue', 'green']
     this.pattern = [] // the pattern the AI is making
+    this.patternIndex = 0
     this.playerPattern = []
     this.playerInputIndex = 0
     this.aiTurn = false
     this.playerTurn = false
+    this.score = 0
 
     // starting positions of the tiles
     this.yellow = this.physics.add.sprite(280, 130, 'yellow')
@@ -68,12 +141,18 @@ class mainScene {
     this.setupTile('green')
     
     // score
-    this.score = 0
     let style = { font: '20px Arial', fill: '#ffffff'}
     this.scoreText = this.add.text(20, 20, 'score: ' + this.score, style)
     
-
-
+    let buttonStyle = {
+      font: '32px Arial',
+      fill: '#1a1a2e',
+      backgroundColor: '#ffc107',
+      padding: { x:15, y:10 }
+    }
+    this.startButton = this.add.text(300, 350, 'Start Game', buttonStyle)
+    this.startButton.setInteractive({ useHandCursor: true})
+    this.startButton.on('pointerdown', this.startGame, this)
 
 
   } // end create()
@@ -85,11 +164,6 @@ class mainScene {
     It will handle all the game's logic, like movements
   /* VVV Put any other functions and code down here VVV */
 
-
-    // add new color to the pattern of the AI
-    const newColor = Phaser.Utils.Array.GetRandom(this.colors)
-    this.pattern.push(newColor)
-    
 
 } // end update ()
 
