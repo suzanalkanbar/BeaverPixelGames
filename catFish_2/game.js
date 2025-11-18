@@ -275,7 +275,7 @@ class mainScene {
                     this.currentFish.x = this.player.x
                     this.currentFish.y = this.player.y - 100
                     this.copy(this.copyFish, this.currentFish)
-                    this.copyFish.y -= 68
+                    this.copyFish.y -= 50
                     this.show(this.currentFish)
                     this.show(this.copyFish)
                     this.hide(this.rod)
