@@ -18,7 +18,17 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
+    const width = this.cameras.main.width
+    const height = this.cameras.main.height
+
+    this.score = 0
+
     this.player = this.physics.add.sprite(350, 200, 'player')
+    this.player.setDrag(0.99)
+    this.player.setMaxVelocity(150)
+    this.player.setCollideWorldBounds(true)
+
+    this.scoreText = this.add.text(width - 200, 20,'Score: 0000').setOrigin(0.5)
 
     this.arrow = this.input.keyboard.createCursorKeys()
 
@@ -29,31 +39,22 @@ class mainScene {
     It will handle all the game's logic, like movements
     */
 
+    if (this.arrow.up.isDown) {
+      this.physics.velocityFromRotation(this.player.rotation, 150, this.player.body.acceleration)
+    } else {
+      this.player.setAcceleration(0)
+    }
+
     // fix hitbox not updating
     if (this.arrow.right.isDown) {
-      this.player.angle += 1
+      this.player.setAngularVelocity(300)
     } else if (this.arrow.left.isDown) {
-      this.player.angle -= 1
+      this.player.setAngularVelocity(-300)
+    } else {
+      this.player.setAngularVelocity(0)
     }
 
-    this.player.setVelocity(0)
-
-    if (this.arrow.up.isDown) {
-
-      if (0 <= this.player.angle < 90) {
-        console.log("1")
-        this.player.setVelocity(Math.sin(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
-      } else if (90 <= this.player.angle < 180) {
-        console.log("2")
-        this.player.setVelocity(Math.cos(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
-      } else if (-180 <= this.player.angle > -90) {
-        console.log("3")
-        this.player.setVelocity(Math.cos(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
-      } else if (0 > this.player.angle >= -90) {
-        console.log("4")
-        this.player.setVelocity(Math.cos(this.player.angle) * 100, Math.sin(this.player.angle) * 100)
-      }
-    }
+    this.scoreText.setText('Score: '+ this.score)
 
     /* VVV Put any other functions and code down here VVV */
 
