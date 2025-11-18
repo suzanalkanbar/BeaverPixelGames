@@ -9,7 +9,8 @@ class mainScene {
     This method is called once at the beginning
     It will load all the assets, like sprites and sounds
     */
-    this.load.image('player', 'sj_asteroids/assets/bullet_hell_player_ship.png');
+    this.load.image('player', 'sj_asteroids/assets/bullet_hell_player_ship.png')
+    this.load.image('asteroid', 'sj_asteroids/assets/asteroid.png')
   }
 
   create() {
@@ -28,6 +29,17 @@ class mainScene {
     this.player.setMaxVelocity(150)
     this.player.setCollideWorldBounds(true)
 
+    this.rockGroup = this.physics.add.group()
+    this.rockArray = []
+
+    for (var i = 0; i < 3; i++) {
+      const rock = this.physics.add.sprite(400 + i*50,200,'asteroid')
+
+      this.rockGroup.add(rock,true)
+      this.rockArray.push(rock)
+
+    }
+
     this.scoreText = this.add.text(width - 200, 20,'Score: 0000').setOrigin(0.5)
 
     this.arrow = this.input.keyboard.createCursorKeys()
@@ -44,7 +56,7 @@ class mainScene {
     } else { 
       this.player.setAcceleration(0)
     }
-    
+
     // fix hitbox not updating
     if (this.arrow.right.isDown) {
       this.player.setAngularVelocity(300)
