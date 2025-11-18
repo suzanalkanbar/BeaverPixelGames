@@ -7,6 +7,10 @@ class mainScene {
     this.load.spritesheet('walking', 
       'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
       {frameWidth: 64, frameHeigth: 66})
+
+      this.load.spritesheet('grass', 'j-pikmin_Mario/assets/grass-spritesheet.png',
+        {frameWidth: 30, frameHeigth: 30}
+      )
   }
 
   create() {
@@ -24,6 +28,19 @@ class mainScene {
     this.player.setCollideWorldBounds(true);
     this.player.body.setGravityY(300);
 
+    this.grass = this.physics.add.staticGroup()
+
+    this.grassX = 15
+    this.spritelength = 30 - 3
+    this.onStart
+
+    for(let i = 0; i < 26; i++){
+      this.grass.create(this.grassX, 385, 'grass', 13)
+      this.grassX += this.spritelength
+    }
+
+    this.physics.add.collider(this.player, this.grass)
+
   }
   update() {
 
@@ -39,7 +56,7 @@ class mainScene {
       this.player.setFrame(0);
     }
 
-    if (this.arrow.up.isDown) {
+    if (this.arrow.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-200);
     }
 
@@ -53,7 +70,7 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#5dba2f', // The background color (grey)
+  backgroundColor: '#5dba2f', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade' }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
