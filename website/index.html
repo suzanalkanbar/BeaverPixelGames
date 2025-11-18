@@ -1,29 +1,44 @@
+<!doctype html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Games</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
 <body>
-
-    <head>
-        <link rel="stylesheet" href="style.css">
-
-    </head>
 
     <div class="hero-cover">
         <header class="site-header">
-            <nav class="nav" aria-label="Primary">
+            <nav class="nav" aria-label="Hoofdnavigatie">
                 <a class="logo" href="/">Logo</a>
 
+                <!-- Burgermenu -->
+                <button class="burger-menu" id="burger" aria-controls="nav-links" aria-expanded="false">
+                    <span class="burger-box" aria-hidden="true">
+                        <span class="burger-line"></span>
+                        <span class="burger-line"></span>
+                        <span class="burger-line"></span>
+                    </span>
+                    <span class="visually-hidden">Menu</span>
+                </button>
 
-
+                <!-- Hoofdmenu -->
                 <ul id="nav-links" class="menu">
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Home</a></li>
                     <li><a href="#">Games</a></li>
-                    <li><a href="./aboutpage.html">About</a></li>
+                    <li><a href="#">About</a></li>
                 </ul>
 
                 <div class="account">
-                    <a class="login" href="./login.html">Login</a>
-                    <a class="signUp" href="./registreren.html">Sign up</a>
+                    <a class="login" href="#">Login</a>
+                    <a class="signUp" href="#">Sign up</a>
                 </div>
             </nav>
         </header>
+
 
         <section class="hero">
             <h1>Game of the week</h1>
@@ -35,7 +50,7 @@
     <main>
 
         <section class="games">
-            <div class="game">Game 1</div>
+            <div class="game" id="game-1">Game 1</div>
             <div class="game">Game 2</div>
             <div class="game">Game 3</div>
 
@@ -43,13 +58,23 @@
             <div class="game">Game 5</div>
             <div class="game">Game 6</div>
         </section>
+
+        <section class="console-wrap">
+            <h2 class="console-title">Speel hier je game</h2>
+            <div id="console-root"></div>
+        </section>
+
     </main>
 
     <footer>
-        <!-- links / copyright -->
+        <!-- links -->
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
-    <script src="website.js"> </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.14.0/dist/phaser.min.js"></script>
+    <script src="website.js"></script>
+
 
 </body>
+
+</html>

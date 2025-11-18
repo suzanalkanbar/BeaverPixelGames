@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 function openGamePopup() {
   let overlay = document.querySelector(".modal-overlay");
   if (overlay) {
@@ -132,19 +133,22 @@ function openGamePopup() {
 
   // ===== START knop: HIER begint je game =====
   startBtn.addEventListener("click", () => {
-    if (!window.snakeLoaded) {
-      const script = document.createElement("script");
-      script.src = "j-snake/game.js";        // zelfde map als index.html
-      script.onload = () => {
-        window.snakeLoaded = true;
-        console.log("Snake game geladen en gestart");
-        // game.js doet zelf: new Phaser.Game({ parent: 'game', ... })
-      };
-      document.body.appendChild(script);
-    } else {
-      console.log("Snake game was al geladen");
-    }
-  });
+  if (!window.snakeLoaded) {
+    const script = document.createElement("script");
+    script.src = "../j-snake/game.js";
+    script.onload = () => {
+      window.snakeLoaded = true;
+      const canvas = document.querySelector("canvas");
+      if (canvas) {
+        document.getElementById("game").appendChild(canvas);
+      }
+    };
+    document.body.appendChild(script);
+  } else {
+    console.log("Snake game was al geladen");
+  }
+});
+
 
   resetBtn.addEventListener("click", () => {
     if (window.Phaser && Phaser.GAMES && Phaser.GAMES.length > 0) {
