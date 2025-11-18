@@ -41,10 +41,10 @@ class mainScene {
 
     if (this.arrow.up.isDown) {
       this.physics.velocityFromRotation(this.player.rotation, 150, this.player.body.acceleration)
-    } else {
+    } else { 
       this.player.setAcceleration(0)
     }
-
+    
     // fix hitbox not updating
     if (this.arrow.right.isDown) {
       this.player.setAngularVelocity(300)
