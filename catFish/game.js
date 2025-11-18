@@ -214,6 +214,12 @@ class mainScene {
                             this.hide(this.rod)
                             this.hideList(this.fishBar)
                         }
+                    } else if(!(this.r1.y < 300 && this.r1.y > 100)){
+                        this.partTwo = false;
+                            playMinigame = false;
+                            mode = 1;
+                            this.hide(this.rod)
+                            this.hideList(this.fishBar)
                     }
                 }
                 if (this.partTwo) {
@@ -240,6 +246,12 @@ class mainScene {
                             this.hide(this.rod)
                             this.hideList(this.fishBar)
                         }
+                    } else if(!(this.r1.y < 300 && this.r1.y > 100)){
+                        this.partTwo = false;
+                            playMinigame = false;
+                            mode = 1;
+                            this.hide(this.rod)
+                            this.hideList(this.fishBar)
                     }
                 }
                 if (this.win) {
