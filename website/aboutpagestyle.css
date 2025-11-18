@@ -61,3 +61,20 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   border-color: #aaa;
 }
+
+.profile-pic {
+  width: 120px;      /* grootte van je ronde foto */
+  height: 120px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;  /* zorgt dat de foto binnen het rondje blijft */
+  border: 4px solid white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.profile-pic img {
+  width: 100%;       /* afbeelding schaalt mee */
+  height: 100%;
+  object-fit: cover; /* vult het rondje mooi zonder rekken */
+  display: block;
+}

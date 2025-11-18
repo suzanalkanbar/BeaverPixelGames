@@ -18,7 +18,7 @@ if (nav && btn) {
 
 // ===== GAME POPUP =====
 
-// vlag om te checken of game.js al geladen is
+
 window.snakeLoaded = false;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,20 +29,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function openGamePopup() {
-  // oude overlay sluiten
-  const old = document.querySelector(".modal-overlay");
-  if (old) old.remove();
+  let overlay = document.querySelector(".modal-overlay");
+  if (overlay) {
+    overlay.style.display = "flex";
+    return;
+  }
 
-  // overlay
-  const overlay = document.createElement("div");
+  overlay = document.createElement("div");
   overlay.className = "modal-overlay";
 
   // sluit-knop
   const closeBtn = document.createElement("button");
   closeBtn.className = "modal-close";
   closeBtn.innerHTML = "&times;";
-  closeBtn.addEventListener("click", () => overlay.remove());
-
+  closeBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
   // venster + console
   const modal = document.createElement("div");
   modal.className = "modal";
@@ -55,17 +57,15 @@ function openGamePopup() {
   screen.className = "console-screen";
 
   const gameContainer = document.createElement("div");
-  gameContainer.id = "game";          // belangrijk: parent: 'game' in game.js
+  gameContainer.id = "game";
   gameContainer.style.width = "700px";
   gameContainer.style.height = "400px";
 
   screen.appendChild(gameContainer);
 
-  // --- BODY met knoppen ---
   const body = document.createElement("div");
   body.className = "console-body";
 
-  // links: D-pad (4 knoppen)
   const leftButtons = document.createElement("div");
   leftButtons.className = "console-buttons";
 
@@ -94,7 +94,6 @@ function openGamePopup() {
   dpad.append(btnUp, btnDown, btnLeft, btnRight, centerDot);
   leftButtons.appendChild(dpad);
 
-  // midden: RESET / START
   const centerButtons = document.createElement("div");
   centerButtons.className = "console-buttons";
 
@@ -135,7 +134,7 @@ function openGamePopup() {
   startBtn.addEventListener("click", () => {
     if (!window.snakeLoaded) {
       const script = document.createElement("script");
-      script.src = "game.js";        // zelfde map als index.html
+      script.src = "j-snake/game.js";        // zelfde map als index.html
       script.onload = () => {
         window.snakeLoaded = true;
         console.log("Snake game geladen en gestart");
@@ -147,11 +146,14 @@ function openGamePopup() {
     }
   });
 
-  // Simpele RESET: hele pagina opnieuw laden
   resetBtn.addEventListener("click", () => {
-    location.reload();
+    if (window.Phaser && Phaser.GAMES && Phaser.GAMES.length > 0) {
+      const phaserGame = Phaser.GAMES[0];
+      const scene = phaserGame.scene.scenes[0];
+      window.gameover = false;
+      scene.scene.restart();
+    }
   });
 
-  // D-pad / A / B doen nu nog niks in de game-logica,
-  // maar je kunt hier later acties aan koppelen.
+
 }
