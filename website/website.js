@@ -135,7 +135,7 @@ function openGamePopup() {
   startBtn.addEventListener("click", () => {
   if (!window.snakeLoaded) {
     const script = document.createElement("script");
-    script.src = "../j-snake/game.js";
+    script.src = "../t_simonSays/game.js";
     script.onload = () => {
       window.snakeLoaded = true;
       const canvas = document.querySelector("canvas");
