@@ -4,9 +4,19 @@ class mainScene {
 
     startGame () {
       this.score = 0
+      this.scoreText.setText('Score: ' + this.score)
       this.pattern = []
       this.aiTurn = true
       this.time.delayedCall(1000, this.aiMakingPattern, [], this)
+      this.startButton.visible = false
+    }
+
+    gameOver () {
+      console.log('Game Over')
+      alert('Game Over')
+      this.score = 0
+      this.scoreText.setText('Score: ' + this.score)
+      this.startButton.visible = true
     }
 
       setupTile(colorName) {
@@ -55,7 +65,7 @@ class mainScene {
       const correctColor = this.pattern[currentInputIndex]
 
       if (playerColor !== correctColor){
-        console.log('Game Over')
+        this.gameOver ()
       }
       else if(this.playerPattern.length == this.pattern.length){
         this.score++
@@ -150,9 +160,10 @@ class mainScene {
       backgroundColor: '#ffc107',
       padding: { x:15, y:10 }
     }
-    this.startButton = this.add.text(300, 350, 'Start Game', buttonStyle)
+    this.startButton = this.add.text(250, 350, 'Start Game', buttonStyle)
     this.startButton.setInteractive({ useHandCursor: true})
     this.startButton.on('pointerdown', this.startGame, this)
+    
 
 
   } // end create()
