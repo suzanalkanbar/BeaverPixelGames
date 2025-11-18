@@ -7,10 +7,11 @@ class mainScene {
     this.load.spritesheet('walking', 
       'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
       {frameWidth: 66, frameHeigth: 66})
+    this.load.spritesheet('grass', 'j-pikmin_Mario/assets/grass-spritesheet.png',
+      {frameWidth: 30, frameHeigth: 30}
+    )
 
-      this.load.spritesheet('grass', 'j-pikmin_Mario/assets/grass-spritesheet.png',
-        {frameWidth: 30, frameHeigth: 30}
-      )
+    this.load.audio('cry', 'j-pikmin_Mario/assets/cry4.mp3')
   }
 
   create() {
@@ -29,6 +30,7 @@ class mainScene {
     this.player = this.physics.add.sprite(200, 200, 'walking', 0);
     this.player.body.setSize(26, 66)
     this.player.body.setGravityY(300);
+    this.player.sound = this.sound.add('cry', {volume: 20})
 
     this.grass = this.physics.add.staticGroup()
 
@@ -89,6 +91,12 @@ class mainScene {
     if (this.arrow.up.isDown && this.player.body.touching.down) {
       this.delay = 0
       this.player.setVelocityY(-200);
+    }
+
+    if(this.player.y >= 400){
+      this.player.x = 200
+      this.player.y = 200
+      this.player.sound.play()
     }
 
   }
