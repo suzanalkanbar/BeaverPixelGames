@@ -16,6 +16,7 @@ class mainScene {
       alert('Game Over')
       this.score = 0
       this.scoreText.setText('Score: ' + this.score)
+      this.startButton = this.add.text(250, 350, 'Restart', buttonStyle)
       this.startButton.visible = true
     }
 
