@@ -9,14 +9,15 @@ class mainScene {
       this.aiTurn = true
       this.time.delayedCall(1000, this.aiMakingPattern, [], this)
       this.startButton.visible = false
+      this.gameOverText.visible = false
     }
 
     gameOver () {
       console.log('Game Over')
-      alert('Game Over')
+      this.gameOverText.visible = true
       this.score = 0
       this.scoreText.setText('Score: ' + this.score)
-      this.startButton = this.add.text(250, 350, 'Restart', buttonStyle)
+      this.startButton.setText('Restart')
       this.startButton.visible = true
     }
 
@@ -24,15 +25,15 @@ class mainScene {
       const tile = this[colorName]
     tile.setInteractive({useHandCursor: true})
     tile.isAnimating = false
+
     tile.on('pointerdown', ()=>{
       if (!this.playerTurn || tile.isAnimating) return
 
 
         tile.isAnimating = true
-
         this.playerPattern.push(colorName)
         console.log(this.playerPattern)
-        this.checkPlayerPattern()
+        
         
         this.tweens.add({
         targets: tile,
@@ -40,9 +41,10 @@ class mainScene {
         scaleX: 1.2,
         scaleY: 1.2,
         yoyo: true,
-      onComplete: () => { tile.isAnimating = false}
+      onComplete: () => { if(!this.startButton.visible) {tile.isAnimating = false}
+      tile.isAnimating = false}
     })
-
+      this.checkPlayerPattern()
   })
     }
     
@@ -133,6 +135,11 @@ class mainScene {
     this.playerTurn = false
     this.score = 0
 
+    const centerX = 350
+    const centerY = 200
+    
+    
+
     // starting positions of the tiles
     this.yellow = this.physics.add.sprite(280, 130, 'yellow')
     this.red = this.physics.add.sprite(420, 130, 'red')
@@ -161,9 +168,20 @@ class mainScene {
       backgroundColor: '#ffc107',
       padding: { x:15, y:10 }
     }
-    this.startButton = this.add.text(250, 350, 'Start Game', buttonStyle)
+    this.startButton = this.add.text(centerX, 375, 'Start Game', buttonStyle)
+    this.startButton.setOrigin(0.5)
     this.startButton.setInteractive({ useHandCursor: true})
     this.startButton.on('pointerdown', this.startGame, this)
+
+    // game over text
+    let gameOverStyle = {
+      font: '40px Arial',
+      fill: '#ff0000',
+      padding: { x:15, y:10 }
+    }
+
+    this.gameOverText = this.add.text(215, 175, 'GAME OVER', gameOverStyle)
+    this.gameOverText.visible = false
     
 
 
