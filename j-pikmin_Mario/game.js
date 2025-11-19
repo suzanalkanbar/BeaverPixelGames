@@ -8,22 +8,33 @@ class mainScene {
 
     this.load.spritesheet('walking', 
       'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
-      {frameWidth: 66, frameHeigth: 66})
+      {frameWidth: 66, frameHeight: 66})
     this.load.spritesheet('grass', 
       'j-pikmin_Mario/assets/grass-spritesheet.png',
-      {frameWidth: 30, frameHeigth: 30}
+      {frameWidth: 30, frameHeight: 30}
     )
     this.load.spritesheet('nectar',
       'j-pikmin_Mario/assets/nectar.png',
       {frameWidth: 26, frameHeight: 7}
     )
+    this.load.spritesheet('bulborb', 
+      'j-pikmin_Mario/assets/bulborb.png',
+      {frameWidth: 31, frameHeight: 28}
+    )
+    this.load.spritesheet('onion', 
+      'j-pikmin_Mario/assets/onion.png',
+      {frameWidth: 63, frameHeight: 61}
+    )
 
     this.load.audio('cry', 'j-pikmin_Mario/assets/cry.mp3')
     this.load.audio('slurp', 'j-pikmin_Mario/assets/slurp.m4a')
     this.load.audio('jump', 'j-pikmin_Mario/assets/jump.mp3')
+    this.load.audio('background', 'j-pikmin_Mario/assets/ogg_beachtheme.ogg')
   }
 
   create() {
+
+    this.sound.play('background', {loop: true})
 
     this.delay = 0
 
@@ -41,6 +52,11 @@ class mainScene {
     this.player = this.physics.add.sprite(200, 200, 'walking', 0);
     this.player.body.setSize(26, 66)
     this.player.body.setGravityY(300);
+
+    this.redOnion = this.add.image(650, 315, 'onion', 0)
+
+    this.bulborb= this.physics.add.group()
+    this.bulborb.create(600, 328, 'bulborb', 0).setScale(1.2)
 
     this.nectar = this.physics.add.sprite(500 ,343, 'nectar', 0)
     this.nectar.play('splash')
@@ -123,6 +139,12 @@ class mainScene {
         this.powerUp();
       }
 
+    if(this.physics.overlap(this.player, this.bulborb)){
+      this.player.x = 200
+      this.player.y = 200
+      this.sound.play('cry')
+    }
+
   }
 
   /* VVV Put any other functions and code down here VVV */
@@ -138,7 +160,7 @@ class mainScene {
 new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
-  backgroundColor: '#5dba2f', // The background color
+  backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade'}, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
