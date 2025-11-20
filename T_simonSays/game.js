@@ -5,6 +5,7 @@ class mainScene {
     startGame () {
       this.score = 0
       this.scoreText.setText('Score: ' + this.score)
+      this.highscoreText.setText('Highscore: ' + this.highscore)
       this.pattern = []
       this.aiTurn = true
       this.time.delayedCall(1000, this.aiMakingPattern, [], this)
@@ -32,7 +33,8 @@ class mainScene {
 
         tile.isAnimating = true
         this.playerPattern.push(colorName)
-        console.log(this.playerPattern)
+        console.log('the pattern of the player: ' + this.playerPattern)
+        this.tileSoundPlay(colorName)
         
         
         this.tweens.add({
@@ -53,7 +55,7 @@ class mainScene {
       if (this.aiTurn == true){    
     const newColor = Phaser.Utils.Array.GetRandom(this.colors) // newColor is a random color
     this.pattern.push(newColor) // add random color to the array
-    console.log(this.pattern)
+    console.log('The pattern of the AI: ' + this.pattern)
     this.patternIndex = 0
     this.playerpattern = []
     this.aiTurn = false
@@ -73,6 +75,8 @@ class mainScene {
       else if(this.playerPattern.length == this.pattern.length){
         this.score++
         this.scoreText.setText('Score: ' + this.score)
+        this.updateHighscore()
+        this.highscoreText.setText('Highscore: ' + this.highscore)
         this.playerTurn = false
         this.aiTurn = true
         this.time.delayedCall(2000, this.aiMakingPattern, [], this)
@@ -84,6 +88,8 @@ class mainScene {
         const colorName = this.pattern[this.patternIndex]
         const tile = this[colorName]
 
+        this.tileSoundPlay(colorName)
+        
         this.tweens.add({
         targets: tile,
         duration: 300, 
@@ -105,6 +111,17 @@ class mainScene {
         }
   }
 
+  updateHighscore() {
+    if(this.score >= this.highscore){
+      this.highscore = this.score
+    }
+  }
+     
+  tileSoundPlay(colorName){
+    this.colorToPlay = colorName
+      this.playIt = this.sound.add(this.colorToPlay)
+      this.playIt.play()
+    }
 
 
 
@@ -118,6 +135,11 @@ class mainScene {
     this.load.image('blue', 't_simonSays/assets/blue.jpg')
     this.load.image('yellow', 't_simonSays/assets/yellow.jpg')
     this.load.image('green', 't_simonSays/assets/green.jpg')
+
+    this.load.audio('red', 't_simonSays/assets/red.mp3')
+    this.load.audio('blue', 't_simonSays/assets/blue.mp3')
+    this.load.audio('yellow', 't_simonSays/assets/yellow.mp3')
+    this.load.audio('green', 't_simonSays/assets/green.mp3')
   }
 
   create() {
@@ -134,6 +156,18 @@ class mainScene {
     this.aiTurn = false
     this.playerTurn = false
     this.score = 0
+    this.highscore = 0
+
+
+    this.redSoundPlay = this.sound.add('red')
+    this.blueSoundPlay = this.sound.add('blue')
+    this.yellowSoundPlay = this.sound.add('yellow')
+    this.greenSoundPlay = this.sound.add('green')
+
+
+
+
+    
 
     const centerX = 350
     const centerY = 200
@@ -160,7 +194,8 @@ class mainScene {
     
     // score
     let style = { font: '20px Arial', fill: '#ffffff'}
-    this.scoreText = this.add.text(20, 20, 'score: ' + this.score, style)
+    this.scoreText = this.add.text(20, 20, 'Score: ' + this.score, style)
+    this.highscoreText = this.add.text (20, 40, 'Highscore: ' + this.highscore, style)
     
     let buttonStyle = {
       font: '32px Arial',
