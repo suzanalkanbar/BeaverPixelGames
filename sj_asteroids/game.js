@@ -55,7 +55,7 @@ class mainScene {
     }
 
     // !!!!!!!!
-    this.physics.add.collider(this.player, this.asteroidGroup, function () {
+    this.physics.add.overlap(this.player, this.asteroidGroup, function () {
       console.log('hit')
 
     }
@@ -125,6 +125,6 @@ new Phaser.Game({
     default: 'arcade',
     arcade: { debug: true }
   }, // The physics engine to use
-  parent: 'game', // Create the game inside the <div id="game"> 
+  parent: 'asteroids', // Create the game inside the <div id="game"> 
 });
 
