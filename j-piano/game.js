@@ -609,6 +609,6 @@ new Phaser.Game({
   backgroundColor: '#000000ff', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade',}, // The physics engine to use
-  parent: 'game', // Create the game inside the <div id="game"> 
+  parent: 'piano', // Create the game inside the <div id="game"> 
 });
 

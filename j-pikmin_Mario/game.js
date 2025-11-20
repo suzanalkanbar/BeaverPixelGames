@@ -25,6 +25,10 @@ class mainScene {
       'j-pikmin_Mario/assets/onion.png',
       {frameWidth: 63, frameHeight: 61}
     )
+    this.load.spritesheet('nectarEgg', 
+      'j-pikmin_Mario/assets/nectar egg.png',
+      {frameWidth: 19, frameHeight: 27}
+    )
 
     this.load.audio('cry', 'j-pikmin_Mario/assets/cry.mp3')
     this.load.audio('slurp', 'j-pikmin_Mario/assets/slurp.m4a')
@@ -36,14 +40,23 @@ class mainScene {
 
     this.sound.play('background', {loop: true})
 
-    this.delay = 0
+    this.delay = 0;
+    this.flowered = false;
+    this.invincible = false;
 
     this.arrow = this.input.keyboard.createCursorKeys();
+    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
     this.anims.create({
         key: 'splash',
         frames: this.anims.generateFrameNumbers('nectar', { frames: [0, 1, 2] }),
         frameRate: 8,
+    });
+
+    this.anims.create({
+        key: 'crack',
+        frames: this.anims.generateFrameNumbers('nectarEgg', { frames: [0, 1, 2, 3] }),
+        frameRate: 4,
     });
 
     this.background = this.add.image(350, 200, 'background')
@@ -52,11 +65,15 @@ class mainScene {
     this.player = this.physics.add.sprite(200, 200, 'walking', 0);
     this.player.body.setSize(26, 66)
     this.player.body.setGravityY(300);
+    this.cameras.main.scrollX = this.player.x - 350
 
     this.redOnion = this.add.image(650, 315, 'onion', 0)
 
-    this.bulborb= this.physics.add.group()
-    this.bulborb.create(600, 328, 'bulborb', 0).setScale(1.2)
+    this.bulborb = this.physics.add.group()
+    this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2)
+
+    this.egg = this.physics.add.staticGroup()
+    this.egg = this.physics.add.sprite(100, 333, 'nectarEgg', 0).setImmovable(true)
 
     this.nectar = this.physics.add.sprite(500 ,343, 'nectar', 0)
     this.nectar.play('splash')
@@ -76,21 +93,26 @@ class mainScene {
 
     this.grassX += this.spritelength * 3
 
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 50; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.grass.create(this.grassX, this.grassY + 27, 'grass', 50)
       this.grassX += this.spritelength
     }
 
     this.physics.add.collider(this.player, this.grass)
-
+    this.physics.add.collider(this.player, this.egg)
   }
 
   update() {
 
+  if(this.spacebar.isDown){
+    console.log(this.player.x)
+  }
 
+  if(!this.flowered){
     if (this.arrow.right.isDown) {
-      this.player.setVelocityX(160);
+      this.player.setVelocityX(160);  
+      this.cameras.main.scrollX = this.player.x - 350
        if(this.delay < 15){
         this.player.setFrame(1);
       }else if(this.delay < 30){
@@ -104,6 +126,7 @@ class mainScene {
      
     }else if (this.arrow.left.isDown) {
       this.player.setVelocityX(-160);   
+      this.cameras.main.scrollX = this.player.x - 350
       if(this.delay < 15){
         this.player.setFrame(3);
       }else if(this.delay < 30){
@@ -124,25 +147,74 @@ class mainScene {
       this.delay = 0
       this.player.setVelocityY(-200);
     }
+  }else if(this.flowered){
+    if (this.arrow.right.isDown) {
+      this.player.setVelocityX(160);
+      this.cameras.main.scrollX = this.player.x - 350
+       if(this.delay < 15){
+        this.player.setFrame(6);
+      }else if(this.delay < 30){
+        this.player.setFrame(7);
+      }else {
+        this.delay = 0
+      }
+      if(this.player.body.touching.down){
+        this.delay++
+      }
+     
+    }else if (this.arrow.left.isDown) {
+      this.player.setVelocityX(-160);   
+      this.cameras.main.scrollX = this.player.x - 350
+      if(this.delay < 15){
+        this.player.setFrame(8);
+      }else if(this.delay < 30){
+        this.player.setFrame(9);
+      }else {
+        this.delay = 0
+      }
+      if(this.player.body.touching.down){
+        this.delay++
+      }
+    }else {
+      this.player.setVelocityX(0);
+      this.player.setFrame(5);
+    }
+
+    if (this.arrow.up.isDown && this.player.body.touching.down) {
+      this.sound.play('jump')
+      this.delay = 0
+      this.player.setVelocityY(-200);
+    }
+  }
 
     if(this.player.y >= 400){
-      this.player.x = 200
-      this.player.y = 200
-      this.nectar.destroy()
-      this.nectar = this.physics.add.sprite(500 ,343, 'nectar', 0)
-      this.nectar.sound = this.sound.add('slurp', {volume: 5})
-      this.nectar.play('splash')
-      this.sound.play('cry')
+      this.death()
     }
 
     if (this.physics.overlap(this.player, this.nectar)) {
         this.powerUp();
       }
 
-    if(this.physics.overlap(this.player, this.bulborb)){
-      this.player.x = 200
-      this.player.y = 200
-      this.sound.play('cry')
+    if(!this.flowered && !this.invincible){
+      if(this.physics.overlap(this.player, this.bulborb)){
+        console.log('wrong')
+        this.death()
+      }
+    }else if(this.flowered){
+      if(this.physics.overlap(this.player, this.bulborb)){
+        console.log(this.flowered)
+        this.invincible = true
+        this.invincTimer = this.time.addEvent({
+          delay: 1500,
+          callback: ()=>{
+            this.invincibile = false
+            this.flowered = false
+          },
+          loop: false
+        })
+        console.log('timer done')
+      }
+      
     }
 
   }
@@ -150,8 +222,26 @@ class mainScene {
   /* VVV Put any other functions and code down here VVV */
 
   powerUp(){
+    this.flowered = true;
     this.nectar.sound.play()
     this.nectar.destroy()
+    console.log(this.flowered)
+  }
+
+  toggleInvinc(){
+    this.invincibile = !this.invincibile
+    console.log('timer done')
+  }
+
+  death(){
+    this.flowered = false;
+    this.player.x = 200
+    this.player.y = 200
+    this.nectar.destroy()
+    this.nectar = this.physics.add.sprite(500 ,343, 'nectar', 0)
+    this.nectar.sound = this.sound.add('slurp', {volume: 5})
+    this.nectar.play('splash')
+    this.sound.play('cry')
   }
 
 }
@@ -162,7 +252,9 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade'}, // The physics engine to use
-  parent: 'game', // Create the game inside the <div id="game"> 
+  physics: { default: 'arcade',
+    arcade: { debug: true }
+  }, // The physics engine to use
+  parent: 'pikmin platformer', // Create the game inside the <div id="game"> 
 });
 
