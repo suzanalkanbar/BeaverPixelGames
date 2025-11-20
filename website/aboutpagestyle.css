@@ -37,7 +37,7 @@
 .introductions-boxes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  flex-wrap: wrap; /* meerdere regels mogelijk */
+  flex-wrap: wrap; /* meerdere regels */
   gap: 3rem; /* ruimte tussen de boxjes */
   justify-content: center; /* centreren */
   margin-top: 2rem;
