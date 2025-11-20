@@ -1,11 +1,10 @@
 // https://freeasteroids.org/ <- inspiratie
 
 // TO DO
-// [ ] add player death if player and asteroid collision
-// [ ] add asteroid death if asteroid and bullet collision
-// [ ] add bullet inactive if asteroid andd bullet collision
-// [ ] add sound of bullet shooting
-
+// [ ] add player death
+// [ ] add reset after player death
+// [ ] add winning screen
+// BUG: player only vulnerable after shooting bullet
 
 // Create the mainScene
 class mainScene {
@@ -17,10 +16,14 @@ class mainScene {
     It will load all the assets, like sprites and sounds
     */
     this.load.spritesheet('player', 'sj_asteroids/assets/bullet_hell_player_ship.png', { frameWidth: 32, frameHeigth: 32 })
+
     this.load.image('asteroid', 'sj_asteroids/assets/asteroid.png')
     this.load.image('bullet', 'sj_asteroids/assets/bullet.png')
+
     this.load.audio('bomb', 'sj_asteroids/assets/8bit_bomb_explosion.wav')
     this.load.audio('laser', 'sj_asteroids/assets/laser1.wav')
+    this.load.audio('rocket', 'sj_asteroids/assets/rocket_engine.wav')
+    this.load.audio('death', 'sj_asteroids/assets/DeathFlash.wav')
   }
 
   create() {
@@ -66,21 +69,9 @@ class mainScene {
     this.bullet.active = false
     this.bullet.speed = Phaser.Math.GetSpeed(500, 1)
 
-    // this.bulletGroup = this.physics.add.group({
-    //   classType: Phaser.GameObjects.Sprite, // NOT EQUAL TO VIDEO
-    //   maxSize: 1,
-    //   runChildUpdate: true
-    // })
-
-    // !!!!!!!!
-    this.physics.add.overlap(this.player, this.asteroidGroup, function () {
-      console.log('hit')
-
-    }
-    )
+    this.physics.add.overlap(this.player, this.asteroidGroup, this.playerAsteroidCollision, undefined, this)
 
     this.physics.add.overlap(this.bullet, this.asteroidGroup, this.bulletAsteroidCollision, undefined, this)
-    
 
     this.scoreText = this.add.text(width - 100, 20, 'Score: 0000').setOrigin(0.5)
 
@@ -94,6 +85,7 @@ class mainScene {
     */
 
     if (this.arrow.up.isDown) {
+      this.sound.play('rocket')
       this.physics.velocityFromRotation(this.player.rotation, 150, this.player.body.acceleration)
       this.player.setFrame(1)
     } else {
@@ -113,18 +105,30 @@ class mainScene {
     if (this.arrow.space.isDown) {
 
       if (!this.bullet.active) { // <- UNCOMMENT TO ENABLE ONE BULLET...
-      this.sound.play('laser')
-      this.bullet.setPosition(this.player.x, this.player.y)
-      this.bullet.setActive(true)
-      this.bullet.setVisible(true)
+        this.sound.play('laser')
+        this.bullet.setPosition(this.player.x, this.player.y)
+        this.bullet.setActive(true)
+        this.bullet.setVisible(true)
 
-      this.bullet.direction = this.player.rotation
-      this.bullet.rotation = this.bullet.direction
+        this.bullet.direction = this.player.rotation
+        this.bullet.rotation = this.bullet.direction
       }
     }
 
     this.bullet.x += Math.cos(this.bullet.direction) * this.bullet.speed * delta
     this.bullet.y += Math.sin(this.bullet.direction) * this.bullet.speed * delta
+
+    if (this.bullet.x < 0) {
+      this.bullet.active = false
+    } else if (this.bullet.x > 700) {
+      this.bullet.active = false
+    }
+
+    if (this.bullet.y < 0) {
+      this.bullet.active = false
+    } else if (this.bullet.y > 400) {
+      this.bullet.active = false
+    }
 
     for (const asteroid of this.asteroidArray) {
       if (asteroid.active) {
@@ -158,6 +162,11 @@ class mainScene {
     this.score += 10
     this.sound.play('bomb')
   }
+
+  playerAsteroidCollision(player, asteroid){
+      console.log('hit')
+      this.sound.play('death')
+    }
 }
 
 // Create the game
