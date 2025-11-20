@@ -77,7 +77,7 @@ class mainScene {
 
       if (playerColor !== correctColor){
         this.gameOver ()
-        
+
       }
       // you only get a score when you reached the same array length as the pattern array of the AI
       else if(this.playerPattern.length == this.pattern.length){
@@ -139,10 +139,10 @@ class mainScene {
     //When you reach a score of 10 the tiles are positioned differently
    otherTilePos(){
       if (this.score >= 10){
-    this.yellow.setPosition(280, 270)
+    this.yellow.setPosition(420, 270)
     this.red.setPosition(280, 130)
-    this.blue.setPosition(420, 270) 
-    this.green.setPosition(420, 130)
+    this.blue.setPosition(420, 130) 
+    this.green.setPosition(280, 270)
       }
     }
 
