@@ -31,22 +31,33 @@ class mainScene {
     this.player.setMaxVelocity(150)
     this.player.setCollideWorldBounds(true)
 
-    
-
     this.asteroidGroup = this.physics.add.group()
     this.asteroidArray = []
 
     // add bunch of rocks 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 1; i++) {
+      // meteor constructor
       var scale = Phaser.Math.FloatBetween(1, 3)
-      const asteroid = this.physics.add.sprite(Phaser.Math.Between(0, width), Phaser.Math.Between(0, height), 'asteroid').setScale(scale)
+      const asteroid = this.physics.add.sprite(200, 200, 'asteroid').setScale(scale)
+      asteroid.speed = Phaser.Math.GetSpeed(100,1)
+      asteroid.direction = Phaser.Math.RND.angle()
+      asteroid.angleRotation = Phaser.Math.RND.between(0.8,2.5)
+      asteroid.active = true
+      asteroid.visible = true
+      asteroid.factor = 1
+
+      const xPos = Phaser.Math.RND.between(0, width)
+      const yPos = Phaser.Math.RND.between(0, height)
+      asteroid.setPosition(xPos, yPos)
 
       this.asteroidGroup.add(asteroid, true)
       this.asteroidArray.push(asteroid)
     }
 
+    // !!!!!!!!
     this.physics.add.collider(this.player, this.asteroidGroup, function () {
       console.log('hit')
+
     }
     )
 
@@ -55,7 +66,7 @@ class mainScene {
     this.arrow = this.input.keyboard.createCursorKeys()
 
   }
-  update() {
+  update(time, delta) {
     /* 
     This method is called 60 times per second after create() 
     It will handle all the game's logic, like movements
@@ -75,6 +86,26 @@ class mainScene {
       this.player.setAngularVelocity(-300)
     } else {
       this.player.setAngularVelocity(0)
+    }
+
+    for (const asteroid of this.asteroidArray) {
+      if (asteroid.active) {
+        asteroid.x += asteroid.factor * Math.cos(asteroid.direction) * asteroid.speed * delta
+        asteroid.y += Math.cos(asteroid.direction) * asteroid.speed * delta
+        asteroid.angle += asteroid.angleRotation
+
+        if (asteroid.x < 0) {
+          asteroid.x = 700
+        } else if (asteroid.x > 700) {
+          asteroid.x = 0
+        }
+
+        if (asteroid.y < 0) {
+          asteroid.y = 400
+        } else if (asteroid.y > 400) {
+          asteroid.y = 0
+        }
+      } 
     }
 
     this.scoreText.setText('Score: ' + this.score)
