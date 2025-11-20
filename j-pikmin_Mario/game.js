@@ -43,8 +43,8 @@ class mainScene {
 
   create() {
 
-    this.backgroundMusic = this.sound.add('forest of hope')
-    this.backgroundMusic.play({loop: true})
+    // this.backgroundMusic = this.sound.add('distant spring')
+    // this.backgroundMusic.play({loop: true})
 
     this.delay = 0;
     this.flowered = false;
@@ -62,8 +62,14 @@ class mainScene {
     this.anims.create({
         key: 'crack',
         frames: this.anims.generateFrameNumbers('nectarEgg', { frames: [0, 1, 2, 3] }),
-        frameRate: 4,
+        frameRate: 6,
     });
+
+    this.anims.create({
+      key: 'bulbdeath',
+      frames: this.anims.generateFrameNumbers('bulborb', { frames: [5, 6] }),
+      frameRate: 10,
+    })
 
     this.backgroundX = -350
     this.background = this.add.image(this.backgroundX, 200, 'background')
@@ -83,7 +89,7 @@ class mainScene {
     this.redOnion = this.physics.add.sprite(1500, 315, 'onion', 0).setImmovable(true)
 
     this.bulborb = this.physics.add.group()
-    this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2)
+    this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
 
     this.egg = this.physics.add.group()
     this.egg = this.physics.add.sprite(100, 333, 'nectarEgg', 0).setImmovable(true)
@@ -119,21 +125,9 @@ class mainScene {
     }
 
     this.physics.add.collider(this.player, this.grass)
-    this.physics.add.collider(this.player, this.egg, ()=>{
-      this.player.setVelocityY(-100)
-      this.egg.play('crack')
-      this.physics.world.colliders.getActive().find(function(i){ return i.name == 'eggcrack'; }).destroy();
-      this.crackTimer = this.time.addEvent({
-          delay: 1000,
-          callback: ()=>{
-            this.egg.destroy() 
-            this.nectar = this.physics.add.sprite(100 ,343, 'nectar', 0)
-            this.nectar.play('splash')
-            this.nectar.sound = this.sound.add('slurp', {volume: 5})
-          },
-          loop: false
-        })
-    }).name = 'eggcrack'
+    this.physics.add.collider(this.player, this.egg,).name = 'eggcrack'
+
+    this.physics.add.collider(this.player, this.bulborb)
 
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
@@ -234,24 +228,72 @@ class mainScene {
         this.powerUp();
       }
 
-    if(!this.flowered && !this.invincible){ 
-      if(this.physics.overlap(this.player, this.bulborb)){
-        this.death()
-      }
-    }else if(this.flowered){
-      if(this.physics.overlap(this.player, this.bulborb)){
-        this.sound.play('hit')
-        this.invincible = true
-        this.flowered = false
-        this.invincTimer = this.time.addEvent({
-          delay: 1500,
+
+      if(this.player.body.touching.down && this.bulborb.body.touching.up){
+        this.bulborb.play('bulbdeath')
+        this.sound.play('bulborb death')
+        this.player.setVelocityY(-100)
+        this.delayTimer = this.time.addEvent({
+          delay: 500,
           callback: ()=>{
-            this.invincible = false      
+            this.bulborb.visible = false  
           },
           loop: false
         })
       }
+
+      if(this.player.body.touching.down && this.bulborb.body.touching.left){
+        if(!this.flowered && !this.invincible){  
+            this.death() 
+        }else if(this.flowered){
+            this.sound.play('hit')
+            this.invincible = true
+            this.flowered = false
+            this.invincTimer = this.time.addEvent({
+              delay: 1500,
+              callback: ()=>{
+                this.invincible = false      
+              },
+              loop: false
+            })
+          
+        }
+      }
+      if(this.player.body.touching.down && this.bulborb.body.touching.right){
+        if(!this.flowered && !this.invincible){  
+            this.death() 
+        }else if(this.flowered){
+            this.sound.play('hit')
+            this.invincible = true
+            this.flowered = false
+            this.invincTimer = this.time.addEvent({
+              delay: 1500,
+              callback: ()=>{
+                this.invincible = false      
+              },
+              loop: false
+            })
+          
+        }
+      }
+
       
+    
+
+    if(this.player.body.touching.down && this.egg.body.touching.up){
+      this.player.setVelocityY(-100)
+      this.egg.play('crack')
+      this.physics.world.colliders.getActive().find(function(i){ return i.name == 'eggcrack'; }).destroy();
+      this.crackTimer = this.time.addEvent({
+          delay: 1000,
+          callback: ()=>{
+            this.egg.visible = false 
+            this.nectar = this.physics.add.sprite(100 ,343, 'nectar', 0)
+            this.nectar.play('splash')
+            this.nectar.sound = this.sound.add('slurp', {volume: 5})
+          },
+          loop: false
+        })
     }
 
   }
