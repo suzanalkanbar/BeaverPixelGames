@@ -33,12 +33,15 @@ class mainScene {
     this.load.audio('cry', 'j-pikmin_Mario/assets/cry.mp3')
     this.load.audio('slurp', 'j-pikmin_Mario/assets/slurp.m4a')
     this.load.audio('jump', 'j-pikmin_Mario/assets/jump.mp3')
-    this.load.audio('background', 'j-pikmin_Mario/assets/ogg_beachtheme.ogg')
+    this.load.audio('forest of hope', 'j-pikmin_Mario/assets/The Forest of Hope.mp3')
+    this.load.audio('distant spring', 'j-pikmin_Mario/assets/The Distant Spring.mp3')
+    this.load.audio('forest navel', 'j-pikmin_Mario/assets/The Forest Navel.mp3')
+    this.load.audio('hit', 'j-pikmin_Mario/assets/hit.mp3')
   }
 
   create() {
 
-    this.sound.play('background', {loop: true})
+    this.sound.play('forest of hope', {loop: true})
 
     this.delay = 0;
     this.flowered = false;
@@ -59,25 +62,31 @@ class mainScene {
         frameRate: 4,
     });
 
-    this.background = this.add.image(350, 200, 'background')
+    this.backgroundX = -350
+    this.background = this.add.image(this.backgroundX, 200, 'background')
     this.background.depth = -1
+    for(let i = 0; i < 10; i++){
+      this.backgroundX += 700
+      this.background = this.add.image(this.backgroundX, 200, 'background')
+      this.background.depth = -1
+    }
+    
 
     this.player = this.physics.add.sprite(200, 200, 'walking', 0);
     this.player.body.setSize(26, 66)
     this.player.body.setGravityY(300);
     this.cameras.main.scrollX = this.player.x - 350
 
-    this.redOnion = this.add.image(650, 315, 'onion', 0)
+    this.redOnion = this.add.image(1500, 315, 'onion', 0)
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2)
 
-    this.egg = this.physics.add.staticGroup()
+    this.egg = this.physics.add.group()
     this.egg = this.physics.add.sprite(100, 333, 'nectarEgg', 0).setImmovable(true)
+    this.egg.depth = 0.1
 
-    this.nectar = this.physics.add.sprite(500 ,343, 'nectar', 0)
-    this.nectar.play('splash')
-    this.nectar.sound = this.sound.add('slurp', {volume: 5})
+    
 
     this.grass = this.physics.add.staticGroup()
 
@@ -85,9 +94,15 @@ class mainScene {
     this.grassY = 360
     this.spritelength = 30 - 3
 
+    for(let i; i< 2; i++){
+      this.grass.create(this.grassX - this.spritelength, this.grassY + this.spritelength, 'grass', 50)
+      // this.grassY += this.spritelength
+    }
+
+    this.grassY = 360
     for(let i = 0; i < 13; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
-      this.grass.create(this.grassX, this.grassY + 27, 'grass', 50)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
       this.grassX += this.spritelength
     }
 
@@ -95,12 +110,25 @@ class mainScene {
 
     for(let i = 0; i < 50; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
-      this.grass.create(this.grassX, this.grassY + 27, 'grass', 50)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
       this.grassX += this.spritelength
     }
 
     this.physics.add.collider(this.player, this.grass)
-    this.physics.add.collider(this.player, this.egg)
+    this.physics.add.collider(this.player, this.egg, ()=>{
+      this.egg.play('crack')
+      this.physics.world.colliders.getActive().find(function(i){ return i.name == 'eggcrack'; }).destroy();
+      this.crackTimer = this.time.addEvent({
+          delay: 1000,
+          callback: ()=>{
+            this.egg.destroy() 
+            this.nectar = this.physics.add.sprite(100 ,343, 'nectar', 0)
+            this.nectar.play('splash')
+            this.nectar.sound = this.sound.add('slurp', {volume: 5})
+          },
+          loop: false
+        })
+    }).name = 'eggcrack'
   }
 
   update() {
@@ -195,24 +223,22 @@ class mainScene {
         this.powerUp();
       }
 
-    if(!this.flowered && !this.invincible){
+    if(!this.flowered && !this.invincible){ 
       if(this.physics.overlap(this.player, this.bulborb)){
-        console.log('wrong')
         this.death()
       }
     }else if(this.flowered){
       if(this.physics.overlap(this.player, this.bulborb)){
-        console.log(this.flowered)
+        this.sound.play('hit')
         this.invincible = true
+        this.flowered = false
         this.invincTimer = this.time.addEvent({
           delay: 1500,
           callback: ()=>{
-            this.invincibile = false
-            this.flowered = false
+            this.invincible = false      
           },
           loop: false
         })
-        console.log('timer done')
       }
       
     }
@@ -225,22 +251,13 @@ class mainScene {
     this.flowered = true;
     this.nectar.sound.play()
     this.nectar.destroy()
-    console.log(this.flowered)
-  }
-
-  toggleInvinc(){
-    this.invincibile = !this.invincibile
-    console.log('timer done')
   }
 
   death(){
     this.flowered = false;
     this.player.x = 200
+    this.cameras.main.scrollX = this.player.x - 350
     this.player.y = 200
-    this.nectar.destroy()
-    this.nectar = this.physics.add.sprite(500 ,343, 'nectar', 0)
-    this.nectar.sound = this.sound.add('slurp', {volume: 5})
-    this.nectar.play('splash')
     this.sound.play('cry')
   }
 
@@ -252,8 +269,8 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade',
-    arcade: { debug: true }
+  physics: { default: 'arcade'
+    // arcade: { debug: true }
   }, // The physics engine to use
   parent: 'pikmin platformer', // Create the game inside the <div id="game"> 
 });
