@@ -37,11 +37,14 @@ class mainScene {
     this.load.audio('distant spring', 'j-pikmin_Mario/assets/The Distant Spring.mp3')
     this.load.audio('forest navel', 'j-pikmin_Mario/assets/The Forest Navel.mp3')
     this.load.audio('hit', 'j-pikmin_Mario/assets/hit.mp3')
+    this.load.audio('bulborb death', 'j-pikmin_Mario/assets/bulborb-death.mp3')
+    this.load.audio('victory', 'j-pikmin_Mario/assets/end of level.mp3')
   }
 
   create() {
 
-    this.sound.play('forest of hope', {loop: true})
+    this.backgroundMusic = this.sound.add('forest of hope')
+    this.backgroundMusic.play({loop: true})
 
     this.delay = 0;
     this.flowered = false;
@@ -77,7 +80,7 @@ class mainScene {
     this.player.body.setGravityY(300);
     this.cameras.main.scrollX = this.player.x - 350
 
-    this.redOnion = this.add.image(1500, 315, 'onion', 0)
+    this.redOnion = this.physics.add.sprite(1500, 315, 'onion', 0).setImmovable(true)
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2)
@@ -91,13 +94,14 @@ class mainScene {
     this.grass = this.physics.add.staticGroup()
 
     this.grassX = 15
-    this.grassY = 360
+    this.grassY = 387
     this.spritelength = 30 - 3
 
-    for(let i; i< 2; i++){
-      this.grass.create(this.grassX - this.spritelength, this.grassY + this.spritelength, 'grass', 50)
-      // this.grassY += this.spritelength
+    for(let i = 0; i < 16; i++){
+    this.grass.create(this.grassX - this.spritelength, this.grassY, 'grass', 50)
+    this.grassY -= this.spritelength
     }
+
 
     this.grassY = 360
     for(let i = 0; i < 13; i++){
@@ -116,6 +120,7 @@ class mainScene {
 
     this.physics.add.collider(this.player, this.grass)
     this.physics.add.collider(this.player, this.egg, ()=>{
+      this.player.setVelocityY(-100)
       this.egg.play('crack')
       this.physics.world.colliders.getActive().find(function(i){ return i.name == 'eggcrack'; }).destroy();
       this.crackTimer = this.time.addEvent({
@@ -129,6 +134,12 @@ class mainScene {
           loop: false
         })
     }).name = 'eggcrack'
+
+    this.physics.add.collider(this.player, this.redOnion, ()=>{
+      this.backgroundMusic.stop()
+      this.sound.play('victory')
+      this.physics.world.colliders.getActive().find(function(i){ return i.name == 'victory'; }).destroy();
+    }).name = 'victory'
   }
 
   update() {
@@ -269,8 +280,8 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade'
-    // arcade: { debug: true }
+  physics: { default: 'arcade',
+    arcade: { debug: true }
   }, // The physics engine to use
   parent: 'pikmin platformer', // Create the game inside the <div id="game"> 
 });
