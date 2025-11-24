@@ -5,6 +5,7 @@ class mainScene {
   preload() {
 
     this.load.image('background', 'j-pikmin_Mario/assets/landscape.png')
+    this.load.image('easterEgg', 'j-pikmin_Mario/assets/my_avatar-1.png.png')
 
     this.load.spritesheet('walking', 
       'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
@@ -108,6 +109,7 @@ class mainScene {
     this.egg = this.physics.add.group()
     this.egg = this.physics.add.sprite(100, 333, 'nectarEgg', 0).setImmovable(true)
     this.egg.depth = 0.1
+    this.nectar = this.physics.add.sprite(-330, 390, 'easterEgg', 0).setScale(0.3)
 
     
 
@@ -277,7 +279,7 @@ class mainScene {
  
 
     if(this.player.body.touching.down && this.egg.body.touching.up){
-      this.player.setVelocityY(-100)
+      this.player.setVelocityY(-150)
       this.egg.play('crack')
       this.physics.world.colliders.getActive().find(function(i){ return i.name == 'eggcrack'; }).destroy();
       this.crackTimer = this.time.addEvent({
@@ -326,7 +328,7 @@ new Phaser.Game({
   backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade',
-    // arcade: { debug: true }
+    arcade: { debug: true }
   }, // The physics engine to use
   parent: 'pikmin platformer', // Create the game inside the <div id="game"> 
 });
