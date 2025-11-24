@@ -43,8 +43,8 @@ class mainScene {
 
   create() {
 
-    // this.backgroundMusic = this.sound.add('distant spring')
-    // this.backgroundMusic.play({loop: true})
+    this.backgroundMusic = this.sound.add('forest of hope')
+    this.backgroundMusic.play({loop: true})
 
     this.delay = 0;
     this.flowered = false;
@@ -71,6 +71,19 @@ class mainScene {
       frameRate: 10,
     })
 
+    this.anims.create({
+      key: 'bulbwalkclosed',
+      frames: this.anims.generateFrameNumbers('bulborb', { frames: [2, 3] }),
+      frameRate: 10,
+      repeat: -1
+    })
+    this.anims.create({
+      key: 'bulbwalkopen',
+      frames: this.anims.generateFrameNumbers('bulborb', { frames: [4, 5] }),
+      frameRate: 10,
+      repeat: -1
+    })
+
     this.backgroundX = -350
     this.background = this.add.image(this.backgroundX, 200, 'background')
     this.background.depth = -1
@@ -81,7 +94,7 @@ class mainScene {
     }
     
 
-    this.player = this.physics.add.sprite(200, 200, 'walking', 0);
+    this.player = this.physics.add.sprite(200, 310, 'walking', 0);
     this.player.body.setSize(26, 66)
     this.player.body.setGravityY(300);
     this.cameras.main.scrollX = this.player.x - 350
@@ -90,6 +103,7 @@ class mainScene {
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
+
 
     this.egg = this.physics.add.group()
     this.egg = this.physics.add.sprite(100, 333, 'nectarEgg', 0).setImmovable(true)
@@ -127,7 +141,7 @@ class mainScene {
     this.physics.add.collider(this.player, this.grass)
     this.physics.add.collider(this.player, this.egg,).name = 'eggcrack'
 
-    this.physics.add.collider(this.player, this.bulborb)
+    this.physics.add.collider(this.player, this.bulborb).name = 'bulborbhitbox'
 
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
@@ -230,6 +244,7 @@ class mainScene {
 
 
       if(this.player.body.touching.down && this.bulborb.body.touching.up){
+        this.physics.world.colliders.getActive().find(function(i){ return i.name == 'bulborbhitbox'; }).destroy();
         this.bulborb.play('bulbdeath')
         this.sound.play('bulborb death')
         this.player.setVelocityY(-100)
@@ -242,7 +257,7 @@ class mainScene {
         })
       }
 
-      if(this.player.body.touching.down && this.bulborb.body.touching.left){
+      if(this.player.body.touching.down && (this.bulborb.body.touching.left || this.bulborb.body.touching.right)){
         if(!this.flowered && !this.invincible){  
             this.death() 
         }else if(this.flowered){
@@ -259,26 +274,7 @@ class mainScene {
           
         }
       }
-      if(this.player.body.touching.down && this.bulborb.body.touching.right){
-        if(!this.flowered && !this.invincible){  
-            this.death() 
-        }else if(this.flowered){
-            this.sound.play('hit')
-            this.invincible = true
-            this.flowered = false
-            this.invincTimer = this.time.addEvent({
-              delay: 1500,
-              callback: ()=>{
-                this.invincible = false      
-              },
-              loop: false
-            })
-          
-        }
-      }
-
-      
-    
+ 
 
     if(this.player.body.touching.down && this.egg.body.touching.up){
       this.player.setVelocityY(-100)
@@ -308,9 +304,16 @@ class mainScene {
 
   death(){
     this.flowered = false;
+    this.nectar.destroy()
+    this.egg.setFrame(0)
+    this.egg.visible = true
+    this.bulborb.setFrame(0)
+    this.bulborb.visible = true
+    this.physics.add.collider(this.player, this.egg,).name = 'eggcrack'
+    this.physics.add.collider(this.player, this.bulborb).name = 'bulborbhitbox'
     this.player.x = 200
     this.cameras.main.scrollX = this.player.x - 350
-    this.player.y = 200
+    this.player.y = 310
     this.sound.play('cry')
   }
 
@@ -323,7 +326,7 @@ new Phaser.Game({
   backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade',
-    arcade: { debug: true }
+    // arcade: { debug: true }
   }, // The physics engine to use
   parent: 'pikmin platformer', // Create the game inside the <div id="game"> 
 });
