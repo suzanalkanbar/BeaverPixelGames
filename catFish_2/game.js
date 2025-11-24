@@ -106,10 +106,10 @@ class mainScene {
         this.rodList = [this.twigRod, this.woodRod, this.fiberglassRod, this.graphiteRod]
         this.activeRod = { name: 'Twig', modifier: 1, unlocked: true }
 
-        this.shoelaceLine = { name: 'Shoelace', speed: 2, unlocked: true }
-        this.threadLine = { name: 'Thread', speed: 1.5, unlocked: false }
+        this.shoelaceLine = { name: 'Shoelace', speed: 1.5, unlocked: true }
+        this.threadLine = { name: 'Thread', speed: 1.25, unlocked: false }
         this.nylonLine = { name: 'Nylon Line', speed: 1, unlocked: false }
-        this.microfiberLine = { name: 'Braided Microfiber Line', speed: 0.5, unlocked: false }
+        this.microfiberLine = { name: 'Braided Microfiber Line', speed: 0.75, unlocked: false }
         this.lineList = [this.shoelaceLine, this.threadLine, this.nylonLine, this.microfiberLine]
         this.activeLine = { name: 'Shoelace', speed: 1, unlocked: true }
 
@@ -146,6 +146,8 @@ class mainScene {
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
         this.escTap = false
         this.escLetgo = true
+        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
 
         this.money = 0
         let style = { font: '20px Arial', fill: '#fff' };
@@ -220,9 +222,9 @@ class mainScene {
             if (this.exclamationMark.alpha > 0) {
                 this.exclamationMark.alpha = this.exclamationMark.alpha - 0.05
             }
-            if (this.arrow.right.isDown && this.player.x < 375) {
+            if ((this.dKey.isDown || this.arrow.right.isDown) && this.player.x < 375) {
                 this.player.x += 2;
-            } else if (this.arrow.left.isDown && this.player.x > 25) {
+            } else if ((this.aKey.isDown || this.arrow.left.isDown) && this.player.x > 25) {
                 this.player.x -= 2;
             }
         }
@@ -426,10 +428,11 @@ class mainScene {
         this.hideList(this.pauseMenu)
     }
     createInventoryMenu() {
-        const invMenuBackground = this.add.rectangle(350, 200, 450, 350, 0xee88ff)
+        const invMenuBackground = this.add.rectangle(350, 200, 450, 350, 0xdd44ff)
         this.invMenuBackground = this.physics.add.existing(invMenuBackground, 0)
         const invSlots = this.add.rectangle(300, 145, 232, 158, 0xffaa00)
         this.invSlots = this.physics.add.existing(invSlots, 0)
+        this.invText = this.add.text(300,224,'Inventory',{font:'25px Arial'}).setOrigin(0.5,0)
         this.inv1 = this.physics.add.sprite(226,108,'empty')
         this.inv2 = this.physics.add.sprite(300,108,'empty')
         this.inv3 = this.physics.add.sprite(374,108,'empty')
@@ -437,12 +440,15 @@ class mainScene {
         this.inv5 = this.physics.add.sprite(300,182,'empty')
         this.inv6 = this.physics.add.sprite(374,182,'empty')
         this.invSlotList = [this.inv1,this.inv2,this.inv3,this.inv4,this.inv5,this.inv6]
-        const rodSlot = this.add.rectangle(500, 90, 50, 50, 0xff0000)
+        const rodSlot = this.add.rectangle(500, 80, 50, 50, 0xff0000)
         this.rodSlot = this.physics.add.existing(rodSlot, 0)
+        this.rodName = this.add.text(500,105,'Twig',{font:'16px Arial'}).setOrigin(0.5,0)
         const lineSlot = this.add.rectangle(500, 150, 50, 50, 0x000000)
         this.lineSlot = this.physics.add.existing(lineSlot, 0)
-        const bobberSlot = this.add.rectangle(500, 210, 50, 50, 0xffff00)
+        this.lineName = this.add.text(500,175,'Shoelace',{font:'16px Arial'}).setOrigin(0.5,0)
+        const bobberSlot = this.add.rectangle(500, 220, 50, 50, 0xffff00)
         this.bobberSlot = this.physics.add.existing(bobberSlot, 0)
+        this.bobberName = this.add.text(500,245,'Pinecone',{font:'16px Arial'}).setOrigin(0.5,0)
         const world1Icon = this.add.rectangle(200, 310, 90, 90, 0x00ff00)
         this.world1Icon = this.physics.add.existing(world1Icon, 0)
         this.world1Icon.setInteractive()
@@ -451,6 +457,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0x00ff00
             this.waterHitbox.fillColor = 0x0000ff
         })
+        this.world1Text = this.add.text(180,355,'Lake', {font:'16px Arial'})
         const world2Icon = this.add.rectangle(300, 310, 90, 90, 0x0000ff)
         this.world2Icon = this.physics.add.existing(world2Icon, 0)
         this.world2Icon.setInteractive()
@@ -459,6 +466,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0xffff44
             this.waterHitbox.fillColor = 0x4444ff
         })
+        this.world2Text = this.add.text(280,355,'Beach',{font:'16px Arial'})
         const world3Icon = this.add.rectangle(400, 310, 90, 90, 0xff0000)
         this.world3Icon = this.physics.add.existing(world3Icon, 0)
         this.world3Icon.setInteractive()
@@ -467,6 +475,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0x444444
             this.waterHitbox.fillColor = 0xff3300
         })
+        this.world3Text = this.add.text(380,355,'Lava',{font:'16px Arial'})
         const world4Icon = this.add.rectangle(500, 310, 90, 90, 0x000000)
         this.world4Icon = this.physics.add.existing(world4Icon, 0)
         this.world4Icon.setInteractive()
@@ -475,34 +484,56 @@ class mainScene {
             this.groundHitbox.fillColor = 0xcccccc
             this.waterHitbox.fillColor = 0x000033
         })
+        this.world4Text = this.add.text(480,355,'Space',{font:'16px Arial'})
 
         this.world1Icon.disableInteractive()
         this.world2Icon.disableInteractive()
         this.world3Icon.disableInteractive()
         this.world4Icon.disableInteractive()
 
-        this.invMenu = [this.invMenuBackground, this.invSlots, this.inv1,this.inv2,this.inv3,this.inv4,this.inv5,this.inv6, this.lineSlot, this.rodSlot, this.bobberSlot, this.world1Icon, this.world2Icon, this.world3Icon, this.world4Icon]
+        this.invMenu = [this.invMenuBackground, this.invSlots, this.inv1,this.inv2,this.inv3,this.inv4,this.inv5,this.inv6, this.lineSlot, this.rodSlot, this.bobberSlot, this.world1Icon, this.world2Icon, this.world3Icon, this.world4Icon,this.world1Text,this.world2Text,this.world3Text,this.world4Text,this.invText,this.rodName,this.lineName,this.bobberName]
         this.hideList(this.invMenu)
     }
     createShopMenu() {
-        const shopMenuBackground = this.add.rectangle(350, 200, 400, 350, 0xffaa66)
+        const shopMenuBackground = this.add.rectangle(350, 200, 400, 350, 0xff9933)
         this.shopMenuBackground = this.physics.add.existing(shopMenuBackground, 0)
-        const shopItem1 = this.add.rectangle(250, 90, 180, 100, 0x00ff00)
+        const shopItem1 = this.add.rectangle(208, 96, 80, 80, 0x00ff00)
         this.shopItem1 = this.physics.add.existing(shopItem1, 0)
-        const shopItem2 = this.add.rectangle(450, 90, 180, 100, 0xffff00)
+        this.shopRodName = this.add.text(168,56,'Rod Name Here',{font:'16px Arial'}).setOrigin(0,1)
+        this.shopRodPrice = this.add.text(248,56,'€100',{font:'16px Arial'}).setOrigin(0,0)
+        this.shopRodDesc = this.add.text(248,72,'Increases\ncatching\nbox',{font:'16px Arial'}).setOrigin(0,0)
+        const shopItem2 = this.add.rectangle(408, 96, 80, 80, 0xffff00)
         this.shopItem2 = this.physics.add.existing(shopItem2, 0)
-        const shopItem3 = this.add.rectangle(250, 200, 180, 100, 0xff0000)
+        this.shopLineName = this.add.text(368,56,'Line Name Here',{font:'16px Arial'}).setOrigin(0,1)
+        this.shopLinePrice = this.add.text(448,56,'€100',{font:'16px Arial'}).setOrigin(0,0)
+        this.shopLineDesc = this.add.text(448,72,'Decreases\nline\nspeed',{font:'16px Arial'}).setOrigin(0,0)
+        const shopItem3 = this.add.rectangle(208, 206, 80, 80, 0xff0000)
         this.shopItem3 = this.physics.add.existing(shopItem3, 0)
-        const shopItem4 = this.add.rectangle(450, 200, 180, 100, 0xff00ff)
+        this.shopBobberName = this.add.text(168,166,'Bobber Name Here',{font:'16px Arial'}).setOrigin(0,1)
+        this.shopBobberPrice = this.add.text(248,166,'€100',{font:'16px Arial'}).setOrigin(0,0)
+        this.shopBobberDesc = this.add.text(248,182,'Decreases\nwaiting\ntime',{font:'16px Arial'}).setOrigin(0,0)
+        const shopItem4 = this.add.rectangle(408, 206, 80, 80, 0xff00ff)
         this.shopItem4 = this.physics.add.existing(shopItem4, 0)
-        const shopItem5 = this.add.rectangle(250, 310, 180, 100, 0x0000ff)
+        this.shopBaitName = this.add.text(368,166,'Bait Name Here',{font:'16px Arial'}).setOrigin(0,1)
+        this.shopBaitPrice = this.add.text(448,166,'€100',{font:'16px Arial'}).setOrigin(0,0)
+        this.shopBaitDesc = this.add.text(448,182,'Increases\nfish\nvariety',{font:'16px Arial'}).setOrigin(0,0)
+        const shopItem5 = this.add.rectangle(208, 316, 80, 80, 0x0000ff)
         this.shopItem5 = this.physics.add.existing(shopItem5, 0)
-        const shopItem6 = this.add.rectangle(450, 310, 180, 100, 0x00ffff)
+        this.shopWorldName = this.add.text(168,276,'World Name Here',{font:'16px Arial'}).setOrigin(0,1)
+        this.shopWorldPrice = this.add.text(248,276,'€100',{font:'16px Arial'}).setOrigin(0,0)
+        this.shopWorldDesc = this.add.text(248,292,'Unlocks\nnew world',{font:'16px Arial'}).setOrigin(0,0)
+        const shopItem6 = this.add.rectangle(408, 316, 80, 80, 0x00ffff)
         this.shopItem6 = this.physics.add.existing(shopItem6)
+        this.shopSellName = this.add.text(368,276,'Sell your Fish',{font:'16px Arial'}).setOrigin(0,1)
+        this.shopSellPrice = this.add.text(448,276,'Earn €0',{font:'16px Arial'}).setOrigin(0,0)
+        this.shopSellDesc = this.add.text(448,292,'Sells your\ninventory',{font:'16px Arial'}).setOrigin(0,0)
         this.shopItem6.setInteractive()
         this.shopItem6.on('pointerdown',()=>{
             for (let i =0;i<this.inventory.length;i++){
-                this.money += this.inventory[i].value
+                this.money += this.invSlotList[i].value
+            }
+            for (let i = 0; i <this.invSlotList.length;i++){
+                this.invSlotList[i].setTexture('empty')
             }
             this.inventory = []
             this.scoreText.setText('cash: ' + this.money)
@@ -510,7 +541,7 @@ class mainScene {
 
         this.shopItem6.disableInteractive()
 
-        this.shopMenu = [this.shopMenuBackground, this.shopItem1, this.shopItem2, this.shopItem3, this.shopItem4, this.shopItem5, this.shopItem6]
+        this.shopMenu = [this.shopMenuBackground, this.shopItem1, this.shopItem2, this.shopItem3, this.shopItem4, this.shopItem5, this.shopItem6,this.shopRodDesc,this.shopRodName,this.shopRodPrice,this.shopLineDesc,this.shopLineName,this.shopLinePrice,this.shopBaitDesc,this.shopBaitName,this.shopBaitPrice,this.shopBobberDesc,this.shopBobberName,this.shopBobberPrice,this.shopWorldDesc,this.shopWorldName,this.shopWorldPrice,this.shopSellDesc,this.shopSellName,this.shopSellPrice]
         this.hideList(this.shopMenu)
     }
     onEvent() {
