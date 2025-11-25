@@ -55,6 +55,7 @@ class mainScene {
     this.flowered = false;
     this.invincible = false;
     this.levelComplete = false;
+    this.level = 1;
 
     this.arrow = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
