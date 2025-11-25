@@ -170,15 +170,23 @@ class mainScene {
 }
 
 // Create the game
-new Phaser.Game({
+window.game = new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
   backgroundColor: '#000000', // The background color (black)
   scene: mainScene, // The name of the scene we created
   physics: {
     default: 'arcade',
-    arcade: { debug: true }
+    arcade: { debug: false }
   }, // The physics engine to use
   parent: 'asteroids', // Create the game inside the <div id="game"> 
 });
+// Create the game
+
+window.restartActiveGame = function () {
+  if (window.game && window.game.scene.scenes[0]) {
+    window.game.scene.scenes[0].scene.restart();
+    gameover = false;
+  }
+};
 
