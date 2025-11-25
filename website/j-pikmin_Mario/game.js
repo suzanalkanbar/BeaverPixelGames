@@ -185,8 +185,10 @@ class mainScene {
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
       this.player.setVelocityX(0)
+      this.player.setFrame(0)
       this.levelComplete = true
       this.sound.play('victory')
+      this.levelCompleteText.x = this.player.x - 180
       this.levelCompleteText.visible = true
       this.redOnion.disableBody()
     })
