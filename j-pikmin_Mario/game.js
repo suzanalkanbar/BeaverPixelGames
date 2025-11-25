@@ -43,13 +43,18 @@ class mainScene {
   }
 
   create() {
+    this.style = {font: '50px Arial', fill: '#e4a426' };
+    this.levelCompleteText = this.add.text(1500, 200, 'Level Complete', this.style);
+    this.levelCompleteText.depth = 1;
+    this.levelCompleteText.visible = false
 
-    this.backgroundMusic = this.sound.add('forest of hope')
+    this.backgroundMusic = this.sound.add('forest navel')
     this.backgroundMusic.play({loop: true})
 
     this.delay = 0;
     this.flowered = false;
     this.invincible = false;
+    this.levelComplete = false;
 
     this.arrow = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
@@ -115,6 +120,8 @@ class mainScene {
 
     this.grass = this.physics.add.staticGroup()
 
+    // creating the first level //
+
     this.grassX = 15
     this.grassY = 387
     this.spritelength = 30 - 3
@@ -134,22 +141,55 @@ class mainScene {
 
     this.grassX += this.spritelength * 3
 
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 20; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
       this.grassX += this.spritelength
     }
 
-    this.physics.add.collider(this.player, this.grass)
-    this.physics.add.collider(this.player, this.egg,).name = 'eggcrack'
+    for(let i = 0; i < 4; i++){
+      this.grassY -= this.spritelength
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassX += this.spritelength
+    }
 
-    this.physics.add.collider(this.player, this.bulborb).name = 'bulborbhitbox'
+    this.grassX += this.spritelength * 2
+
+    for(let i = 0; i < 4; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassY += this.spritelength
+      this.grassX += this.spritelength
+    }
+
+    for(let i = 0; i < 20; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
+      this.grassX += this.spritelength
+    }
+
+    // end of the first level //
+
+    this.physics.add.collider(this.player, this.grass)
+    this.physics.add.collider(this.player, this.egg,)
+
+    this.physics.add.collider(this.player, this.bulborb)
 
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
+      this.player.setVelocityX(0)
+      this.levelComplete = true
       this.sound.play('victory')
-      this.physics.world.colliders.getActive().find(function(i){ return i.name == 'victory'; }).destroy();
-    }).name = 'victory'
+      this.levelCompleteText.visible = true
+      this.redOnion.disableBody()
+    })
   }
 
   update() {
@@ -158,6 +198,7 @@ class mainScene {
     console.log(this.player.x)
   }
 
+  if(!this.levelComplete){
   if(!this.flowered){
     if (this.arrow.right.isDown) {
       this.player.setVelocityX(160);  
@@ -235,6 +276,7 @@ class mainScene {
       this.player.setVelocityY(-200);
     }
   }
+  }
 
     if(this.player.y >= 400){
       this.death()
@@ -246,14 +288,14 @@ class mainScene {
 
 
       if(this.player.body.touching.down && this.bulborb.body.touching.up){
-        this.physics.world.colliders.getActive().find(function(i){ return i.name == 'bulborbhitbox'; }).destroy();
         this.bulborb.play('bulbdeath')
         this.sound.play('bulborb death')
         this.player.setVelocityY(-100)
         this.delayTimer = this.time.addEvent({
           delay: 500,
           callback: ()=>{
-            this.bulborb.visible = false  
+            this.bulborb.visible = false 
+            this.bulborb.disableBody() 
           },
           loop: false
         })
@@ -281,11 +323,11 @@ class mainScene {
     if(this.player.body.touching.down && this.egg.body.touching.up){
       this.player.setVelocityY(-150)
       this.egg.play('crack')
-      this.physics.world.colliders.getActive().find(function(i){ return i.name == 'eggcrack'; }).destroy();
       this.crackTimer = this.time.addEvent({
           delay: 1000,
           callback: ()=>{
             this.egg.visible = false 
+            this.egg.disableBody()
             this.nectar = this.physics.add.sprite(100 ,343, 'nectar', 0)
             this.nectar.play('splash')
             this.nectar.sound = this.sound.add('slurp', {volume: 5})
@@ -309,10 +351,10 @@ class mainScene {
     this.nectar.destroy()
     this.egg.setFrame(0)
     this.egg.visible = true
+    this.egg.enableBody()
     this.bulborb.setFrame(0)
     this.bulborb.visible = true
-    this.physics.add.collider(this.player, this.egg,).name = 'eggcrack'
-    this.physics.add.collider(this.player, this.bulborb).name = 'bulborbhitbox'
+    this.bulborb.enableBody()
     this.player.x = 200
     this.cameras.main.scrollX = this.player.x - 350
     this.player.y = 310
@@ -332,4 +374,3 @@ new Phaser.Game({
   }, // The physics engine to use
   parent: 'pikmin platformer', // Create the game inside the <div id="game"> 
 });
-
