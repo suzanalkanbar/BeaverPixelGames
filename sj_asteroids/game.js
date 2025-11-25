@@ -179,6 +179,6 @@ new Phaser.Game({
     default: 'arcade',
     arcade: { debug: false }
   }, // The physics engine to use
-  parent: 'asteroids', // Create the game inside the <div id="game"> 
+  parent: 'game', // Create the game inside the <div id="game"> 
 });
 

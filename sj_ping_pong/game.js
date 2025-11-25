@@ -217,5 +217,5 @@ new Phaser.Game({
       debug: false              // debug is true.
     }
   },                            
-  parent: 'ping_pong',               // Create the game inside the <div id="game"> 
+  parent: 'game',               // Create the game inside the <div id="game"> 
 });
