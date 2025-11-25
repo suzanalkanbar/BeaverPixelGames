@@ -323,7 +323,7 @@ class mainScene {
  
 
     if(this.player.body.touching.down && this.egg.body.touching.up){
-      this.player.setVelocityY(-150)
+      this.player.setVelocityY(-160)
       this.egg.play('crack')
       this.crackTimer = this.time.addEvent({
           delay: 1000,
