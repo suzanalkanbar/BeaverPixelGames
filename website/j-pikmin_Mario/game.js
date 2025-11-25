@@ -80,13 +80,13 @@ class mainScene {
 
     this.anims.create({
       key: 'bulbwalkclosed',
-      frames: this.anims.generateFrameNumbers('bulborb', { frames: [2, 3] }),
+      frames: this.anims.generateFrameNumbers('bulborb', { frames: [1, 2] }),
       frameRate: 10,
       repeat: -1
     })
     this.anims.create({
       key: 'bulbwalkopen',
-      frames: this.anims.generateFrameNumbers('bulborb', { frames: [4, 5] }),
+      frames: this.anims.generateFrameNumbers('bulborb', { frames: [3, 4] }),
       frameRate: 10,
       repeat: -1
     })
@@ -110,6 +110,7 @@ class mainScene {
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
+    this.moveEnemyRight()
 
 
     this.egg = this.physics.add.group()
@@ -304,7 +305,7 @@ class mainScene {
         })
       }
 
-      if(this.player.body.touching.down && (this.bulborb.body.touching.left || this.bulborb.body.touching.right)){
+      if(this.player.body.touching && (this.bulborb.body.touching.left || this.bulborb.body.touching.right)){
         if(!this.flowered && !this.invincible){  
             this.death() 
         }else if(this.flowered){
@@ -342,6 +343,32 @@ class mainScene {
   }
 
   /* VVV Put any other functions and code down here VVV */
+
+  moveEnemyRight(){
+    this.bulborb.setVelocityX(100)
+    this.bulborb.play('bulbwalkclosed')
+    this.bulborb.setFlipX(true)
+    this.walkTimer = this.time.addEvent({
+          delay: 2000,
+          callback: ()=>{
+            this.moveEnemyLeft()
+          },
+          loop: false
+        })
+  }
+
+  moveEnemyLeft(){
+    this.bulborb.setVelocityX(-100)
+    this.bulborb.play('bulbwalkclosed')
+    this.bulborb.setFlipX(false)
+    this.walkTimer = this.time.addEvent({
+          delay: 2000,
+          callback: ()=>{
+            this.moveEnemyRight()
+          },
+          loop: false
+        })
+  }
 
   powerUp(){
     this.flowered = true;
