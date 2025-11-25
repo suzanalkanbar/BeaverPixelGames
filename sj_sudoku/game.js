@@ -30,9 +30,9 @@ class mainScene {
         this.add.line(350, (i * 40) + 20, 361, 0, 0, 0, blackColor, 1).setLineWidth(2)
       }
       const alpha = 0.5
-      this.add.rectangle(230, 80, 116, 116, whiteColor, alpha) // 1
-      this.add.rectangle(350, 80, 116, 116, whiteColor, alpha) // 2
-      this.add.rectangle(470, 80, 116, 116, whiteColor, alpha) // 3
+      this.add.rectangle(230,  80, 116, 116, whiteColor, alpha) // 1
+      this.add.rectangle(350,  80, 116, 116, whiteColor, alpha) // 2
+      this.add.rectangle(470,  80, 116, 116, whiteColor, alpha) // 3
       this.add.rectangle(230, 200, 116, 116, whiteColor, alpha) // 4
       this.add.rectangle(350, 200, 116, 116, whiteColor, alpha) // 5
       this.add.rectangle(470, 200, 116, 116, whiteColor, alpha) // 6
@@ -72,7 +72,13 @@ class mainScene {
       }).setOrigin(0.5, 0.5)
     }
 
-
+    // create rectangles for interaction:
+    if (true) {
+      this.r1c1 = this.add.rectangle(650, 200, 30, 100)
+      this.blub = this.physics.add.sprite(this.firstKeyX, this.firstKeyY + 65, 'whiteKeyMiddle').setInteractive()
+      this.r1c1.input.hitArea.setTo(13, 0, 10, 130)
+      this.physics.add.existing(this.paddleRight, true)
+    }
 
   }
   update() {
@@ -128,7 +134,7 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#919191', // The background color (grey)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade', arcade: { debug: true } }, // The physics engine to use
+  physics: { default: 'arcade', arcade: { debug: false } }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
