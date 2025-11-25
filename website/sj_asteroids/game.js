@@ -32,10 +32,21 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
+    this.style = {font: '40px Arial', fill: '#1742dcff' };
+    this.victoryText = this.add.text(100, 100, 'ASTEROIDS DESTROYED!', this.style);
+    this.victoryText.depth = 1;
+    this.victoryText.visible = false
+
+    this.style = {font: '40px Arial', fill: '#e20a0aff' };
+    this.deathText = this.add.text(170, 100, 'SHIP DESTROYED!', this.style);
+    this.deathText.depth = 1;
+    this.deathText.visible = false
+
     const width = this.cameras.main.width
     const height = this.cameras.main.height
 
     this.score = 0
+    this.gameover = false
 
     this.player = this.physics.add.sprite(350, 200, 'player', 0)
     this.player.setDrag(0.99)
@@ -101,7 +112,7 @@ class mainScene {
       this.player.setAngularVelocity(0)
     }
 
-
+    if(!this.gameover){
     if (this.arrow.space.isDown) {
 
       if (!this.bullet.active) { // <- UNCOMMENT TO ENABLE ONE BULLET...
@@ -113,6 +124,7 @@ class mainScene {
         this.bullet.direction = this.player.rotation
         this.bullet.rotation = this.bullet.direction
       }
+    }
     }
 
     this.bullet.x += Math.cos(this.bullet.direction) * this.bullet.speed * delta
@@ -152,6 +164,10 @@ class mainScene {
 
     this.scoreText.setText('Score: ' + this.score)
 
+    if(this.score == 100){
+      this.victoryText.visible = true
+    }
+
 
   }
   /* VVV Put any other functions and code down here VVV */
@@ -166,6 +182,10 @@ class mainScene {
   playerAsteroidCollision(player, asteroid){
       console.log('hit')
       this.sound.play('death')
+      this.gameover = true
+      this.player.visible = false
+      this.player.disableBody()
+      this.deathText.visible = true
     }
 }
 

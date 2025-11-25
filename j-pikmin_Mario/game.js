@@ -44,11 +44,11 @@ class mainScene {
 
   create() {
     this.style = {font: '50px Arial', fill: '#e4a426' };
-    this.levelCompleteText = this.add.text(1500, 200, 'Level Complete', this.style);
+    this.levelCompleteText = this.add.text(1300, 100, 'Level Complete', this.style);
     this.levelCompleteText.depth = 1;
     this.levelCompleteText.visible = false
 
-    this.backgroundMusic = this.sound.add('forest navel')
+    this.backgroundMusic = this.sound.add('forest of hope')
     this.backgroundMusic.play({loop: true})
 
     this.delay = 0;
@@ -185,8 +185,10 @@ class mainScene {
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
       this.player.setVelocityX(0)
+      this.player.setFrame(0)
       this.levelComplete = true
       this.sound.play('victory')
+      this.levelCompleteText.x = this.player.x - 180
       this.levelCompleteText.visible = true
       this.redOnion.disableBody()
     })
