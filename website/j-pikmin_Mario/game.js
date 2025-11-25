@@ -44,7 +44,7 @@ class mainScene {
 
   create() {
     this.style = {font: '50px Arial', fill: '#e4a426' };
-    this.levelCompleteText = this.add.text(1300, 200, 'Level Complete', this.style);
+    this.levelCompleteText = this.add.text(1300, 100, 'Level Complete', this.style);
     this.levelCompleteText.depth = 1;
     this.levelCompleteText.visible = false
 
