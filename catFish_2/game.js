@@ -414,17 +414,21 @@ class mainScene {
         }
     }
     createPauseMenu() {
-        const pauseMenuBackground = this.add.rectangle(350, 200, 300, 350, 0xffcc77)
+        const pauseMenuBackground = this.add.rectangle(350, 200, 300, 350, 0xffaa55)
         this.pauseMenuBackground = this.physics.add.existing(pauseMenuBackground, 0)
         const logo = this.add.rectangle(350, 100, 200, 100, 0x0000ff)
         this.logo = this.physics.add.existing(logo, 0)
-        const resumeButton = this.add.rectangle(350, 200, 200, 50, 0x000000)
+        this.pauseText = this.add.text(350,100,'Paused',{font:'40px Arial'}).setOrigin(0.5,0.5)
+        const resumeButton = this.add.rectangle(350, 200, 200, 40, 0x009900)
         this.resumeButton = this.physics.add.existing(resumeButton, 0)
-        const collectionButton = this.add.rectangle(350, 250, 200, 50, 0xff0000)
+        this.resumeText = this.add.text(350,200,'Resume',{font:'20px Arial'}).setOrigin(0.5,0.5)
+        const collectionButton = this.add.rectangle(350, 250, 200, 40, 0x990000)
+        this.collectionText = this.add.text(350,250,'Collection',{font:'20px Arial'}).setOrigin(0.5,0.5)
         this.collectionButton = this.physics.add.existing(collectionButton, 0)
-        const exitButton = this.add.rectangle(350, 300, 200, 50, 0xffff00)
+        const exitButton = this.add.rectangle(350, 300, 200, 40, 0x000099)
         this.exitButton = this.physics.add.existing(exitButton, 0)
-        this.pauseMenu = [this.pauseMenuBackground, this.logo, this.resumeButton, this.collectionButton, this.exitButton]
+        this.exitText = this.add.text(350,300,'Exit Game',{font:'20px Arial'}).setOrigin(0.5,0.5)
+        this.pauseMenu = [this.pauseMenuBackground, this.logo, this.resumeButton, this.collectionButton, this.exitButton,this.pauseText,this.resumeText,this.collectionText,this.exitText]
         this.hideList(this.pauseMenu)
     }
     createInventoryMenu() {
