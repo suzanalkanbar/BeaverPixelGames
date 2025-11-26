@@ -113,12 +113,12 @@ class mainScene {
   drawBoard(board) { // draw/ update board text
     var horNames = ["Hor1", "Hor2", "Hor3", "Hor4", "Hor5", "Hor6", "Hor7", "Hor8", "Hor9"]
 
-    for(var i = 0; i < 81; i ++) {
-      var currentIndex = Math.floor(i / 9)
-      var text = ""
-      text = text + this.gameBoard[horNames[currentIndex]][currentIndex]
-    }
-    this.boardLabel.setText(text)
+    // for(var i = 0; i < 81; i ++) {
+    //   var currentIndex = Math.floor(i / 9)
+    //   var text = ""
+    //   text = text + this.gameBoard[horNames[currentIndex]][currentIndex]
+    // }
+    // this.boardLabel.setText(text)
 
     // this.Hor1Label.setText(board.Hor1)
     // this.Hor2Label.setText(board.Hor2)
