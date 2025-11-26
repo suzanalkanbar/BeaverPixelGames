@@ -122,14 +122,14 @@ class mainScene {
       this.shotsRoundText.setText((this.currentShot - 1) + ' out of ' + (6) + ' shot')
       this.restart.visible = false
       this.reload.visible = true
-      // this.delayTimer = this.time.addEvent({
-      //     delay: 3200,
-      //     callback: ()=>{
+      this.delayTimer = this.time.addEvent({
+          delay: 3200,
+          callback: ()=>{
             this.shootButton.visible = true
             this.reload.visible = false
-        //   },
-        //   loop: false
-        // })
+          },
+          loop: false
+        })
       this.startRound()
     }else{
       this.round = 0
