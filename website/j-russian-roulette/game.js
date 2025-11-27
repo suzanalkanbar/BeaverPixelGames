@@ -28,6 +28,7 @@ class mainScene {
     this.load.image('reload', 'j-russian-roulette/assets/reload button.png')
     this.load.image('background', 'j-russian-roulette/assets/background bar.png')
     this.load.image('table', 'j-russian-roulette/assets/table.png')
+    this.load.image('start', 'j-russian-roulette/assets/start.png')
     this.load.image('shoot yourself', 'j-russian-roulette/assets/shoot yourself.png')
 
     this.load.audio('shot','j-russian-roulette/assets/shot.mp3')
@@ -44,6 +45,10 @@ class mainScene {
     this.table = this.add.image(350, 385, 'table').setOrigin(0.5, 0.5)
     this.table.depth = 0.1
 
+    this.selfShot = this.add.image(550, 240, 'shoot yourself').setOrigin(0.5, 0.5)
+    this.selfShot.depth = 1
+    this.selfShot.visible = false
+
     this.round = 0
     this.currentShot = 1
     this.totalPlayers = 5
@@ -58,18 +63,23 @@ class mainScene {
     Phaser.Utils.Array.Add(this.playerArray, this.physics.add.sprite(-500, -600, 'turn arrow', 0))
 
     Phaser.Utils.Array.Add(this.playerArray, this.physics.add.sprite(this.playerX, this.playerY, 'man green', 0));
+    this.playerArray[1].name = 'man green'
     this.playerX += this.playerXMove
     Phaser.Utils.Array.Add(this.playerArray, this.physics.add.sprite(this.playerX, this.playerY, 'woman blue', 0));
+    this.playerArray[2].name = 'woman blue'
     this.playerX += this.playerXMove
     Phaser.Utils.Array.Add(this.playerArray, this.physics.add.sprite(this.playerX, this.playerY, 'man yellow', 0));
+    this.playerArray[3].name = 'man yellow'
     this.playerX += this.playerXMove
     Phaser.Utils.Array.Add(this.playerArray, this.physics.add.sprite(this.playerX, this.playerY, 'man pink', 0));
+    this.playerArray[4].name = 'man pink'
     this.playerX += this.playerXMove
 
     console.log(this.playerArray)
     
     if(this.playerIndex == 0){
       this.turnArrow = this.add.image(350, 300, 'turn arrow', 0).setOrigin(0.5, 0.5).setScale(2);
+      this.selfShot.visible = true
     }else{
       this.turnArrow = this.add.image(this.playerArray[this.playerIndex].x, this.playerY - 64, 'turn arrow', 1).setOrigin(0.5, 0.5).setScale(2);
     }
@@ -100,15 +110,16 @@ class mainScene {
     this.reload.depth = 0.2
     this.reload.visible = false
 
+    this.start = this.physics.add.sprite(350, this.buttonY, 'start', ).setOrigin(0.5, 0.5).setScale(2).setInteractive().on('pointerdown', this.startRound, this)
+    this.start.depth = 0.2
+
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
-    this.style = { font: '50px Arial', fill: '#ff1616ff' };
+    this.style = { font: '50px Arial', fill: '#0a5bfeff' };
     this.shotsRoundText = this.add.text(350, 30, '0 out of 6 shot', this.style).setOrigin(0.5, 0.5);
     this.shotsRoundText.depth = 1;
 
     this.playersLeft = this.add.text(350, 70, this.players + ' out of ' + this.totalPlayers + ' players left', this.style).setOrigin(0.5, 0.5);
-
-    this.startRound()
     
   }
   update() {
@@ -119,6 +130,17 @@ class mainScene {
   /* VVV Put any other functions and code down here VVV */
 
   startRound(){
+    this.start.visible = false
+    this.start.disableInteractive()
+    this.reloading.visible = true
+      this.delayTimer = this.time.addEvent({
+          delay: 3200,
+          callback: ()=>{
+            this.shootButton.visible = true
+            this.reloading.visible = false
+          },
+          loop: false
+        })
     this.bullet = Phaser.Math.Between(1, 6)
     console.log('here is the bullet: ' + this.bullet)
     this.sound.play('reload')
@@ -128,14 +150,12 @@ class mainScene {
     console.log(this.currentShot)
     //if the bullet is shot
     if(this.currentShot == this.bullet){
+      
       //lose by dying
       if(this.playerIndex == 0){
-        console.log(this.playerArray)
-        console.log(this.playerIndex)
-        console.log(this.playerArray[this.playerIndex])
         this.playerArray[this.playerIndex].destroy()
         this.shotsRoundText.setText('you are dead')
-        this.shootButton.disableInteractive()
+        
         if((this.players - 1) != 1){
         this.playersLeft.setText((this.players - 1) + ' players were left')
         }else{
@@ -153,6 +173,15 @@ class mainScene {
         this.delayTimer = this.time.addEvent({
           delay: 1000,
           callback: ()=>{
+            if(this.playerArray[this.playerIndex].name == 'man green'){
+            this.add.image(this.playerArray[this.playerIndex].x, this.playerArray[this.playerIndex].y, 'man green', 1)
+            }else if(this.playerArray[this.playerIndex].name == 'woman blue'){
+            this.add.image(this.playerArray[this.playerIndex].x, this.playerArray[this.playerIndex].y, 'woman blue', 1)
+            }else if(this.playerArray[this.playerIndex].name == 'man yellow'){
+            this.add.image(this.playerArray[this.playerIndex].x, this.playerArray[this.playerIndex].y, 'man yellow', 1)
+            }else if(this.playerArray[this.playerIndex].name == 'man pink'){
+            this.add.image(this.playerArray[this.playerIndex].x, this.playerArray[this.playerIndex].y, 'man pink', 1)
+            }
              this.playerArray[this.playerIndex].destroy()
           Phaser.Utils.Array.RemoveAt(this.playerArray, this.playerIndex)
           console.log(this.playerArray)
@@ -160,10 +189,12 @@ class mainScene {
             this.playerIndex = 0
           }
           if(this.playerIndex == 0){
+            this.selfShot.visible = true
             this.turnArrow.setFrame(0)
             this.turnArrow.x = 350
             this.turnArrow.y = 300
           }else{
+            this.selfShot.visible = false
             this.turnArrow.setFrame(1)
             this.turnArrow.y = this.playerY - 64
             this.turnArrow.x = this.playerArray[this.playerIndex].x
@@ -185,6 +216,13 @@ class mainScene {
           },
           loop: false
         })
+        this.delayTimer = this.time.addEvent({
+          delay: 1000,
+          callback: ()=>{
+            this.selfShot.visible = false
+          },
+          loop: false
+        })
           //if there are still others left
         }else{
           this.reload.visible = true
@@ -201,10 +239,12 @@ class mainScene {
         this.playerIndex = 0
       }
       if(this.playerIndex == 0){
+        this.selfShot.visible = true
         this.turnArrow.setFrame(0)
             this.turnArrow.x = 350
             this.turnArrow.y = 300
           }else{
+            this.selfShot.visible = false
             this.turnArrow.setFrame(1)
             this.turnArrow.y = this.playerY - 64
             this.turnArrow.x = this.playerArray[this.playerIndex].x
@@ -249,10 +289,12 @@ class mainScene {
         this.playerX += this.playerXMove
       }
       if(this.playerIndex == 0){
+        this.selfShot.visible = true
         this.turnArrow.setFrame(0)
             this.turnArrow.x = 350
             this.turnArrow.y = 300
           }else{
+            this.selfShot.visible = false
             this.turnArrow.setFrame(1)
             this.turnArrow.y = this.playerY - 64
             this.turnArrow.x = this.playerArray[this.playerIndex].x
