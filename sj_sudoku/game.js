@@ -1,3 +1,5 @@
+// !!!!!! add win and lose screen  !!!! juliann!!!
+
 // Create the mainScene
 class mainScene {
   // The three methods currently empty 
@@ -77,6 +79,10 @@ class mainScene {
       Row8: [0, 0, 6, 0, 0, 0, 0, 9, 5],
       Row9: [3, 0, 9, 2, 8, 0, 1, 4, 7]
     }
+
+    this.errorLabel = this.add.text(620, 40, 'Mistakes: \n0/3', { fontSize: 20, color: 'black' }).setOrigin(0.5, 0.5)
+    this.errors = 0
+
   }
 
   update() {
@@ -142,11 +148,48 @@ class mainScene {
   changeNumber(rowName, index) {
     if (this.inputNumberY != undefined) {
       this.gameBoard[rowName][index] = this.inputNumberY
+
       if (this.gameBoard[rowName][index] != this.solution[rowName][index]) {
+        this.delayTimer = this.time.addEvent({
+          delay: 500,
+          callback: () => { this.gameBoard[rowName][index] = 0 },
+          loop: false
+        })
         this.sound.play('wrong')
+        this.errors++
+        this.checkLoseState()
+      }
+      else {
+        this.checkWinState()
+
       }
     }
   }
+
+  checkWinState() {
+    this.winState = true
+
+    for (var n = 0; n < 9; n++) {
+      var currentRow = this.RowNames[n]
+      for (var i = 0; i < 9; i++) {
+        var currentNumb = this.gameBoard[currentRow][i]
+        if (currentNumb == 0) {
+          this.winState = false
+        }
+      }
+    }
+    console.log('winState is: ' + this.winState)
+  }
+
+  checkLoseState() {
+    this.loseState = false
+    this.errorLabel.setText('Mistakes: \n' + this.errors + '/3')
+    if (this.errors > 3) {
+      this.loseState = true
+    }
+    console.log('losetate is: ' + this.loseState)
+  }
+
 }
 
 // Create the game
