@@ -4,16 +4,70 @@ class mainScene {
 
   preload() {
     this.load.image('ground', 't_dinoGame/assets/ground.png')
-  
+    this.load.image('beaver', 't_dinoGame/assets/beaver.png')
+    this.load.image('treeTrunk', 't_dinoGame/assets/treeTrunk.png')
   }
 
   create() {
+    this.gameSpeed = 8
+    this.respawnTime = 0
+
     this.ground = this.add.tileSprite(0, 350, 1400, 100, 'ground')
+    this.beaver = this.physics.add.sprite(0, 350, 'beaver')
+    .setOrigin(0, 1)
+    .setCollideWorldBounds(true)
+    .setGravityY(5000)
+    .setSize(79,115)
 
+    this.obstacles = this.physics.add.group()
+
+    this.handleInputs()
+    this.addCollision()
+    
   }
-  update() {
 
-    this.ground.tilePositionX += 5
+  handleInputs() {
+    this.input.keyboard.on('keydown_SPACE', () => {
+
+      if (!this.beaver.body.onFloor()) {return}
+      this.beaver.setVelocityY(-1500)
+    })
+  }
+
+  placeObstacle() {
+    const distance = Phaser.Math.Between (600, 900)
+
+    let obstacle 
+    obstacle = this.obstacles.create(1400 + distance, 400, 'treeTrunk')
+    .setSize(65, 70) // this is the perfect size for the hitbox of the tree trunk
+      console.log('trunk')
+      console.log(distance)
+    
+  }
+
+  addCollision() {
+      this.physics.add.collider(this.beaver, this.obstacles, () => {
+      this.physics.pause()
+      this.respawnTime = 0
+      this.gameSpeed = 0
+      console.log('game over')
+    }, null, this)
+  }
+  
+
+
+
+  update(time, delta) {
+
+    this.ground.tilePositionX += this.gameSpeed
+    Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed)
+
+    this.respawnTime += delta * this.gameSpeed * 0.08
+
+    if (this.respawnTime >= 1500){
+      this.placeObstacle()
+      this.respawnTime = 0
+    }
     
 
   }
@@ -28,7 +82,12 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#dba101', // The background color (grey)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade' }, // The physics engine to use
+  physics: { 
+    default: 'arcade',
+    arcade: {
+      debug: false
+    } 
+  }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
