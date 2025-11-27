@@ -5,6 +5,7 @@ class mainScene {
   preload() {
     this.load.audio('missClick', 'sj_sudoku/assets/error_CDOxCYm.mp3')
     this.load.audio('tileClick', 'sj_sudoku/assets/tf2-button-click.mp3')
+    this.load.audio('wrong', 'sj_sudoku/assets/wrong.mp3')
   }
 
   create() {
@@ -12,33 +13,48 @@ class mainScene {
     const blackColor = 0x000000
 
     // create grid + board:
+    if (true) {
+      this.board = this.add.rectangle(350, 200, 360, 360, whiteColor, 1)
+      this.physics.add.existing(this.board).setInteractive().on('pointerdown', this.getTile, this)
 
-    this.add.rectangle(350, 200, 360, 360, whiteColor, 1)
-    for (var i = 0; i < 10; i++) {
-      this.add.line((i * 40) + 170, 200, 0, 0, 0, 361, blackColor, 1).setLineWidth(2)
-    }
-    for (var i = 0; i < 10; i++) {
-      this.add.line(350, (i * 40) + 20, 361, 0, 0, 0, blackColor, 1).setLineWidth(2)
-    }
-    const alpha = 0.5
-
-    for (var n = 0; n < 3; n++) {
-      var yPos = 80 + (n * 120)
-      for (var i = 0; i < 3; i++) {
-        this.add.rectangle(230 + (i * 120), yPos, 116, 116, whiteColor, alpha)
+      for (var i = 0; i < 10; i++) {
+        this.add.line((i * 40) + 170, 200, 0, 0, 0, 361, blackColor, 1).setLineWidth(2)
+      }
+      for (var i = 0; i < 10; i++) {
+        this.add.line(350, (i * 40) + 20, 361, 0, 0, 0, blackColor, 1).setLineWidth(2)
+      }
+      const alpha = 0.5
+      for (var n = 0; n < 3; n++) {
+        var yPos = 80 + (n * 120)
+        for (var i = 0; i < 3; i++) {
+          this.add.rectangle(230 + (i * 120), yPos, 116, 116, whiteColor, alpha)
+        }
       }
     }
 
-    // create text:
-    this.boardLabel = this.add.text(176, 22, '0', { fontSize: 43, color: 'black' }).setOrigin(0, 0).setScale(1.5, 1)
+    // create tiles + numbers:
+    if (true) {
+      this.numbers = this.add.rectangle(40, 200, 40, (40 * 9), whiteColor, 1)
+      this.physics.add.existing(this.numbers).setInteractive().on('pointerdown', this.getNumber, this)
 
-    // create rectangles for interaction:
-    this.board = this.add.rectangle(350, 200, 360, 360, '', 0)
-    this.physics.add.existing(this.board).setInteractive().on('pointerdown', this.getTile, this)
+      for (var i = 0; i < 2; i++) {
+        this.add.line((i * 40) + 20, 200, 0, 0, 0, 361, blackColor, 1).setLineWidth(2)
+        this.add.line(40, 20 + (i * 360), 44, 0, 0, 0, blackColor, 1).setLineWidth(2)
+      }
+      for (var i = 0; i < 10; i++) {
+        this.add.line(40, 20 + (i * 40), 44, 0, 0, 0, blackColor, 1).setLineWidth(2)
+        if (i == 0) { }
+        else { this.add.text(28, (i * 40) - 20, i, { fontSize: 43, color: 'black' }) }
+      }
+    }
+    this.selection = this.add.rectangle(40, 200, 36, 36, 0xacfffd, 0.5)
+    this.selection.visible = false
+
+    // create text:
+    this.boardLabel = this.add.text(350, 200, '0', { fontSize: 43, color: 'black' }).setOrigin(0.5, 0.5).setScale(1.5, 1)
 
     // create solution and board, prefilled. Will become empty templates later if algorithms work
     this.RowNames = ["Row1", "Row2", "Row3", "Row4", "Row5", "Row6", "Row7", "Row8", "Row9"]
-
     this.solution = {
       Row1: [1, 2, 7, 8, 6, 9, 5, 3, 4],
       Row2: [9, 4, 3, 5, 1, 7, 8, 2, 6],
@@ -50,7 +66,6 @@ class mainScene {
       Row8: [4, 8, 6, 3, 7, 1, 2, 9, 5],
       Row9: [3, 5, 9, 2, 8, 6, 1, 4, 7]
     }
-
     this.gameBoard = {
       Row1: [1, 0, 7, 8, 6, 0, 5, 0, 4],
       Row2: [0, 0, 3, 5, 0, 7, 0, 0, 0],
@@ -63,6 +78,7 @@ class mainScene {
       Row9: [3, 0, 9, 2, 8, 0, 1, 4, 7]
     }
   }
+
   update() {
     this.drawGameBoard()
   }
@@ -96,26 +112,40 @@ class mainScene {
   getTile(input) {
     var xPos = input.downX
     var yPos = input.downY
-    // console.log(xPos, yPos)
 
     var inputY = Math.floor((yPos - 20) / 40)  // nummer van 0 - 8
     var inputX = Math.floor((xPos - 170) / 40) // nummer van 0 - 8
-    // console.log(inputY, inputX)
-
     var inputRowName = this.RowNames[inputY]
-    // console.log(this.inputRowName)
 
-    this.currentTile = this.gameBoard[inputRowName][inputX] // number on tile at mouseclick
+    var currentTile = this.gameBoard[inputRowName][inputX] // number on tile at mouseclick
 
-    console.log(this.currentTile)
+    // console.log(currentTile)
 
-    if (this.currentTile != 0) {
+    if (currentTile != 0) {
       this.sound.play('missClick')
-    } else if (this.currentTile == 0) {
+    } else {
       this.sound.play('tileClick')
-    } else (
-      console.log("uh oh.")
-    )
+      this.changeNumber(inputRowName, inputX)
+    }
+  }
+
+  getNumber(input) {
+    this.sound.play('tileClick')
+    var yPos = input.downY
+    this.inputNumberY = Math.floor((yPos - 20) / 40) + 1
+    // console.log(this.inputNumberY)
+
+    this.selection.setY((this.inputNumberY * 40))
+    this.selection.visible = true
+  }
+
+  changeNumber(rowName, index) {
+    if (this.inputNumberY != undefined) {
+      this.gameBoard[rowName][index] = this.inputNumberY
+      if (this.gameBoard[rowName][index] != this.solution[rowName][index]) {
+        this.sound.play('wrong')
+      }
+    }
   }
 }
 
@@ -125,7 +155,6 @@ new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#919191', // The background color (grey)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade', arcade: { debug: true } }, // The physics engine to use
+  physics: { default: 'arcade', arcade: { debug: false } }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
-
