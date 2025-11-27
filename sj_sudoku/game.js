@@ -3,150 +3,119 @@ class mainScene {
   // The three methods currently empty 
 
   preload() {
-    /*     
-    This method is called once at the beginning
-    It will load all the assets, like sprites and sounds
-    */
-
+    this.load.audio('missClick', 'sj_sudoku/assets/error_CDOxCYm.mp3')
+    this.load.audio('tileClick', 'sj_sudoku/assets/tf2-button-click.mp3')
   }
 
   create() {
-    /* 
-    This method is called once, just after preload()
-    It will initialize our scene, like the positions of the sprites
-    */
-
     const whiteColor = 0xffffff
     const blackColor = 0x000000
 
     // create grid + board:
-    if (true) {
-      this.add.rectangle(350, 200, 360, 360, whiteColor, 1)
-      for (var i = 0; i < 10; i++) {
-        this.add.line((i * 40) + 170, 200, 0, 0, 0, 361, blackColor, 1).setLineWidth(2)
+
+    this.add.rectangle(350, 200, 360, 360, whiteColor, 1)
+    for (var i = 0; i < 10; i++) {
+      this.add.line((i * 40) + 170, 200, 0, 0, 0, 361, blackColor, 1).setLineWidth(2)
+    }
+    for (var i = 0; i < 10; i++) {
+      this.add.line(350, (i * 40) + 20, 361, 0, 0, 0, blackColor, 1).setLineWidth(2)
+    }
+    const alpha = 0.5
+
+    for (var n = 0; n < 3; n++) {
+      var yPos = 80 + (n * 120)
+      for (var i = 0; i < 3; i++) {
+        this.add.rectangle(230 + (i * 120), yPos, 116, 116, whiteColor, alpha)
       }
-      for (var i = 0; i < 10; i++) {
-        this.add.line(350, (i * 40) + 20, 361, 0, 0, 0, blackColor, 1).setLineWidth(2)
-      }
-      const alpha = 0.5
-      this.add.rectangle(230, 80, 116, 116, whiteColor, alpha) // 1
-      this.add.rectangle(350, 80, 116, 116, whiteColor, alpha) // 2
-      this.add.rectangle(470, 80, 116, 116, whiteColor, alpha) // 3
-      this.add.rectangle(230, 200, 116, 116, whiteColor, alpha) // 4
-      this.add.rectangle(350, 200, 116, 116, whiteColor, alpha) // 5
-      this.add.rectangle(470, 200, 116, 116, whiteColor, alpha) // 6
-      this.add.rectangle(230, 320, 116, 116, whiteColor, alpha) // 7
-      this.add.rectangle(350, 320, 116, 116, whiteColor, alpha) // 8
-      this.add.rectangle(470, 320, 116, 116, whiteColor, alpha) // 9
     }
 
     // create text:
-    if (true) {
-      this.boardLabel = this.add.text(177, 22, '0', { fontSize: 43, color: 'black' }).setOrigin(0, 0)
-
-      // this.Hor1Label = this.add.text(190, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor2Label = this.add.text(230, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor3Label = this.add.text(270, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor4Label = this.add.text(310, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor5Label = this.add.text(350, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor6Label = this.add.text(390, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor7Label = this.add.text(430, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor8Label = this.add.text(470, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-      // this.Hor9Label = this.add.text(510, 200, 'text', {
-      //   fontSize: 43, color: 'black'
-      // }).setOrigin(0.5, 0.5)
-    }
+    this.boardLabel = this.add.text(176, 22, '0', { fontSize: 43, color: 'black' }).setOrigin(0, 0).setScale(1.5, 1)
 
     // create rectangles for interaction:
     this.board = this.add.rectangle(350, 200, 360, 360, '', 0)
     this.physics.add.existing(this.board).setInteractive().on('pointerdown', this.getTile, this)
 
+    // create solution and board, prefilled. Will become empty templates later if algorithms work
+    this.RowNames = ["Row1", "Row2", "Row3", "Row4", "Row5", "Row6", "Row7", "Row8", "Row9"]
 
-  }
-  update() {
     this.solution = {
-      Hor1: [1, 2, 7, 8, 6, 9, 5, 3, 4],
-      Hor2: [9, 4, 3, 5, 1, 7, 8, 2, 6],
-      Hor3: [5, 6, 8, 4, 3, 2, 9, 7, 1],
-      Hor4: [8, 3, 5, 1, 9, 4, 7, 6, 2],
-      Hor5: [7, 1, 4, 6, 2, 8, 3, 5, 9],
-      Hor6: [6, 9, 2, 7, 5, 3, 4, 1, 8],
-      Hor7: [2, 7, 1, 9, 4, 5, 6, 8, 3],
-      Hor8: [4, 8, 6, 3, 7, 1, 2, 9, 5],
-      Hor9: [3, 5, 9, 2, 8, 6, 1, 4, 7]
+      Row1: [1, 2, 7, 8, 6, 9, 5, 3, 4],
+      Row2: [9, 4, 3, 5, 1, 7, 8, 2, 6],
+      Row3: [5, 6, 8, 4, 3, 2, 9, 7, 1],
+      Row4: [8, 3, 5, 1, 9, 4, 7, 6, 2],
+      Row5: [7, 1, 4, 6, 2, 8, 3, 5, 9],
+      Row6: [6, 9, 2, 7, 5, 3, 4, 1, 8],
+      Row7: [2, 7, 1, 9, 4, 5, 6, 8, 3],
+      Row8: [4, 8, 6, 3, 7, 1, 2, 9, 5],
+      Row9: [3, 5, 9, 2, 8, 6, 1, 4, 7]
     }
 
     this.gameBoard = {
-      Hor1: [1, 0, 7, 8, 6, 0, 5, 0, 4],
-      Hor2: [0, 0, 3, 5, 0, 7, 0, 0, 0],
-      Hor3: [5, 0, 8, 0, 0, 0, 0, 0, 0],
-      Hor4: [8, 0, 0, 0, 0, 0, 7, 6, 0],
-      Hor5: [0, 0, 4, 0, 2, 8, 3, 0, 9],
-      Hor6: [6, 9, 2, 7, 0, 3, 0, 0, 8],
-      Hor7: [0, 7, 1, 9, 0, 5, 6, 0, 3],
-      Hor8: [0, 0, 6, 0, 0, 0, 0, 9, 5],
-      Hor9: [3, 0, 9, 2, 8, 0, 1, 4, 7]
+      Row1: [1, 0, 7, 8, 6, 0, 5, 0, 4],
+      Row2: [0, 0, 3, 5, 0, 7, 0, 0, 0],
+      Row3: [5, 0, 8, 0, 0, 0, 0, 0, 0],
+      Row4: [8, 0, 0, 0, 0, 0, 7, 6, 0],
+      Row5: [0, 0, 4, 0, 2, 8, 3, 0, 9],
+      Row6: [6, 9, 2, 7, 0, 3, 0, 0, 8],
+      Row7: [0, 7, 1, 9, 0, 5, 6, 0, 3],
+      Row8: [0, 0, 6, 0, 0, 0, 0, 9, 5],
+      Row9: [3, 0, 9, 2, 8, 0, 1, 4, 7]
     }
-
-    this.drawBoard(this.gameBoard)
-
+  }
+  update() {
+    this.drawGameBoard()
   }
 
   /* VVV Put any other functions and code down here VVV */
+  drawGameBoard() { // draw/ update board text
+    var stringMain = ""
+    var stringSub = ""
 
-  drawBoard(board) { // draw/ update board text
-    var horNames = ["Hor1", "Hor2", "Hor3", "Hor4", "Hor5", "Hor6", "Hor7", "Hor8", "Hor9"]
+    for (var n = 0; n < 9; n++) {
+      var currentRow = this.RowNames[n]
 
-    // for(var i = 0; i < 81; i ++) {
-    //   var currentIndex = Math.floor(i / 9)
-    //   var text = ""
-    //   text = text + this.gameBoard[horNames[currentIndex]][currentIndex]
-    // }
-    // this.boardLabel.setText(text)
+      for (var i = 0; i < 9; i++) {
+        var currentNumb = this.gameBoard[currentRow][i]
+        var append
+        if (currentNumb == 0) {
+          append = " "
+        } else {
+          append = currentNumb
+        }
+        stringSub = stringSub + "" + append
+      }
+      if (n == 0) { stringMain = stringMain + stringSub }
+      else { stringMain = stringMain + "\n" + stringSub }
 
-    // this.Hor1Label.setText(board.Hor1)
-    // this.Hor2Label.setText(board.Hor2)
-    // this.Hor3Label.setText(board.Hor3)
-    // this.Hor4Label.setText(board.Hor4)
-    // this.Hor5Label.setText(board.Hor5)
-    // this.Hor6Label.setText(board.Hor6)
-    // this.Hor7Label.setText(board.Hor7)
-    // this.Hor8Label.setText(board.Hor8)
-    // this.Hor9Label.setText(board.Hor9)
+      stringSub = ""
+    }
+    this.boardLabel.setText(stringMain)
   }
 
   getTile(input) {
     var xPos = input.downX
     var yPos = input.downY
-    //console.log(xPos, yPos)
+    // console.log(xPos, yPos)
 
-    this.inputVert = Math.floor((yPos - 20) / 40)
-    // console.log(this.inputVert)
+    var inputY = Math.floor((yPos - 20) / 40)  // nummer van 0 - 8
+    var inputX = Math.floor((xPos - 170) / 40) // nummer van 0 - 8
+    // console.log(inputY, inputX)
 
-    var horNames = ["Hor1", "Hor2", "Hor3", "Hor4", "Hor5", "Hor6", "Hor7", "Hor8", "Hor9"]
-    var inputHor = Math.floor((xPos - 170) / 40)
-    this.inputHorName = horNames[inputHor]
-    // console.log(this.inputVertName)
+    var inputRowName = this.RowNames[inputY]
+    // console.log(this.inputRowName)
 
-    console.log(this.gameBoard[this.inputHorName][this.inputVert])
+    this.currentTile = this.gameBoard[inputRowName][inputX] // number on tile at mouseclick
 
+    console.log(this.currentTile)
 
+    if (this.currentTile != 0) {
+      this.sound.play('missClick')
+    } else if (this.currentTile == 0) {
+      this.sound.play('tileClick')
+    } else (
+      console.log("uh oh.")
+    )
   }
 }
 
