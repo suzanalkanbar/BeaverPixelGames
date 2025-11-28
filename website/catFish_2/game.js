@@ -42,37 +42,94 @@ class mainScene {
         this.fishBar = [r0, r1, r2, r3]
         this.hideList(this.fishBar)
 
-        this.fish1 = this.physics.add.sprite(100, 100, 'yellow')
-        this.fishMaker(this.fish1, 40, 7, 75, 25, 10, 'Lake', 'yellow')
-        this.fish2 = this.physics.add.sprite(100, 100, 'orange')
-        this.fishMaker(this.fish2, 30, 4, 80, 20, 25, 'Lake', 'orange')
+        this.fish1 = this.physics.add.sprite(100, 100, 'red')
+        this.fishMaker(this.fish1, 40, 7, 75, 25, 10, 'Lake', 'red', 0)
+        this.fish2 = this.physics.add.sprite(100, 100, 'red')
+        this.fishMaker(this.fish2, 30, 4, 80, 20, 25, 'Lake', 'red', 0)
         this.fish3 = this.physics.add.sprite(100, 100, 'red')
-        this.fishMaker(this.fish3, 60, 10, 70, 30, 2, 'Lake', 'red')
-        this.fish4 = this.physics.add.sprite(100, 100, 'green')
-        this.fishMaker(this.fish4, 20, 4, 70, 30, 40, 'Beach', 'green')
-        this.fish5 = this.physics.add.sprite(100, 100, 'blue')
-        this.fishMaker(this.fish5, 15, 3, 80, 20, 80, 'Beach', 'blue')
-        this.fish6 = this.physics.add.sprite(100, 100, 'purple')
-        this.fishMaker(this.fish6, 8, 1, 60, 40, 120, 'Lava', 'purple')
+        this.fishMaker(this.fish3, 60, 10, 70, 30, 2, 'Lake', 'red', 0)
+        this.fish4 = this.physics.add.sprite(100, 100, 'red')
+        this.fishMaker(this.fish4, 20, 4, 70, 30, 40, 'Lake', 'red', 0)
+        this.fish5 = this.physics.add.sprite(100, 100, 'red')
+        this.fishMaker(this.fish5, 15, 3, 80, 20, 80, 'Lake', 'red', 0)
+        this.fish6 = this.physics.add.sprite(100, 100, 'red')
+        this.fishMaker(this.fish6, 8, 1, 60, 40, 120, 'Lake', 'red', 1)
         this.fish7 = this.physics.add.sprite(100, 100, 'red')
-        this.fishMaker(this.fish7, 40, 6, 75, 25, 10, 'Space', 'red')
+        this.fishMaker(this.fish7, 40, 6, 75, 25, 10, 'Lake', 'red', 2)
+        this.fish8 = this.physics.add.sprite(100, 100, 'red')
+        this.fishMaker(this.fish8, 40, 7, 75, 25, 10, 'Lake', 'red', 3)
+
+        this.fish9 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish9, 30, 4, 80, 20, 25, 'Beach', 'orange', 0)
+        this.fish10 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish10, 30, 4, 80, 20, 25, 'Beach', 'orange', 0)
+        this.fish11 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish11, 30, 4, 80, 20, 25, 'Beach', 'orange', 0)
+        this.fish12 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish12, 30, 4, 80, 20, 25, 'Beach', 'orange', 0)
+        this.fish13 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish13, 30, 4, 80, 20, 25, 'Beach', 'orange', 0)
+        this.fish14 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish14, 30, 4, 80, 20, 25, 'Beach', 'orange', 1)
+        this.fish15 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish15, 30, 4, 80, 20, 25, 'Beach', 'orange', 2)
+        this.fish16 = this.physics.add.sprite(100, 100, 'orange')
+        this.fishMaker(this.fish16, 30, 4, 80, 20, 25, 'Beach', 'orange', 3)
+
+        this.fish17 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish17, 20, 4, 70, 30, 40, 'Lava', 'green', 0)
+        this.fish18 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish18, 20, 4, 70, 30, 40, 'Lava', 'green', 0)
+        this.fish19 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish19, 20, 4, 70, 30, 40, 'Lava', 'green', 0)
+        this.fish20 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish20, 20, 4, 70, 30, 40, 'Lava', 'green', 0)
+        this.fish21 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish21, 20, 4, 70, 30, 40, 'Lava', 'green', 0)
+        this.fish22 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish22, 20, 4, 70, 30, 40, 'Lava', 'green', 1)
+        this.fish23 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish23, 20, 4, 70, 30, 40, 'Lava', 'green', 2)
+        this.fish24 = this.physics.add.sprite(100, 100, 'green')
+        this.fishMaker(this.fish24, 20, 4, 70, 30, 40, 'Lava', 'green', 3)
+
+        this.fish25 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish25, 15, 3, 80, 20, 80, 'Space', 'blue', 0)
+        this.fish26 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish26, 15, 3, 80, 20, 80, 'Space', 'blue', 0)
+        this.fish27 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish27, 15, 3, 80, 20, 80, 'Space', 'blue', 0)
+        this.fish28 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish28, 15, 3, 80, 20, 80, 'Space', 'blue', 0)
+        this.fish29 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish29, 15, 3, 80, 20, 80, 'Space', 'blue', 0)
+        this.fish30 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish30, 15, 3, 80, 20, 80, 'Space', 'blue', 1)
+        this.fish31 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish31, 15, 3, 80, 20, 80, 'Space', 'blue', 2)
+        this.fish32 = this.physics.add.sprite(100, 100, 'blue')
+        this.fishMaker(this.fish32, 15, 3, 80, 20, 80, 'Space', 'blue', 3)
+
+        this.fish33 = this.physics.add.sprite(100, 100, 'purple')
+        this.fishMaker(this.fish30, 15, 3, 80, 20, 80, 'Space', 'purple', 4)
 
         this.currentFish = this.physics.add.sprite(100, 100, 'red')
         this.hide(this.currentFish)
         this.copyFish = this.physics.add.sprite(100, 100, 'red')
         this.hide(this.copyFish)
 
-        this.fishes = [this.fish1, this.fish2, this.fish3, this.fish4, this.fish5, this.fish6, this.fish7]
+        this.fishes = [this.fish1, this.fish2, this.fish3, this.fish4, this.fish5, this.fish6, this.fish7,this.fish8,this.fish9,this.fish10,this.fish11,this.fish12,this.fish13,this.fish14,this.fish15,this.fish16,this.fish17,this.fish18,this.fish19,this.fish20,this.fish21,this.fish22,this.fish23,this.fish24,this.fish25,this.fish26,this.fish27,this.fish28,this.fish29,this.fish30,this.fish31,this.fish32]
         this.availableFishes = []
         this.hideList(this.fishes)
+        this.hide(this.fish33)
 
         this.twigRod = { name: 'Twig', level: 0, modifier: 0.5, cost: 0, unlocked: true }
-        this.woodRod = { name: 'Wooden Rod', level: 1, modifier: 1, cost: 100, unlocked: true }
-        this.fiberglassRod = { name: 'Fiberglass Rod', level: 2, modifier: 1.5, cost: 1000, unlocked: true }
-        this.graphiteRod = { name: 'Graphite Rod', level: 3, modifier: 2, cost: 10000, unlocked: true }
+        this.woodRod = { name: 'Wooden Rod', level: 1, modifier: 1, cost: 100, unlocked: false }
+        this.fiberglassRod = { name: 'Fiberglass Rod', level: 2, modifier: 1.5, cost: 1000, unlocked: false }
+        this.graphiteRod = { name: 'Graphite Rod', level: 3, modifier: 2, cost: 10000, unlocked: false }
         this.rodList = [this.twigRod, this.woodRod, this.fiberglassRod, this.graphiteRod]
         this.activeRod = { name: 'Twig', level: 0, modifier: 0.5, cost: 0, unlocked: true }
-        this.shopRod = this.woodRod
+        this.shopRod = {name:'Wooden Rod',cost:100}
 
         this.shoelaceLine = { name: 'Shoelace', level: 0, speed: 1.5, cost: 0, unlocked: true }
         this.threadLine = { name: 'Thread', level: 1, speed: 1.25, cost: 50, unlocked: true }
@@ -90,9 +147,9 @@ class mainScene {
         this.activeBobber = { name: 'Pinecone', level: 0, time: 1000, cost: 0, unlocked: true }
         this.shopBobber = this.yarnBobber
 
-        this.breadBait = { name: 'Bread', cost: 200, unlocked: false }
-        this.wormBait = { name: 'Worm', cost: 1000, unlocked: false }
-        this.fishBait = { name: 'Fish', cost: 5000, unlocked: false }
+        this.breadBait = { name: 'Bread',tier:1, cost: 200, unlocked: false }
+        this.wormBait = { name: 'Worm',tier:2, cost: 1000, unlocked: false }
+        this.fishBait = { name: 'Fish',tier:3, cost: 5000, unlocked: false }
         this.baitList = [this.breadBait, this.wormBait, this.fishBait]
         this.shopBait = this.breadBait
 
@@ -134,7 +191,7 @@ class mainScene {
         this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
 
-        this.money = 0
+        this.money = 100000
         let style = { font: '20px Arial', fill: '#fff' };
         this.scoreText = this.add.text(20, 20, 'cash: ' + this.money, style);
         this.hide(this.scoreText)
@@ -422,7 +479,7 @@ class mainScene {
         }
     }
 
-    fishMaker(fish, catchS, critS, highN, lowN, worth, level, called) {
+    fishMaker(fish, catchS, critS, highN, lowN, worth, level, called, bait) {
         fish.catchSize = catchS
         fish.critSize = critS
         fish.high = highN
@@ -430,6 +487,8 @@ class mainScene {
         fish.value = worth
         fish.world = level
         fish.name = called
+        fish.tier = bait
+        fish.caught = false
     }
     createStartMenu() {
         const startBackground = this.add.rectangle(350, 200, 700, 400, 0x000000)
@@ -585,6 +644,27 @@ class mainScene {
         this.shopMenuBackground = this.physics.add.existing(shopMenuBackground, 0)
         const shopItem1 = this.add.rectangle(208, 96, 80, 80, 0x00ff00)
         this.shopItem1 = this.physics.add.existing(shopItem1, 0)
+        this.shopItem1.setInteractive()
+        this.shopItem1.on('pointerdown',() => {
+            if (this.money >= this.shopRod.cost){
+                for (let i =0;i<this.rodList.length;i++){
+                    if(this.shopRod.name == this.rodList[i].name){
+                        this.rodList[i].unlocked = true
+                        this.money -= this.shopRod.cost
+                        this.scoreText.setText('cash: ' + this.money)
+                        if(!(this.rodList[i].name ==  'Graphite Rod')){
+                        this.shopRod.name = this.rodList[i+1].name
+                        this.shopRod.cost = this.rodList[i+1].cost
+                        } else {
+                            this.shopRod.name = 'All rods bought'
+                            this.shopRod.cost = 0
+                        }
+                        this.updateShopText()
+                        break
+                    }
+                }
+            }
+        })
         this.shopRodName = this.add.text(168, 56, 'Rod Name Here', { font: '16px Arial' }).setOrigin(0, 1)
         this.shopRodPrice = this.add.text(248, 56, '€100', { font: '16px Arial' }).setOrigin(0, 0)
         this.shopRodDesc = this.add.text(248, 72, 'Increases\ncatching\nbox', { font: '16px Arial' }).setOrigin(0, 0)
@@ -620,9 +700,11 @@ class mainScene {
             }
             for (let i = 0; i < this.invSlotList.length; i++) {
                 this.invSlotList[i].setTexture('empty')
+                this.invSlotList[i].value = 0
             }
             this.inventory = []
             this.scoreText.setText('cash: ' + this.money)
+            this.updateShopText()
         })
 
         this.shopItem6.disableInteractive()
