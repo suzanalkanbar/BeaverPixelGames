@@ -135,13 +135,13 @@ function openGamePopup() {
   startBtn.addEventListener("click", () => {
   if (!window.snakeLoaded) {
     const script = document.createElement("script");
-    script.src = "../t_simonSays/game.js";
+    script.src = "../j-snake/game.js";
     script.onload = () => {
       window.snakeLoaded = true;
-      const canvas = document.querySelector("canvas");
-      if (canvas) {
-        document.getElementById("game").appendChild(canvas);
-      }
+     const canvas = document.querySelector("canvas");
+    if (canvas) {
+     document.getElementById("game").appendChild(canvas);
+     }
     };
     document.body.appendChild(script);
   } else {
@@ -159,5 +159,4 @@ function openGamePopup() {
     }
   });
 
-
-}
+ }
