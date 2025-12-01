@@ -6,6 +6,7 @@ class mainScene {
 
     this.load.image('background', 'j-pikmin_Mario/assets/landscape.png')
     this.load.image('easterEgg', 'j-pikmin_Mario/assets/my_avatar-1.png.png')
+    this.load.image('bench', 'j-pikmin_Mario/assets/bench.png')
 
     this.load.spritesheet('walking', 
       'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
@@ -106,7 +107,7 @@ class mainScene {
     this.player.body.setGravityY(300);
     this.cameras.main.scrollX = this.player.x - 350
 
-    this.redOnion = this.physics.add.sprite(1500, 315, 'onion', 0).setImmovable(true)
+    this.redOnion = this.physics.add.sprite(2000, 315, 'onion', 0).setImmovable(true)
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
@@ -128,12 +129,14 @@ class mainScene {
     this.grassY = 387
     this.spritelength = 30 - 3
 
+    //back wall
     for(let i = 0; i < 16; i++){
     this.grass.create(this.grassX - this.spritelength, this.grassY, 'grass', 50)
     this.grassY -= this.spritelength
     }
 
-
+    
+    //straight
     this.grassY = 360
     for(let i = 0; i < 13; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
@@ -141,14 +144,17 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
+    //hole
     this.grassX += this.spritelength * 3
 
+    //straight
     for(let i = 0; i < 20; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
       this.grassX += this.spritelength
     }
 
+    //stairs up
     for(let i = 0; i < 4; i++){
       this.grassY -= this.spritelength
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
@@ -159,8 +165,10 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
+    //hole
     this.grassX += this.spritelength * 2
 
+    //stairs down
     for(let i = 0; i < 4; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.amount = (400 - this.grassY) / this.spritelength
@@ -171,7 +179,23 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
-    for(let i = 0; i < 20; i++){
+    //straight
+    for(let i = 0; i < 8; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
+      this.grassX += this.spritelength
+    }
+
+    //bench platform
+    this.bench = this.physics.add.sprite(this.grassX + 120, this.grassY - 65, 'bench').setScale(1.5, 1).setImmovable(true)
+    this.bench.depth = -1
+    this.bench.body.setSize(150, 4)
+
+    //hole
+    this.grassX += this.spritelength * 9
+
+    //straight
+    for(let i = 0; i < 8; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
       this.grassX += this.spritelength
@@ -184,6 +208,8 @@ class mainScene {
 
     this.physics.add.collider(this.player, this.bulborb)
 
+    this.physics.add.collider(this.player, this.bench)
+
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
       this.player.setVelocityX(0)
@@ -192,8 +218,16 @@ class mainScene {
       this.sound.play('victory')
       this.levelCompleteText.x = this.player.x - 180
       this.levelCompleteText.visible = true
-      this.redOnion.disableBody()
-    })
+      this.physics.world.colliders.getActive().find(function(i){return i.name == 'onion'}).destroy();
+      this.delayTimer = this.time.addEvent({
+          delay: 3200,
+          callback: ()=>{
+            this.player.visible = false
+            this.redOnion.setVelocityY(-50)
+          },
+          loop: false
+        })
+    }).name = 'onion'
   }
 
   update() {
@@ -295,6 +329,7 @@ class mainScene {
         this.bulborb.play('bulbdeath')
         this.sound.play('bulborb death')
         this.player.setVelocityY(-100)
+        this.bulborb.setVelocityX(0)
         this.delayTimer = this.time.addEvent({
           delay: 500,
           callback: ()=>{
@@ -400,7 +435,7 @@ window.game = new Phaser.Game({
   backgroundColor: '#e4a426', // The background color
   scene: mainScene, // The name of the scene we created
   physics: { default: 'arcade',
-    // arcade: { debug: true }
+    arcade: { debug: true }
   }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });

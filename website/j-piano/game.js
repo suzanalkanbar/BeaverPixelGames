@@ -603,7 +603,7 @@ class mainScene {
 }
 
 // Create the game
-window.activePhaserGame = new Phaser.Game({
+window.game = new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
   backgroundColor: '#000000ff', // The background color

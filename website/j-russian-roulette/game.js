@@ -30,6 +30,9 @@ class mainScene {
     this.load.image('table', 'j-russian-roulette/assets/table.png')
     this.load.image('start', 'j-russian-roulette/assets/start.png')
     this.load.image('shoot yourself', 'j-russian-roulette/assets/shoot yourself.png')
+    this.load.image('flash', 'j-russian-roulette/assets/flashbang.png')
+    this.load.image('mag', 'j-russian-roulette/assets/empty.png')
+    this.load.image('shadow', 'j-russian-roulette/assets/silhouet.png')
 
     this.load.audio('shot','j-russian-roulette/assets/shot.mp3')
     this.load.audio('blank', 'j-russian-roulette/assets/blank.mp3')
@@ -48,6 +51,9 @@ class mainScene {
     this.selfShot = this.add.image(550, 240, 'shoot yourself').setOrigin(0.5, 0.5)
     this.selfShot.depth = 1
     this.selfShot.visible = false
+    this.flash = this.physics.add.sprite(350, 200, 'flash').setOrigin(0.5, 0.5)
+    this.flash.depth = 10
+    this.flash.visible = false
 
     this.round = 0
     this.currentShot = 1
@@ -115,13 +121,15 @@ class mainScene {
 
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
-    this.style = { font: '50px Arial', fill: '#0a5bfeff' };
-    this.shotsRoundText = this.add.text(350, 30, '0 out of 6 shot', this.style).setOrigin(0.5, 0.5);
+    this.add.image(600, 30, 'mag').setOrigin(0.5, 0.5).setScale(1.2)
+    this.style = { font: '40px Arial', fill: '#ffffffff' };
+    this.shotsRoundText = this.add.text(650, 30, '0/6', this.style).setOrigin(0.5, 0.5);
     this.shotsRoundText.depth = 1;
 
-    this.playersLeft = this.add.text(350, 70, this.players + ' out of ' + this.totalPlayers + ' players left', this.style).setOrigin(0.5, 0.5);
-    
+    this.add.image(602, 65, 'shadow').setOrigin(0.5, 0.5).setScale(1.2)
+    this.playersLeft = this.add.text(650, 70, this.players + '/' + this.totalPlayers, this.style).setOrigin(0.5, 0.5);
   }
+
   update() {
 
 
@@ -133,6 +141,7 @@ class mainScene {
     this.start.visible = false
     this.start.disableInteractive()
     this.reloading.visible = true
+    this.shootButton.visible = false
       this.delayTimer = this.time.addEvent({
           delay: 3200,
           callback: ()=>{
@@ -154,21 +163,23 @@ class mainScene {
       //lose by dying
       if(this.playerIndex == 0){
         this.playerArray[this.playerIndex].destroy()
-        this.shotsRoundText.setText('you are dead')
-        
-        if((this.players - 1) != 1){
-        this.playersLeft.setText((this.players - 1) + ' players were left')
-        }else{
-        this.playersLeft.setText((this.players - 1) + ' player was left')
-        }
+        this.shootButton.visible = false
         this.sound.play('shot')
-        this.restart.visible = true
-        this.restart.play('blooddrip')
+        this.flash.visible = true
+        this.delayTimer = this.time.addEvent({
+          delay: 500,
+          callback: ()=>{
+            this.flash.visible = false
+            this.restart.visible = true
+            this.restart.play('blooddrip')
+          },
+          loop: false
+        })
         //a computer dies
       }else{
-        this.shotsRoundText.setText('L computer')
         this.players -= 1
         this.sound.play('shot')
+        this.playersLeft.setText(this.players + '/' + this.totalPlayers)
         this.playerArray[this.playerIndex].setFrame(1)
         this.delayTimer = this.time.addEvent({
           delay: 1000,
@@ -207,8 +218,6 @@ class mainScene {
        
         // if you win
         if(this.players == 1){
-          this.shotsRoundText.setText('You Win')
-          this.playersLeft.setText('lucky son of a B')
           this.delayTimer = this.time.addEvent({
           delay: 300,
           callback: ()=>{
@@ -251,7 +260,7 @@ class mainScene {
           }
 
       this.sound.play('blank')
-      this.shotsRoundText.setText((this.currentShot - 1) + ' out of ' + (6) + ' shot')
+      this.shotsRoundText.setText((this.currentShot - 1) + '/6')
     }
   }
 
@@ -260,8 +269,9 @@ class mainScene {
     if(this.round < (this.totalPlayers - 2)){
       this.currentShot = 1
       this.round++
-      this.shotsRoundText.setText((this.currentShot - 1) + ' out of ' + (6) + ' shot')
+      this.shotsRoundText.setText((this.currentShot - 1) + '/6')
       this.restart.visible = false
+      this.shootButton.visible = false
       this.reload.visible = false
       this.reloading.visible = true
       this.delayTimer = this.time.addEvent({
@@ -278,9 +288,9 @@ class mainScene {
       this.round = 0
       console.log('restarted')
       this.players = this.totalPlayers
-      this.playersLeft.setText(this.players + ' out of ' + this.totalPlayers + ' players left')
+      this.playersLeft.setText(this.players + '/' + this.totalPlayers)
       this.currentShot = 1
-      this.shotsRoundText.setText((this.currentShot - 1) + ' out of ' + (6 - this.round) + ' shot')
+      this.shotsRoundText.setText((this.currentShot - 1) + '/6')
 
       this.playerArray[this.playerIndex].destroy()
       this.playerIndex = 0
