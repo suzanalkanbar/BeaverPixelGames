@@ -107,10 +107,12 @@ class mainScene {
     this.player.body.setGravityY(300);
     this.cameras.main.scrollX = this.player.x - 350
 
-    this.redOnion = this.physics.add.sprite(3000, 315, 'onion', 0).setImmovable(true)
+    this.redOnion = this.physics.add.sprite(3180, 315, 'onion', 0).setImmovable(true)
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
+
+    this.bulborb2 = this.physics.add.sprite(2014, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
     this.moveEnemyRight()
 
 
@@ -273,8 +275,12 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
+    //hole
+    this.grassX += this.spritelength
+    this.grassY -= this.spritelength
+
     //straight
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 1; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.amount = (400 - this.grassY) / this.spritelength
       for(let a = 0; a < this.amount; a++){
@@ -283,9 +289,61 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
-    this.grassY += this.spritelength * 1
+    //hole
+    this.grassX += this.spritelength * 2
+
     //straight
-    for(let i = 0; i < 15; i++){
+    for(let i = 0; i < 1; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassX += this.spritelength
+    }
+
+    //hole
+    this.grassX += this.spritelength * 2
+
+    //straight
+    for(let i = 0; i < 1; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassX += this.spritelength
+    }
+
+    //hole
+    this.grassX += this.spritelength * 2
+
+    //straight
+    for(let i = 0; i < 1; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassX += this.spritelength
+    }
+
+    //hole
+    this.grassX += this.spritelength * 2
+
+    //stairs down
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassY += this.spritelength
+      this.grassX += this.spritelength
+    }
+
+    //straight
+    for(let i = 0; i < 13; i++){
       this.grass.create(this.grassX, this.grassY, 'grass', 13)
       this.amount = (400 - this.grassY) / this.spritelength
       for(let a = 0; a < this.amount; a++){
@@ -303,6 +361,7 @@ class mainScene {
     this.physics.add.collider(this.player, this.egg,)
 
     this.physics.add.collider(this.player, this.bulborb)
+    this.physics.add.collider(this.player, this.bulborb2)
 
     this.physics.add.collider(this.player, this.bench)
 
@@ -426,13 +485,34 @@ class mainScene {
       if(this.player.body.touching.down && this.bulborb.body.touching.up){
         this.bulborb.play('bulbdeath')
         this.sound.play('bulborb death')
+        if(this.arrow.up.isDown){
+          this.player.setVelocityY(-200)
+        }else{
         this.player.setVelocityY(-100)
+        }
         this.bulborb.setVelocityX(0)
         this.delayTimer = this.time.addEvent({
           delay: 500,
           callback: ()=>{
             this.bulborb.visible = false 
             this.bulborb.disableBody() 
+          },
+          loop: false
+        })
+      }else if(this.player.body.touching.down && this.bulborb2.body.touching.up){
+        this.bulborb2.play('bulbdeath')
+        this.sound.play('bulborb death')
+        if(this.arrow.up.isDown){
+          this.player.setVelocityY(-200)
+        }else{
+        this.player.setVelocityY(-100)
+        }
+        this.bulborb2.setVelocityX(0)
+        this.delayTimer = this.time.addEvent({
+          delay: 500,
+          callback: ()=>{
+            this.bulborb2.visible = false 
+            this.bulborb2.disableBody() 
           },
           loop: false
         })
@@ -452,7 +532,21 @@ class mainScene {
               },
               loop: false
             })
-          
+        }
+      }else if(this.player.body.touching && (this.bulborb2.body.touching.left || this.bulborb2.body.touching.right)){
+        if(!this.flowered && !this.invincible){  
+            this.death() 
+        }else if(this.flowered){
+            this.sound.play('hit')
+            this.invincible = true
+            this.flowered = false
+            this.invincTimer = this.time.addEvent({
+              delay: 1500,
+              callback: ()=>{
+                this.invincible = false      
+              },
+              loop: false
+            })
         }
       }
  
@@ -481,6 +575,9 @@ class mainScene {
     this.bulborb.setVelocityX(100)
     this.bulborb.play('bulbwalkclosed')
     this.bulborb.setFlipX(true)
+    this.bulborb2.setVelocityX(30)
+    this.bulborb2.play('bulbwalkclosed')
+    this.bulborb2.setFlipX(true)
     this.walkTimer = this.time.addEvent({
           delay: 2000,
           callback: ()=>{
@@ -494,6 +591,9 @@ class mainScene {
     this.bulborb.setVelocityX(-100)
     this.bulborb.play('bulbwalkclosed')
     this.bulborb.setFlipX(false)
+    this.bulborb2.setVelocityX(-30)
+    this.bulborb2.play('bulbwalkclosed')
+    this.bulborb2.setFlipX(false)
     this.walkTimer = this.time.addEvent({
           delay: 2000,
           callback: ()=>{
