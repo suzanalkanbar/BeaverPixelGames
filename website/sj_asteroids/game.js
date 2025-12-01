@@ -32,12 +32,12 @@ class mainScene {
     It will initialize our scene, like the positions of the sprites
     */
 
-    this.style = {font: '40px Arial', fill: '#1742dcff' };
+    this.style = { font: '40px Arial', fill: '#1742dcff' };
     this.victoryText = this.add.text(100, 100, 'ASTEROIDS DESTROYED!', this.style);
     this.victoryText.depth = 1;
     this.victoryText.visible = false
 
-    this.style = {font: '40px Arial', fill: '#e20a0aff' };
+    this.style = { font: '40px Arial', fill: '#e20a0aff' };
     this.deathText = this.add.text(170, 100, 'SHIP DESTROYED!', this.style);
     this.deathText.depth = 1;
     this.deathText.visible = false
@@ -112,19 +112,19 @@ class mainScene {
       this.player.setAngularVelocity(0)
     }
 
-    if(!this.gameover){
-    if (this.arrow.space.isDown) {
+    if (!this.gameover) {
+      if (this.arrow.space.isDown) {
 
-      if (!this.bullet.active) { // <- UNCOMMENT TO ENABLE ONE BULLET...
-        this.sound.play('laser')
-        this.bullet.setPosition(this.player.x, this.player.y)
-        this.bullet.setActive(true)
-        this.bullet.setVisible(true)
+        if (!this.bullet.active) { // <- UNCOMMENT TO ENABLE ONE BULLET...
+          this.sound.play('laser')
+          this.bullet.setPosition(this.player.x, this.player.y)
+          this.bullet.setActive(true)
+          this.bullet.setVisible(true)
 
-        this.bullet.direction = this.player.rotation
-        this.bullet.rotation = this.bullet.direction
+          this.bullet.direction = this.player.rotation
+          this.bullet.rotation = this.bullet.direction
+        }
       }
-    }
     }
 
     this.bullet.x += Math.cos(this.bullet.direction) * this.bullet.speed * delta
@@ -164,7 +164,7 @@ class mainScene {
 
     this.scoreText.setText('Score: ' + this.score)
 
-    if(this.score == 100){
+    if (this.score == 100) {
       this.victoryText.visible = true
     }
 
@@ -179,14 +179,14 @@ class mainScene {
     this.sound.play('bomb')
   }
 
-  playerAsteroidCollision(player, asteroid){
-      console.log('hit')
-      this.sound.play('death')
-      this.gameover = true
-      this.player.visible = false
-      this.player.disableBody()
-      this.deathText.visible = true
-    }
+  playerAsteroidCollision(player, asteroid) {
+    console.log('hit')
+    this.sound.play('death')
+    this.gameover = true
+    this.player.visible = false
+    this.player.disableBody()
+    this.deathText.visible = true
+  }
 }
 
 // Create the game

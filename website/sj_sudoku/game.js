@@ -82,6 +82,17 @@ class mainScene {
 
     this.errorLabel = this.add.text(620, 40, 'Mistakes: \n0/3', { fontSize: 20, color: 'black' }).setOrigin(0.5, 0.5)
     this.errors = 0
+    this.gameover = false
+
+    this.style = { font: '60px Arial', fill: '#1742dc' }
+    this.victoryText = this.add.text(350, 200, 'SUDOKU SOLVED!', this.style).setOrigin(0.5, 0.5)
+    this.victoryText.depth = 1
+    this.victoryText.visible = false
+
+    this.style = { font: '60px Arial', fill: '#e20a0a' }
+    this.deathText = this.add.text(350, 200, 'SUDOKU FAILED!', this.style).setOrigin(0.5, 0.5)
+    this.deathText.depth = 1
+    this.deathText.visible = false
 
   }
 
@@ -116,33 +127,37 @@ class mainScene {
   }
 
   getTile(input) {
-    var xPos = input.downX
-    var yPos = input.downY
+    if (!this.gameover) {
+      var xPos = input.downX
+      var yPos = input.downY
 
-    var inputY = Math.floor((yPos - 20) / 40)  // nummer van 0 - 8
-    var inputX = Math.floor((xPos - 170) / 40) // nummer van 0 - 8
-    var inputRowName = this.RowNames[inputY]
+      var inputY = Math.floor((yPos - 20) / 40)  // nummer van 0 - 8
+      var inputX = Math.floor((xPos - 170) / 40) // nummer van 0 - 8
+      var inputRowName = this.RowNames[inputY]
 
-    var currentTile = this.gameBoard[inputRowName][inputX] // number on tile at mouseclick
+      var currentTile = this.gameBoard[inputRowName][inputX] // number on tile at mouseclick
 
-    // console.log(currentTile)
+      // console.log(currentTile)
 
-    if (currentTile != 0) {
-      this.sound.play('missClick')
-    } else {
-      this.sound.play('tileClick')
-      this.changeNumber(inputRowName, inputX)
+      if (currentTile != 0) {
+        this.sound.play('missClick')
+      } else {
+        this.sound.play('tileClick')
+        this.changeNumber(inputRowName, inputX)
+      }
     }
   }
 
   getNumber(input) {
-    this.sound.play('tileClick')
-    var yPos = input.downY
-    this.inputNumberY = Math.floor((yPos - 20) / 40) + 1
-    // console.log(this.inputNumberY)
+    if (!this.gameover) {
+      this.sound.play('tileClick')
+      var yPos = input.downY
+      this.inputNumberY = Math.floor((yPos - 20) / 40) + 1
+      // console.log(this.inputNumberY)
 
-    this.selection.setY((this.inputNumberY * 40))
-    this.selection.visible = true
+      this.selection.setY((this.inputNumberY * 40))
+      this.selection.visible = true
+    }
   }
 
   changeNumber(rowName, index) {
@@ -179,21 +194,24 @@ class mainScene {
       }
     }
     console.log('winState is: ' + this.winState)
+
+    if (this.winState == true) {
+      this.victoryText.visible = true
+    }
   }
 
   checkLoseState() {
-    this.loseState = false
     this.errorLabel.setText('Mistakes: \n' + this.errors + '/3')
     if (this.errors > 3) {
-      this.loseState = true
+      this.deathText.visible = true
+      this.gameover = true
     }
-    console.log('losetate is: ' + this.loseState)
   }
 
 }
 
 // Create the game
-new Phaser.Game({
+window.game = new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
   backgroundColor: '#919191', // The background color (grey)
@@ -201,3 +219,10 @@ new Phaser.Game({
   physics: { default: 'arcade', arcade: { debug: false } }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
+
+window.restartActiveGame = function () {
+  if (window.game && window.game.scene.scenes[0]) {
+    window.game.scene.scenes[0].scene.restart();
+    gameover = false;
+  }
+};
