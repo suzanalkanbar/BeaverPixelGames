@@ -6,6 +6,10 @@ class mainScene {
     this.load.image('ground', 't_dinoGame/assets/ground.png')
     this.load.image('beaver', 't_dinoGame/assets/beaver.png')
     this.load.image('treeTrunk', 't_dinoGame/assets/treeTrunk.png')
+    this.load.spritesheet('walking_beaver',
+      't_dinoGame/assets/walking_beaver.png',
+      { frameWidth: 112, frameHeight: 122 }
+    )
   }
 
   create() {
@@ -13,11 +17,22 @@ class mainScene {
     this.respawnTime = 0
 
     this.ground = this.add.tileSprite(0, 350, 1400, 100, 'ground')
-    this.beaver = this.physics.add.sprite(0, 350, 'beaver')
+    this.beaver = this.physics.add.sprite(0, 350, 'walking_beaver')
     .setOrigin(0, 1)
     .setCollideWorldBounds(true)
     .setGravityY(5000)
     .setSize(79,115)
+
+    
+
+    this.anims.create({
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('walking_beaver', { start: 0, end: 1}),
+      frameRate: 10,
+      repeat: -1
+    })
+
+    this.beaver.anims.play('walk', true)
 
     this.obstacles = this.physics.add.group()
 
@@ -48,6 +63,7 @@ class mainScene {
   addCollision() {
       this.physics.add.collider(this.beaver, this.obstacles, () => {
       this.physics.pause()
+      this.beaver.anims.pause()
       this.respawnTime = 0
       this.gameSpeed = 0
       console.log('game over')
@@ -85,7 +101,7 @@ new Phaser.Game({
   physics: { 
     default: 'arcade',
     arcade: {
-      debug: false
+      debug: true
     } 
   }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
