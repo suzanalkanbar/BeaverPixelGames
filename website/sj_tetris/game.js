@@ -18,13 +18,17 @@ TO DO
 class mainScene {
 
   preload() {
-
+    this.load.image('blue_ricky', 'sj_tetris/assets/blue_ricky.png')
+    this.load.image('cleveland_z', 'sj_tetris/assets/cleveland_z.png')
+    this.load.image('hero', 'sj_tetris/assets/hero.png')
+    this.load.image('orange_ricky', 'sj_tetris/assets/orange_ricky.png')
+    this.load.image('rhode_island_z', 'sj_tetris/assets/rhode_island_z.png')
+    this.load.image('smashboy', 'sj_tetris/assets/smashboy.png')
   }
 
   create() {
     const whiteColor = 0xffffff
     const blackColor = 0x000000
-
 
     // create grid
     this.grid = this.add.rectangle(350, 200, 200, 400, blackColor, 1)
@@ -54,6 +58,9 @@ class mainScene {
     this.score = 0
     this.level = 0
     this.lines = 0
+
+    // create the blocks
+    
 
   }
 
