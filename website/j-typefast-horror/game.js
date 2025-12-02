@@ -68,7 +68,11 @@ class mainScene {
       if(this.index < this.endIndex){
         // this.arrow.x += 5
         this.index++
-        this.currentLetterText.setText(this.theText[this.index])
+        if(this.theText[this.index] == ' '){
+          this.currentLetterText.setText('space')
+        }else{
+          this.currentLetterText.setText(this.theText[this.index])
+        }
       }else{
         this.ArrayText.setText('you win this round, but do not get your hopes up')
         this.timer.setColor('green')
