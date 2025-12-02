@@ -35,7 +35,7 @@ class mainScene {
 
     this.style = { font: '15px Helvetica', fill: '#fff' }
     this.ArrayText = this.add.text(350, 340, this.theText.join(''), this.style).setOrigin(0.5, 0.5)
-    this.arrow = this.add.image(198, 330, 'arrow').setOrigin(0.5, 0.5)
+    // this.arrow = this.add.image(198, 330, 'arrow').setOrigin(0.5, 0.5)
 
     this.input.keyboard.on('keydown', event =>
         {
@@ -65,13 +65,13 @@ class mainScene {
     if(key == this.theText[this.index]){
       console.log('key correct')
       if(this.index < this.endIndex){
-        this.arrow.x += 5
+        // this.arrow.x += 5
         this.index++
       }else{
         this.ArrayText.setText('you win this round, but do not get your hopes up')
         this.timer.setColor('green')
         this.timer.setText('YOU HAD ' + this.timeLeft + ' SECONDS LEFT')
-        this.arrow.visible = false
+        // this.arrow.visible = false
         this.delayTimer.remove()
       }
     }else{
