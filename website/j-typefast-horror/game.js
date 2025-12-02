@@ -17,8 +17,9 @@ class mainScene {
 
     this.index = 0
     this.endIndex = this.theText.length - 1
-    
-    console.log(this.theText[this.index])
+
+    this.currentLetter = this.theText[this.index]
+    this.currentLetterText = this.add.text(350, 370, this.currentLetter).setOrigin(0.5, 0.5)
 
 
     this.style = { font: '50px Helvetica', fill: '#fff' }
@@ -67,6 +68,7 @@ class mainScene {
       if(this.index < this.endIndex){
         // this.arrow.x += 5
         this.index++
+        this.currentLetterText.setText(this.theText[this.index])
       }else{
         this.ArrayText.setText('you win this round, but do not get your hopes up')
         this.timer.setColor('green')
