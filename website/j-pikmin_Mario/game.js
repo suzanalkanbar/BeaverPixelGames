@@ -372,11 +372,7 @@ class mainScene {
       this.levelComplete = true
       this.sound.play('victory')
       this.levelCompleteText.x = this.player.x - 180
-      if(this.level == 1){
-      this.levelCompleteText.setText(this.level + ' level complete')
-      }else{
-        this.levelCompleteText.setText(this.level + ' levels complete')
-      }
+      this.levelCompleteText.setText('level ' + this.level + ' complete')
       this.levelCompleteText.visible = true
       this.physics.world.colliders.getActive().find(function(i){return i.name == 'onion'}).destroy();
       this.delayTimer = this.time.addEvent({
