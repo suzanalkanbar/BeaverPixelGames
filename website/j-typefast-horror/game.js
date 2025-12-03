@@ -11,6 +11,7 @@ class mainScene {
     )
 
     this.load.audio('laugh', 'j-typefast-horror/assets/fnaf laugh.mp3')
+    this.load.audio('foxy scream', 'j-typefast-horror/assets/foxy scream.mp3')
     
   }
 
@@ -27,31 +28,40 @@ class mainScene {
     });
 
 
-    this.theText = ['I', ' ', 'w', 'i', 'l', 'l', ' ','k' , 'i' , 'l', 'l', ' ', 'y', 'o', 'u', ' ', 'i', 'f', ' ', 'y', 'o', 'u', ' ', 'd', 'o', ' ', 'n', 'o', 't', ' ', 't', 'y', 'p', 'e', ' ', 't', 'h', 'i', 's', ' ', 'f', 'a', 's', 't', ' ', 'e', 'n', 'o', 'u', 'g', 'h', '.', ' ', 'S', 'o', ' ', 'y', 'o', 'u', ' ', 'b', 'e', 't', 't', 'e', 'r', ' ', 'n', 'o', 't', ' ', 'm', 'a', 'k', 'e', ' ', 'a', ' ', 'm', 'i', 's', 't', 'a', 'k', 'e', '.']
-    this.testText = [{letter: 'Y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}]
+    this.testText = [{letter: 'Y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'O', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}]
 
     this.index = 0
     this.endIndex = this.testText.length - 1
     this.once = 0
 
     this.style = { font: '50px Helvetica', fill: '#fff' }
-    this.timeLeft = 15
+    this.timeLeft = 20
     this.timer = this.add.text(350, 200, this.timeLeft + ' SECONDS LEFT', this.style).setOrigin(0.5, 0.5)
     this.delayTimer = this.time.addEvent({
           delay: 1000,
           callback: ()=>{
             this.timeLeft--
+            if(this.timeLeft < 6){
+              this.timer.setText('')
+            }else{
             this.timer.setText(this.timeLeft + ' SECONDS LEFT')
+            }
           },
           repeat: this.timeLeft - 1
         })
 
     this.letterX = 70
+    this.letterY = 340
+    this.arrayY = 340
     for(let i = 0; i < this.testText.length; i++){
       this.style = { font: '15px Helvetica', fill: this.testText[i].color }
-      this.ArrayText = this.add.text(this.letterX, 340, this.testText[i].letter, this.style).setOrigin(0.5, 0.5)
+      this.ArrayText = this.add.text(this.letterX, this.letterY, this.testText[i].letter, this.style).setOrigin(0.5, 0.5)
       this.testText[i].x = this.letterX
       this.letterX += 10
+      if(i == 57){
+        this.letterX = 70
+        this.letterY += 15
+      }
     }
     this.arrow = this.add.image(this.testText[this.index].x, 330, 'arrow').setOrigin(0.5, 0.5)
 
@@ -61,7 +71,6 @@ class mainScene {
             this.typing(event.key);
 
         });
-    
   }
 
   update() {
@@ -72,10 +81,11 @@ class mainScene {
 
     if(this.timeLeft == 0){
       this.timer.setColor('red')
-      this.timer.setText('SAY GOODBYE TO YOUR LIFE')
+      this.timer.setText('BYE BYE')
       this.foxyScare.depth = 1
       if(this.once == 0){
         this.once = 1
+        this.sound.play('foxy scream')
         this.foxyScare.play('foxyscare')
       }
     }
@@ -88,10 +98,14 @@ class mainScene {
       console.log('key correct')
       this.testText[this.index].color = 'green'
       this.style = { font: '15px Helvetica', fill: this.testText[this.index].color }
-      this.ArrayText = this.add.text(this.testText[this.index].x, 340, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
+      this.ArrayText = this.add.text(this.testText[this.index].x, this.arrayY, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
       if(this.index < this.endIndex){
         this.index++
         this.arrow.x = this.testText[this.index].x
+        if(this.index == 57){
+          this.arrow.y = 345
+          this.arrayY += 15
+        }
       }else{
         this.timer.setColor('green')
         this.timer.setText('YOU HAD ' + this.timeLeft + ' SECONDS LEFT')
@@ -102,7 +116,7 @@ class mainScene {
       console.log('wrong key')
       this.testText[this.index].color = 'red'
       this.style = { font: '15px Helvetica', fill: this.testText[this.index].color }
-      this.ArrayText = this.add.text(this.testText[this.index].x, 340, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
+      this.ArrayText = this.add.text(this.testText[this.index].x, this.arrayY, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
     } 
   }
 
