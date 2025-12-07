@@ -372,6 +372,7 @@ class mainScene {
       this.levelComplete = true
       this.sound.play('victory')
       this.levelCompleteText.x = this.player.x - 180
+      this.levelCompleteText.setText('level ' + this.level + ' complete')
       this.levelCompleteText.visible = true
       this.physics.world.colliders.getActive().find(function(i){return i.name == 'onion'}).destroy();
       this.delayTimer = this.time.addEvent({
@@ -379,6 +380,7 @@ class mainScene {
           callback: ()=>{
             this.player.visible = false
             this.redOnion.setVelocityY(-50)
+            this.level += 0.5
           },
           loop: false
         })

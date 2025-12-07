@@ -14,6 +14,7 @@ class mainScene {
         this.load.image('green', 'catFish_2/assets/fish/green.png')
         this.load.image('blue', 'catFish_2/assets/fish/blue.png')
         this.load.image('purple', 'catFish_2/assets/fish/purple.png')
+        this.load.image('shop','catFish_2/assets/shop.png')
     }
     create() {
         const air = this.add.rectangle(350, 200, 700, 400, 0x7777ff)
@@ -22,8 +23,7 @@ class mainScene {
         this.groundHitbox = this.physics.add.existing(grass, 0)
         const water = this.add.rectangle(550, 375, 300, 50, 0x0000ff)
         this.waterHitbox = this.physics.add.existing(water, 0)
-        const shop = this.add.rectangle(100, 250, 200, 200, 0xff0000)
-        this.shopHitbox = this.physics.add.existing(shop, 0)
+        this.shopHitbox = this.physics.add.sprite(128,222,'shop')
         this.player = this.physics.add.sprite(250, 325, 'player')
         this.fishingRod = this.physics.add.sprite(100, 325, 'rod')
         this.hide(this.fishingRod)
@@ -111,14 +111,14 @@ class mainScene {
         this.fishMaker(this.fish32, 15, 3, 80, 20, 80, 'Space', 'blue', 3)
 
         this.fish33 = this.physics.add.sprite(100, 100, 'purple')
-        this.fishMaker(this.fish30, 15, 3, 80, 20, 80, 'Space', 'purple', 4)
+        this.fishMaker(this.fish33, 3, 0, 80, 20, 80, 'Space', 'purple', 3)
 
         this.currentFish = this.physics.add.sprite(100, 100, 'red')
         this.hide(this.currentFish)
         this.copyFish = this.physics.add.sprite(100, 100, 'red')
         this.hide(this.copyFish)
 
-        this.fishes = [this.fish1, this.fish2, this.fish3, this.fish4, this.fish5, this.fish6, this.fish7,this.fish8,this.fish9,this.fish10,this.fish11,this.fish12,this.fish13,this.fish14,this.fish15,this.fish16,this.fish17,this.fish18,this.fish19,this.fish20,this.fish21,this.fish22,this.fish23,this.fish24,this.fish25,this.fish26,this.fish27,this.fish28,this.fish29,this.fish30,this.fish31,this.fish32]
+        this.fishes = [this.fish1, this.fish2, this.fish3, this.fish4, this.fish5, this.fish6, this.fish7, this.fish8, this.fish9, this.fish10, this.fish11, this.fish12, this.fish13, this.fish14, this.fish15, this.fish16, this.fish17, this.fish18, this.fish19, this.fish20, this.fish21, this.fish22, this.fish23, this.fish24, this.fish25, this.fish26, this.fish27, this.fish28, this.fish29, this.fish30, this.fish31, this.fish32]
         this.availableFishes = []
         this.hideList(this.fishes)
         this.hide(this.fish33)
@@ -129,37 +129,38 @@ class mainScene {
         this.graphiteRod = { name: 'Graphite Rod', level: 3, modifier: 2, cost: 10000, unlocked: false }
         this.rodList = [this.twigRod, this.woodRod, this.fiberglassRod, this.graphiteRod]
         this.activeRod = { name: 'Twig', level: 0, modifier: 0.5, cost: 0, unlocked: true }
-        this.shopRod = {name:'Wooden Rod',cost:100}
+        this.shopRod = { name: 'Wooden Rod', cost: 100 }
 
         this.shoelaceLine = { name: 'Shoelace', level: 0, speed: 1.5, cost: 0, unlocked: true }
-        this.threadLine = { name: 'Thread', level: 1, speed: 1.25, cost: 50, unlocked: true }
-        this.nylonLine = { name: 'Nylon Line', level: 2, speed: 1, cost: 500, unlocked: true }
-        this.microfiberLine = { name: 'Braided Microfiber Line', level: 3, speed: 0.75, cost: 10000, unlocked: true }
+        this.threadLine = { name: 'Thread', level: 1, speed: 1.25, cost: 50, unlocked: false }
+        this.nylonLine = { name: 'Nylon Line', level: 2, speed: 1, cost: 500, unlocked: false }
+        this.microfiberLine = { name: 'Braided Microfiber Line', level: 3, speed: 0.75, cost: 10000, unlocked: false }
         this.lineList = [this.shoelaceLine, this.threadLine, this.nylonLine, this.microfiberLine]
         this.activeLine = { name: 'Shoelace', level: 0, speed: 1, cost: 0, unlocked: true }
-        this.shopLine = this.threadLine
+        this.shopLine = { name: 'Thread', cost: 50 }
 
         this.pineconeBobber = { name: 'Pinecone', level: 0, time: 1000, cost: 0, unlocked: true }
-        this.yarnBobber = { name: 'Yarn', level: 1, time: -1000, cost: 50, unlocked: true }
-        this.roundBobber = { name: 'Round Bobber', level: 2, time: -3000, cost: 1000, unlocked: true }
-        this.cigarBobber = { name: 'Cigar Bobber', level: 3, time: -5000, cost: 10000, unlocked: true }
+        this.yarnBobber = { name: 'Yarn', level: 1, time: -1000, cost: 50, unlocked: false }
+        this.roundBobber = { name: 'Round Bobber', level: 2, time: -3000, cost: 1000, unlocked: false }
+        this.cigarBobber = { name: 'Cigar Bobber', level: 3, time: -5000, cost: 10000, unlocked: false }
         this.bobberList = [this.pineconeBobber, this.yarnBobber, this.roundBobber, this.cigarBobber]
         this.activeBobber = { name: 'Pinecone', level: 0, time: 1000, cost: 0, unlocked: true }
-        this.shopBobber = this.yarnBobber
+        this.shopBobber = { name: 'Yarn', cost: 50 }
 
-        this.breadBait = { name: 'Bread',tier:1, cost: 200, unlocked: false }
-        this.wormBait = { name: 'Worm',tier:2, cost: 1000, unlocked: false }
-        this.fishBait = { name: 'Fish',tier:3, cost: 5000, unlocked: false }
+        this.breadBait = { name: 'Bread', tier: 1, cost: 200, unlocked: false }
+        this.wormBait = { name: 'Worm', tier: 2, cost: 1000, unlocked: false }
+        this.fishBait = { name: 'Fish', tier: 3, cost: 5000, unlocked: false }
+        this.activeBait = 0
         this.baitList = [this.breadBait, this.wormBait, this.fishBait]
-        this.shopBait = this.breadBait
+        this.shopBait = { name: 'Bread', cost: 200 }
 
         this.world1 = { name: 'Lake', cost: 0, unlocked: true }
-        this.world2 = { name: 'Beach', cost: 200, unlocked: true }
-        this.world3 = { name: 'Lava', cost: 1000, unlocked: true }
-        this.world4 = { name: 'Space', cost: 5000, unlocked: true }
+        this.world2 = { name: 'Beach', cost: 200, unlocked: false }
+        this.world3 = { name: 'Lava', cost: 1000, unlocked: false }
+        this.world4 = { name: 'Space', cost: 5000, unlocked: false }
         this.worldList = [this.world1, this.world2, this.world3, this.world4]
         this.activeWorld = 'Lake'
-        this.shopWorld = this.world2
+        this.shopWorld = { name: 'Beach', cost: 200 }
 
         this.inventory = []
         this.inventoryFull = false
@@ -178,7 +179,6 @@ class mainScene {
         this.createInventoryMenu()
         this.createShopMenu()
 
-
         this.arrow = this.input.keyboard.createCursorKeys();
         this.spaceTap = false
         this.spaceLetgo = true
@@ -193,8 +193,12 @@ class mainScene {
 
         this.money = 100000
         let style = { font: '20px Arial', fill: '#fff' };
-        this.scoreText = this.add.text(20, 20, 'cash: ' + this.money, style);
+        this.scoreText = this.add.text(10, 10, 'cash: ' + this.money, style);
         this.hide(this.scoreText)
+        this.progressText = this.add.text(690, 10, 'you still need 8 types of fish here', style)
+        this.progressText.setOrigin(1, 0)
+        this.finalFish = false
+        this.hide(this.progressText)
     }
     update() {
         if (this.arrow.space.isDown && this.spaceLetgo) {
@@ -237,7 +241,9 @@ class mainScene {
                 this.spaceTap = false
                 mode = 1
                 this.hideList(this.startList)
+                this.hide(this.startBackground)
                 this.show(this.scoreText)
+                this.show(this.progressText)
             }
         }
         if (mode == 1) {
@@ -313,10 +319,14 @@ class mainScene {
                 hasPassed = false;
                 this.spaceTap = false;
                 this.availableFishes = []
-                for (let i = 0; i < this.fishes.length; i++) {
-                    console.log(this.fishes[i].world)
-                    if (this.fishes[i].world == this.activeWorld) {
-                        this.availableFishes.push(this.fishes[i])
+                if (this.finalFish && this.activeWorld == 'Space') {
+                    this.availableFishes.push(this.fish33)
+                } else {
+                    for (let i = 0; i < this.fishes.length; i++) {
+                        console.log(this.fishes[i].world)
+                        if (this.fishes[i].world == this.activeWorld && this.fishes[i].tier <= this.activeBait) {
+                            this.availableFishes.push(this.fishes[i])
+                        }
                     }
                 }
                 this.copy(this.currentFish, this.availableFishes[Math.floor(Math.random() * this.availableFishes.length)])
@@ -406,20 +416,34 @@ class mainScene {
                 }
                 if (this.win) {
                     this.hideList(this.fishBar)
+                    for (let i = 0; i < this.fishes.length; i++) {
+                        if (this.fishes[i].name == this.currentFish.name) {
+                            this.fishes[i].caught = true
+                        }
+                    }
                     this.inventory.push(this.currentFish)
                     this.copy(this.invSlotList[this.inventory.length - 1], this.currentFish)
                     console.log(this.inventory)
                     mode = 1
+                    if(this.currentFish.name == this.fish33.name){
+                        mode = 7
+                    }
                     playMinigame = false;
                     this.currentFish.x = this.player.x
                     this.currentFish.y = this.player.y - 100
                     this.show(this.currentFish)
                     this.win = false;
                     this.hide(this.fishingRod)
+                    this.updateProgressText()
 
                 }
                 if (this.doubleWin) {
                     this.hideList(this.fishBar)
+                    for (let i = 0; i < this.fishes.length; i++) {
+                        if (this.fishes[i].name == this.currentFish.name) {
+                            this.fishes[i].caught = true
+                        }
+                    }
                     this.inventory.push(this.currentFish)
                     this.copy(this.invSlotList[this.inventory.length - 1], this.currentFish)
                     if (this.inventory.length < 6) {
@@ -438,6 +462,7 @@ class mainScene {
                     this.show(this.currentFish)
                     this.show(this.copyFish)
                     this.hide(this.fishingRod)
+                    this.updateProgressText()
                 }
             }
         }
@@ -477,6 +502,9 @@ class mainScene {
                 mode = 1
             }
         }
+        if (mode == 7){
+
+        }
     }
 
     fishMaker(fish, catchS, critS, highN, lowN, worth, level, called, bait) {
@@ -500,10 +528,12 @@ class mainScene {
         this.startButtonBackground = this.physics.add.existing(startButtonBackground, 0)
         this.startButtonBackground.setInteractive()
         this.startText = this.add.text(550, 250, 'Start Game', { font: '39px Arial' }).setOrigin(0.5, 0.5)
-        this.startList = [this.startBackground, this.startLogo, this.startButtonBackground, this.startText]
+        this.startList = [this.startLogo, this.startButtonBackground, this.startText]
         this.startButtonBackground.on('pointerdown', () => {
             this.hideList(this.startList)
+            this.hide(this.startBackground)
             this.show(this.scoreText)
+            this.show(this.progressText)
             mode = 1
         })
     }
@@ -515,14 +545,25 @@ class mainScene {
         this.pauseText = this.add.text(350, 100, 'Paused', { font: '40px Arial' }).setOrigin(0.5, 0.5)
         const resumeButton = this.add.rectangle(350, 200, 200, 40, 0x009900)
         this.resumeButton = this.physics.add.existing(resumeButton, 0)
+        this.resumeButton.setInteractive()
+        this.resumeButton.on('pointerdown', () => {
+            this.hideList(this.pauseMenu)
+            this.hide(this.menuBackdrop)
+            mode = 1
+        })
         this.resumeText = this.add.text(350, 200, 'Resume', { font: '20px Arial' }).setOrigin(0.5, 0.5)
-        const collectionButton = this.add.rectangle(350, 250, 200, 40, 0x990000)
-        this.collectionText = this.add.text(350, 250, 'Collection', { font: '20px Arial' }).setOrigin(0.5, 0.5)
-        this.collectionButton = this.physics.add.existing(collectionButton, 0)
         const exitButton = this.add.rectangle(350, 300, 200, 40, 0x000099)
         this.exitButton = this.physics.add.existing(exitButton, 0)
+        this.exitButton.setInteractive()
+        this.exitButton.on('pointerdown', () => {
+            this.hideList(this.pauseMenu)
+            this.hide(this.menuBackdrop)
+            mode = 0
+            this.showList(this.startList)
+            this.startBackground.setAlpha(0.2)
+        })
         this.exitText = this.add.text(350, 300, 'Exit Game', { font: '20px Arial' }).setOrigin(0.5, 0.5)
-        this.pauseMenu = [this.pauseMenuBackground, this.logo, this.resumeButton, this.collectionButton, this.exitButton, this.pauseText, this.resumeText, this.collectionText, this.exitText]
+        this.pauseMenu = [this.pauseMenuBackground, this.logo, this.resumeButton, this.exitButton, this.pauseText, this.resumeText, this.exitText]
         this.hideList(this.pauseMenu)
     }
     createInventoryMenu() {
@@ -598,6 +639,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0x00ff00
             this.waterHitbox.fillColor = 0x0000ff
             this.activeWorld = this.world1.name
+            this.updateProgressText()
         })
         this.world1Text = this.add.text(180, 355, 'Lake', { font: '16px Arial' })
         const world2Icon = this.add.rectangle(300, 310, 90, 90, 0x0000ff)
@@ -608,6 +650,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0xffff44
             this.waterHitbox.fillColor = 0x4444ff
             this.activeWorld = this.world2.name
+            this.updateProgressText()
         })
         this.world2Text = this.add.text(280, 355, 'Beach', { font: '16px Arial' })
         const world3Icon = this.add.rectangle(400, 310, 90, 90, 0xff0000)
@@ -618,6 +661,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0x444444
             this.waterHitbox.fillColor = 0xff3300
             this.activeWorld = this.world3.name
+            this.updateProgressText()
         })
         this.world3Text = this.add.text(380, 355, 'Lava', { font: '16px Arial' })
         const world4Icon = this.add.rectangle(500, 310, 90, 90, 0x000000)
@@ -628,6 +672,7 @@ class mainScene {
             this.groundHitbox.fillColor = 0xcccccc
             this.waterHitbox.fillColor = 0x000033
             this.activeWorld = this.world4.name
+            this.updateProgressText()
         })
         this.world4Text = this.add.text(480, 355, 'Space', { font: '16px Arial' })
 
@@ -645,16 +690,16 @@ class mainScene {
         const shopItem1 = this.add.rectangle(208, 96, 80, 80, 0x00ff00)
         this.shopItem1 = this.physics.add.existing(shopItem1, 0)
         this.shopItem1.setInteractive()
-        this.shopItem1.on('pointerdown',() => {
-            if (this.money >= this.shopRod.cost){
-                for (let i =0;i<this.rodList.length;i++){
-                    if(this.shopRod.name == this.rodList[i].name){
+        this.shopItem1.on('pointerdown', () => {
+            if (this.money >= this.shopRod.cost) {
+                for (let i = 0; i < this.rodList.length; i++) {
+                    if (this.shopRod.name == this.rodList[i].name) {
                         this.rodList[i].unlocked = true
                         this.money -= this.shopRod.cost
                         this.scoreText.setText('cash: ' + this.money)
-                        if(!(this.rodList[i].name ==  'Graphite Rod')){
-                        this.shopRod.name = this.rodList[i+1].name
-                        this.shopRod.cost = this.rodList[i+1].cost
+                        if (!(this.rodList[i].name == 'Graphite Rod')) {
+                            this.shopRod.name = this.rodList[i + 1].name
+                            this.shopRod.cost = this.rodList[i + 1].cost
                         } else {
                             this.shopRod.name = 'All rods bought'
                             this.shopRod.cost = 0
@@ -670,21 +715,106 @@ class mainScene {
         this.shopRodDesc = this.add.text(248, 72, 'Increases\ncatching\nbox', { font: '16px Arial' }).setOrigin(0, 0)
         const shopItem2 = this.add.rectangle(408, 96, 80, 80, 0xffff00)
         this.shopItem2 = this.physics.add.existing(shopItem2, 0)
+        this.shopItem2.setInteractive()
+        this.shopItem2.on('pointerdown', () => {
+            if (this.money >= this.shopLine.cost) {
+                for (let i = 0; i < this.lineList.length; i++) {
+                    if (this.shopLine.name == this.lineList[i].name) {
+                        this.lineList[i].unlocked = true
+                        this.money -= this.shopLine.cost
+                        this.scoreText.setText('cash: ' + this.money)
+                        if (!(this.lineList[i].name == 'Braided Microfiber Line')) {
+                            this.shopLine.name = this.lineList[i + 1].name
+                            this.shopLine.cost = this.lineList[i + 1].cost
+                        } else {
+                            this.shopLine.name = 'All lines bought'
+                            this.shopLine.cost = 0
+                        }
+                        this.updateShopText()
+                        break
+                    }
+                }
+            }
+        })
         this.shopLineName = this.add.text(368, 56, 'Line Name Here', { font: '16px Arial' }).setOrigin(0, 1)
         this.shopLinePrice = this.add.text(448, 56, '€100', { font: '16px Arial' }).setOrigin(0, 0)
         this.shopLineDesc = this.add.text(448, 72, 'Decreases\nline\nspeed', { font: '16px Arial' }).setOrigin(0, 0)
         const shopItem3 = this.add.rectangle(208, 206, 80, 80, 0xff0000)
         this.shopItem3 = this.physics.add.existing(shopItem3, 0)
+        this.shopItem3.setInteractive()
+        this.shopItem3.on('pointerdown', () => {
+            if (this.money >= this.shopBobber.cost) {
+                for (let i = 0; i < this.bobberList.length; i++) {
+                    if (this.shopBobber.name == this.bobberList[i].name) {
+                        this.bobberList[i].unlocked = true
+                        this.money -= this.shopBobber.cost
+                        this.scoreText.setText('cash: ' + this.money)
+                        if (!(this.bobberList[i].name == 'Cigar Bobber')) {
+                            this.shopBobber.name = this.bobberList[i + 1].name
+                            this.shopBobber.cost = this.bobberList[i + 1].cost
+                        } else {
+                            this.shopBobber.name = 'All lines bought'
+                            this.shopBobber.cost = 0
+                        }
+                        this.updateShopText()
+                        break
+                    }
+                }
+            }
+        })
         this.shopBobberName = this.add.text(168, 166, 'Bobber Name Here', { font: '16px Arial' }).setOrigin(0, 1)
         this.shopBobberPrice = this.add.text(248, 166, '€100', { font: '16px Arial' }).setOrigin(0, 0)
         this.shopBobberDesc = this.add.text(248, 182, 'Decreases\nwaiting\ntime', { font: '16px Arial' }).setOrigin(0, 0)
         const shopItem4 = this.add.rectangle(408, 206, 80, 80, 0xff00ff)
         this.shopItem4 = this.physics.add.existing(shopItem4, 0)
+        this.shopItem4.setInteractive()
+        this.shopItem4.on('pointerdown', () => {
+            if (this.money >= this.shopBait.cost) {
+                for (let i = 0; i < this.baitList.length; i++) {
+                    if (this.shopBait.name == this.baitList[i].name) {
+                        this.baitList[i].unlocked = true
+                        this.money -= this.shopBait.cost
+                        this.activeBait = this.baitList[i].tier
+                        this.scoreText.setText('cash: ' + this.money)
+                        if (!(this.baitList[i].name == 'Fish')) {
+                            this.shopBait.name = this.baitList[i + 1].name
+                            this.shopBait.cost = this.baitList[i + 1].cost
+                        } else {
+                            this.shopBait.name = 'All bait bought'
+                            this.shopBait.cost = 0
+                        }
+                        this.updateShopText()
+                        break
+                    }
+                }
+            }
+        })
         this.shopBaitName = this.add.text(368, 166, 'Bait Name Here', { font: '16px Arial' }).setOrigin(0, 1)
         this.shopBaitPrice = this.add.text(448, 166, '€100', { font: '16px Arial' }).setOrigin(0, 0)
         this.shopBaitDesc = this.add.text(448, 182, 'Increases\nfish\nvariety', { font: '16px Arial' }).setOrigin(0, 0)
         const shopItem5 = this.add.rectangle(208, 316, 80, 80, 0x0000ff)
         this.shopItem5 = this.physics.add.existing(shopItem5, 0)
+        this.shopItem5.setInteractive()
+        this.shopItem5.on('pointerdown', () => {
+            if (this.money >= this.shopWorld.cost) {
+                for (let i = 0; i < this.worldList.length; i++) {
+                    if (this.shopWorld.name == this.worldList[i].name) {
+                        this.worldList[i].unlocked = true
+                        this.money -= this.shopWorld.cost
+                        this.scoreText.setText('cash: ' + this.money)
+                        if (!(this.worldList[i].name == 'Space')) {
+                            this.shopWorld.name = this.worldList[i + 1].name
+                            this.shopWorld.cost = this.worldList[i + 1].cost
+                        } else {
+                            this.shopWorld.name = 'All worlds bought'
+                            this.shopWorld.cost = 0
+                        }
+                        this.updateShopText()
+                        break
+                    }
+                }
+            }
+        })
         this.shopWorldName = this.add.text(168, 276, 'World Name Here', { font: '16px Arial' }).setOrigin(0, 1)
         this.shopWorldPrice = this.add.text(248, 276, '€100', { font: '16px Arial' }).setOrigin(0, 0)
         this.shopWorldDesc = this.add.text(248, 292, 'Unlocks\nnew world', { font: '16px Arial' }).setOrigin(0, 0)
@@ -728,6 +858,34 @@ class mainScene {
             inventoryValue += this.invSlotList[i].value
         }
         this.shopSellPrice.setText('Earn €' + inventoryValue)
+    }
+    updateProgressText() {
+        let numb = 0
+        if (!this.finalFish) {
+            for (let i = 0; i < this.fishes.length; i++) {
+                if (this.fishes[i].world == this.activeWorld && this.fishes[i].caught == false) {
+                    numb++
+                }
+            }
+            if (numb == 0) {
+                let allCaught = true
+                for (let i = 0; i < this.fishes.length; i++) {
+                    if (this.fishes[i].caught == false)
+                        allCaught = false
+                }
+                if (allCaught) {
+                    this.progressText.setText('Meet me in space')
+                    if (this.fishes.length < 33) {
+                        this.fishes.push(this.fish33)
+                        this.finalFish = true
+                    }
+                } else {
+                    this.progressText.setText('You still need to visit other realms')
+                }
+            } else {
+                this.progressText.setText('You still need ' + numb + ' types of fish here')
+            }
+        }
     }
     onEvent() {
         this.show(this.exclamationMark)
