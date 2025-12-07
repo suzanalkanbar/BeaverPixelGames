@@ -34,7 +34,7 @@ main{
   max-width: var(--container);
   margin: 0 auto; 
 }
-/*.logo{
+.logo{
     display: inline-flex;
     align-items: center;
     text-decoration:none;
@@ -232,42 +232,43 @@ to{
 
 /*****hero****/
 .hero-cover{
-    min-height: 100vh;
-    background-image: linear-gradient(
-        rgba(0,0,0,.45),
-        rgba(0,0,0,.45)
-      ),
-      url("./imgs/animal-crossing-new-horizons-nintendo-switch-2-edition-scree_7hjg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin: 0;
-    z-index: 1;
-  }
+  min-height: 100vh;
+  background-image: linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.45)
+    ),
+    url("./imgs/animal-crossing-new-horizons-nintendo-switch-2-edition-scree_7hjg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  margin: 0;
+  
+}
 
-  .hero{
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center; color: #fff;
-    padding: 0 20px;
-    flex-wrap: wrap;
-  }
+.hero{
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; color: #fff;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
 
 
-  .hero h1{ 
-    font-size: clamp(28px, 5vw, 56px); 
-    margin: 0 0 10px; 
+.hero h1{ 
+  font-size: clamp(28px, 5vw, 56px); 
+  margin: 0 0 10px; 
 }
 .hero p{ 
-    font-size: clamp(16px, 2.2vw, 20px); 
-    margin: 0; opacity: .9; 
+  font-size: clamp(16px, 2.2vw, 20px); 
+  margin: 0; opacity: .9; 
 }
-  
-  
 
 
-  
+
+
+
 
 
 /********games cards******/
@@ -360,11 +361,9 @@ gap: 18px;
 }
 
 .console-screen {
-  background: #111;
+  background: #167782;
   border-radius: 18px;
   padding: 10px;
-  box-shadow: inset 0 0 0 3px rgba(0,0,0,.3);
-
   display: flex;
   justify-content: center;
   align-items: center;;
@@ -372,12 +371,11 @@ gap: 18px;
 
 .console-screen canvas {
 display: block;
-width: 700px;     /* schaalt mee, echte grootte is 700x400 */
+width: 700px;     
 height: 400px;
 border-radius: 10px;
 }
 
-/* onderkant met knoppen */
 .console-body {
 display: flex;
 justify-content: space-between;
@@ -392,7 +390,6 @@ align-items: center;
 gap: 16px;
 }
 
-/* algemene knopstijl */
 .btn {
 border: none;
 cursor: pointer;
@@ -407,7 +404,6 @@ height: 110px;
 
 
 
-/* basis voor alle pijltjes */
 .dpad-btn {
 position: absolute;
 background: #E17E3B;
@@ -553,85 +549,63 @@ box-shadow: none;
 }
 
 
+/* === GAMEBOY PAGINA — RETRO CUTE BACKGROUND === */
 
 
-  /*** login en registreer pagina ***/
-  .auth-page {
+
+.gameboy-page {
   min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gameboy-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 16px 40px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #ffffff;
+}
+
+/* titel en tekst */
+.gameboy-main h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.gameboy-main p {
+  max-width: 520px;
+  opacity: 0.95;
+  margin-bottom: 24px;
+}
+
+/* console centreren */
+.console-wrap {
   display: flex;
   justify-content: center;
-  align-items: center;
-  background: var(--teal);
-  padding: 40px 20px;
 }
 
-.auth-form {
-  background: rgba(240, 192, 34, 0.724);
-  color: var(--white);
-  padding: 40px;
-  border-radius: var(--radius);
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 6px 20px rgba(124, 122, 118, 0.614);
+.console {
+  margin-top: 8px;
 }
 
-.auth-form h1 {
-  text-align: center;
-  color: var(--gold);
-  margin-bottom: 30px;
+
+.gameboy-page {
+  min-height: 100vh;
+  background-color: #167782;  /* jouw teal basis */
+
+  /* diagonale retro lijnen */
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      #136a74  0px,
+      #136a74 30px,   /* donkere strook 16px */
+      #136a74 30px,
+      rgba(0,0,0,0.18) 62px 
+    );
 }
-
-.auth-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.auth-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: none;
-  border-radius: var(--radius);
-  background: #ffffff;
-  color: #000;
-  font-size: 1rem;
-}
-
-.auth-form .btn {
-  width: 100%;
-  padding: 12px;
-  background: var(--gold);
-  color: var(--white);
-  border: none;
-  border-radius: var(--radius);
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.auth-form .btn:hover {
-  background: #ffc420;
-}
-
-.auth-form .switch {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.auth-form .switch a {
-  color: var(--gold);
-  text-decoration: none;
-}
-
-.auth-form .switch a:hover {
-  text-decoration: underline;
-}
-  
-
-/* aboutpage style*/
-
-
-
-

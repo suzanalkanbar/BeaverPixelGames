@@ -28,7 +28,7 @@ class mainScene {
 
     this.resetButton = this.physics.add.sprite(350, 300, 'reset')
     this.resetButton.depth = 1;
-    this.winner = this.physics.add.sprite(350, 170, 'winner')
+    this.winner = this.physics.add.sprite(350, 200, 'winner')
     this.winner.depth = 1;
 
     player = this.physics.add.sprite(290,350, 'snakeSheet', 0);
@@ -64,11 +64,11 @@ class mainScene {
     this.gameoverText.depth = 1;
 
     style = {font: '50px Arial', fill: '#e4a426' };
-    this.winnerText = this.add.text(250, 300, 'WINNER!', style);
+    this.winnerText = this.add.text(250, 20, 'WINNER!', style);
     this.winnerText.depth = 1;
 
     style = {font: '15px Arial', fill: '#e4a426' }
-    this.winnerResetText = this.add.text(270, 370, 'click the snake to restart', style);
+    this.winnerResetText = this.add.text(270, 340, 'click the snake to restart', style);
     this.winnerResetText.depth = 1;
     
   }

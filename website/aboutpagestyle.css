@@ -37,7 +37,7 @@
 .introductions-boxes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  flex-wrap: wrap; /* meerdere regels */
+  flex-wrap: wrap; /* meerdere regels mogelijk */
   gap: 3rem; /* ruimte tussen de boxjes */
   justify-content: center; /* centreren */
   margin-top: 2rem;
@@ -67,14 +67,14 @@
   height: 120px;
   margin: 0 auto 1rem;
   border-radius: 50%;
-  overflow: hidden;  
+  overflow: hidden;  /* zorgt dat de foto binnen het rondje blijft */
   border: 4px solid white;
   box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
 
 .profile-pic img {
-  width: 100%;       
+  width: 100%;       /* afbeelding schaalt mee */
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover; /* vult het rondje mooi zonder rekken */
   display: block;
 }

@@ -1,40 +1,30 @@
 // --- NAV / BURGER MENU ---
-const nav = document.querySelector('.nav');
-const btn = document.getElementById('burger');
+const nav = document.querySelector(".nav");
+const btn = document.getElementById("burger");
 
 if (nav && btn) {
-  btn.addEventListener('click', () => {
-    const open = nav.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.addEventListener("click", () => {
+    const open = nav.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
   });
 
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && nav.classList.contains('is-open')) {
-      nav.classList.remove('is-open');
-      btn.setAttribute('aria-expanded', 'false');
+  document.addEventListener("click", (e) => {
+    if (!nav.contains(e.target) && nav.classList.contains("is-open")) {
+      nav.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
     }
   });
 }
 
-// ===== GAME POPUP =====
-
-
-window.snakeLoaded = false;
-
+// === GAMES: kaart klikken -> nieuwe pagina met gameboy ===
 document.addEventListener("DOMContentLoaded", () => {
-  const game1 = document.getElementById("game-1");
-  if (game1) {
-    game1.addEventListener("click", openGamePopup);
-  }
-});
-
-
-function openGamePopup() {
-  let overlay = document.querySelector(".modal-overlay");
-  if (overlay) {
-    overlay.style.display = "flex";
-    return;
-  }
+  document.querySelectorAll(".game").forEach((card) => {
+    card.addEventListener("click", () => {
+      const gamePath = card.dataset.game;
+      if (!gamePath) {
+        console.warn("Geen data-game attribuut op dit element.");
+        return;
+      }
 
   overlay = document.createElement("div");
   overlay.className = "modal-overlay";
@@ -135,13 +125,13 @@ function openGamePopup() {
   startBtn.addEventListener("click", () => {
   if (!window.snakeLoaded) {
     const script = document.createElement("script");
-    script.src = "../j-snake/game.js";
+    script.src = "../t_simonSays/game.js";
     script.onload = () => {
       window.snakeLoaded = true;
-     const canvas = document.querySelector("canvas");
-    if (canvas) {
-     document.getElementById("game").appendChild(canvas);
-     }
+      const canvas = document.querySelector("canvas");
+      if (canvas) {
+        document.getElementById("game").appendChild(canvas);
+      }
     };
     document.body.appendChild(script);
   } else {
@@ -159,4 +149,5 @@ function openGamePopup() {
     }
   });
 
- }
+
+}
