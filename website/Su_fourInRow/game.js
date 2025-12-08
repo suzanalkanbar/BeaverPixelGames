@@ -23,9 +23,8 @@ class mainScene extends Phaser.Scene {
   }
 
   preload() {
-    // this.load.image("board", "fourInRow/assets/board.png");
-    // this.load.image("red", "fourInRow/assets/red.png");
-    // this.load.image("yellow", "fourInRow/assets/yellow.png");
+    this.load.audio("drop", "Su_fourInRow/assets/pop-402324.mp3");
+
   }
 
   create() {
@@ -169,6 +168,8 @@ class mainScene extends Phaser.Scene {
     const radius = CELL_SIZE * 0.4;
 
     const piece = this.add.circle(x, y, radius, color);
+    this.sound.play("drop", { volume: 0.5 });
+
     this.pieces.push(piece);
 
     this.lastRow = row;
