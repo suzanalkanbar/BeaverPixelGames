@@ -91,7 +91,7 @@ window.game = new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#d5d5d5', // The background color (grey)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade' }, // The physics engine to use
+  physics: { default: 'arcade' , arcade: { debug: true}}, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
