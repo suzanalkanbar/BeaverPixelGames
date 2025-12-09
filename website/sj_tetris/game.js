@@ -66,6 +66,9 @@ class mainScene {
     this.level = 0
     this.lines = 0
 
+    // temp block
+    this.block = this.physics.add.image(260, 10, 'smashboy_block').setOrigin(0.5, 0.5)
+
     // movement of blocks
     this.gridNames = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19', 'R20',]
     this.gameGrid = { // grid of 10 x 20, R1 - R20
@@ -100,7 +103,7 @@ class mainScene {
 
   update() {
 
-    this.spawnBlock()
+    //this.spawnBlock()
 
     if (this.staggered == this.staggerMax) {
       this.block.y = this.block.y + this.distance
