@@ -32,3 +32,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const allGames = Array.from(document.querySelectorAll(".game"));
+  const seeMoreBtn = document.getElementById("seeMoreBtn");
+
+  let visibleCount = 6;  
+  const batchSize = 3;    
+
+  allGames.forEach(game => game.style.display = "none");
+
+  function showGames() {
+    for (let i = 0; i < visibleCount; i++) {
+      if (allGames[i]) {
+        allGames[i].style.display = "flex";
+      }
+    }
+
+    if (visibleCount >= allGames.length) {
+      seeMoreBtn.style.display = "none";
+    }
+  }
+
+  showGames();
+
+  // on click "See More"
+  seeMoreBtn.addEventListener("click", () => {
+    visibleCount += batchSize;
+    showGames();
+  });
+});
