@@ -1,191 +1,166 @@
-(() => {
-  const GRID = 3;
-  const CELL = 120;          
-  const BOARD = GRID * CELL; // 360
-  const HUD = 72;
-  const WIDTH = BOARD;
-  const HEIGHT = BOARD + HUD;
-
-  let scene;
-  let board;
-  let currentPlayer;
-  let gameOver;
-
-  let gridGfx;      // static grid
-  let overlayGfx;   // win line
-  let marks = [];   // texts we draw
-  let statusText;
-  let restartText;
-
-  const config = {
-    type: Phaser.AUTO,
-    parent: "game",
-    width: WIDTH,
-    height: HEIGHT,
-    backgroundColor: "#ffffff",
-    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: { preload, create, update }
-  };
-
-  new Phaser.Game(config);
-
-  function preload() {
-    // geen, want we maken alles in phaser zelf
+class mainScene extends Phaser.Scene {
+  constructor() {
+    super("mainScene");
   }
 
-  function create() {
-    scene = this;
+  preload() {}
 
-    gridGfx = scene.add.graphics({ lineStyle: { width: 4, color: 0x000000 } });
-    overlayGfx = scene.add.graphics();
+  create() {
+    const GRID = 3;
+    const CELL = 120;          
+    const BOARD = GRID * CELL; // 360
+    const HUD = 72;
+    const WIDTH = BOARD;
+    const HEIGHT = BOARD + HUD;
 
-    drawGrid();
-    initGame();
+    this.GRID = GRID;
+    this.CELL = CELL;
+    this.BOARD = BOARD;
 
-    statusText = scene.add.text(WIDTH / 2, BOARD + 12, "Player X's turn", {
+    this.board = Array.from({ length: GRID }, () => Array(GRID).fill(""));
+    this.currentPlayer = "X";
+    this.gameOver = false;
+
+    this.gridGfx = this.add.graphics({ lineStyle: { width: 4, color: 0x000000 } });
+    this.overlayGfx = this.add.graphics();
+
+    this.marks = [];
+
+    // teken grid
+    this.gridGfx.strokeLineShape(new Phaser.Geom.Line(CELL, 0, CELL, BOARD));
+    this.gridGfx.strokeLineShape(new Phaser.Geom.Line(CELL * 2, 0, CELL * 2, BOARD));
+    this.gridGfx.strokeLineShape(new Phaser.Geom.Line(0, CELL, BOARD, CELL));
+    this.gridGfx.strokeLineShape(new Phaser.Geom.Line(0, CELL * 2, BOARD, CELL * 2));
+
+    // HUD text
+    this.statusText = this.add.text(WIDTH / 2, BOARD + 12, "Player X's turn", {
       fontSize: "20px",
       color: "#111",
-      fontFamily: "Arial, Helvetica, sans-serif"
+      fontFamily: "Arial"
     }).setOrigin(0.5, 0);
 
-    restartText = scene.add.text(WIDTH / 2, BOARD + 38, "Restart", {
+    this.restartText = this.add.text(WIDTH / 2, BOARD + 38, "Restart", {
       fontSize: "18px",
       color: "#fec23fff",
-      fontFamily: "Arial, Helvetica, sans-serif"
+      fontFamily: "Arial"
     }).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
 
-    restartText.on("pointerup", hardReset);
+    this.restartText.on("pointerup", () => this.restartGame());
 
-    scene.input.on("pointerdown", onPointerDown, scene);
+    this.input.on("pointerdown", (p) => this.onPointerDown(p));
   }
 
-  function update() {}
+  restartGame() {
+    this.board = Array.from({ length: this.GRID }, () => Array(this.GRID).fill(""));
+    this.currentPlayer = "X";
+    this.gameOver = false;
 
-  function drawGrid() {
-    // verticale lijnen
-    gridGfx.strokeLineShape(new Phaser.Geom.Line(CELL, 0, CELL, BOARD));
-    gridGfx.strokeLineShape(new Phaser.Geom.Line(CELL * 2, 0, CELL * 2, BOARD));
-    // horizontale lijnen
-    gridGfx.strokeLineShape(new Phaser.Geom.Line(0, CELL, BOARD, CELL));
-    gridGfx.strokeLineShape(new Phaser.Geom.Line(0, CELL * 2, BOARD, CELL * 2));
+    this.overlayGfx.clear();
+
+    for (const t of this.marks) t.destroy();
+    this.marks = [];
+
+    this.statusText.setText("Player X's turn");
   }
 
-  function initGame() {
-    board = Array.from({ length: GRID }, () => Array(GRID).fill(""));
-    currentPlayer = "X";
-    gameOver = false;
-    overlayGfx.clear();
-    // verwijder vorige stappen/zetten
-    for (const t of marks) t.destroy();
-    marks = [];
-    setStatus("Player X's turn");
-  }
+  onPointerDown(pointer) {
+    if (this.gameOver) return;
+    if (pointer.y > this.BOARD) return;
 
-  function hardReset() {
-    initGame();
-  }
+    const col = Math.floor(pointer.x / this.CELL);
+    const row = Math.floor(pointer.y / this.CELL);
 
-  function setStatus(msg) {
-    statusText && statusText.setText(msg);
-  }
+    if (this.board[row][col] !== "") return;
 
-  function onPointerDown(pointer) {
-    if (gameOver) return;
-    if (pointer.y > BOARD) return;
+    this.placeMark(row, col);
 
-    const col = Math.floor(pointer.x / CELL);
-    const row = Math.floor(pointer.y / CELL);
-    if (!inBounds(row, col)) return;
-    if (board[row][col] !== "") return;
-
-    placeMark(row, col, currentPlayer);
-
-    const win = checkWin(board);
+    const win = this.checkWin();
     if (win) {
-      gameOver = true;
-      drawWinLine(win);
-      setStatus(`Player ${currentPlayer} wins!`);
+      this.gameOver = true;
+      this.drawWinLine(win);
+      this.statusText.setText(`Player ${this.currentPlayer} wins!`);
       return;
     }
 
-    if (isFull(board)) {
-      gameOver = true;
-      setStatus("Draw! No more moves.");
+    if (this.isFull()) {
+      this.gameOver = true;
+      this.statusText.setText("Draw!");
       return;
     }
 
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    setStatus(`Player ${currentPlayer}'s turn`);
+    this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+    this.statusText.setText(`Player ${this.currentPlayer}'s turn`);
   }
 
-  function inBounds(r, c) {
-    return r >= 0 && r < GRID && c >= 0 && c < GRID;
-  }
+  placeMark(row, col) {
+    this.board[row][col] = this.currentPlayer;
 
-  function placeMark(row, col, player) {
-    board[row][col] = player;
-    const cx = col * CELL + CELL / 2;
-    const cy = row * CELL + CELL / 2;
-    const t = scene.add.text(cx, cy, player, {
-      fontSize: Math.floor(CELL * 0.66) + "px",
-      color: "#111111",
-      fontFamily: "Arial, Helvetica, sans-serif"
+    const cx = col * this.CELL + this.CELL / 2;
+    const cy = row * this.CELL + this.CELL / 2;
+
+    const t = this.add.text(cx, cy, this.currentPlayer, {
+      fontSize: Math.floor(this.CELL * 0.66) + "px",
+      color: "#111",
+      fontFamily: "Arial"
     }).setOrigin(0.5);
-    marks.push(t);
+
+    this.marks.push(t);
   }
 
-  function checkWin(b) {
+  isFull() {
+    return this.board.every(row => row.every(c => c !== ""));
+  }
+
+  checkWin() {
+    const b = this.board;
+    const G = this.GRID;
+
     // rows
-    for (let r = 0; r < GRID; r++) {
-      if (b[r][0] && b[r][0] === b[r][1] && b[r][1] === b[r][2]) {
-        return { kind: "row", index: r };
-      }
+    for (let r = 0; r < G; r++) {
+      if (b[r][0] && b[r][0] === b[r][1] && b[r][1] === b[r][2]) return { kind: "row", index: r };
     }
+
     // cols
-    for (let c = 0; c < GRID; c++) {
-      if (b[0][c] && b[0][c] === b[1][c] && b[1][c] === b[2][c]) {
-        return { kind: "col", index: c };
-      }
+    for (let c = 0; c < G; c++) {
+      if (b[0][c] && b[0][c] === b[1][c] && b[1][c] === b[2][c]) return { kind: "col", index: c };
     }
+
     // diag
-    if (b[0][0] && b[0][0] === b[1][1] && b[1][1] === b[2][2]) {
-      return { kind: "diag" };
-    }
+    if (b[0][0] && b[0][0] === b[1][1] && b[1][1] === b[2][2]) return { kind: "diag" };
+
     // anti
-    if (b[0][2] && b[0][2] === b[1][1] && b[1][1] === b[2][0]) {
-      return { kind: "anti" };
-    }
+    if (b[0][2] && b[0][2] === b[1][1] && b[1][1] === b[2][0]) return { kind: "anti" };
+
     return null;
   }
 
-  function isFull(b) {
-    for (let r = 0; r < GRID; r++) {
-      for (let c = 0; c < GRID; c++) {
-        if (b[r][c] === "") return false;
-      }
-    }
-    return true;
-  }
-
-  function drawWinLine(res) {
-    overlayGfx.clear();
-    overlayGfx.lineStyle(6, 0xef4444, 1);
+  drawWinLine(win) {
     const pad = 14;
-    const half = CELL / 2;
+    const half = this.CELL / 2;
+    const B = this.BOARD;
 
-    if (res.kind === "row") {
-      const y = res.index * CELL + half;
-      overlayGfx.strokeLineShape(new Phaser.Geom.Line(pad, y, BOARD - pad, y));
-    } else if (res.kind === "col") {
-      const x = res.index * CELL + half;
-      overlayGfx.strokeLineShape(new Phaser.Geom.Line(x, pad, x, BOARD - pad));
-    } else if (res.kind === "diag") {
-      overlayGfx.strokeLineShape(new Phaser.Geom.Line(pad, pad, BOARD - pad, BOARD - pad));
-    } else if (res.kind === "anti") {
-      overlayGfx.strokeLineShape(new Phaser.Geom.Line(BOARD - pad, pad, pad, BOARD - pad));
+    this.overlayGfx.clear();
+    this.overlayGfx.lineStyle(6, 0xef4444, 1);
+
+    if (win.kind === "row") {
+      const y = win.index * this.CELL + half;
+      this.overlayGfx.strokeLineShape(new Phaser.Geom.Line(pad, y, B - pad, y));
+    }
+
+    else if (win.kind === "col") {
+      const x = win.index * this.CELL + half;
+      this.overlayGfx.strokeLineShape(new Phaser.Geom.Line(x, pad, x, B - pad));
+    }
+
+    else if (win.kind === "diag") {
+      this.overlayGfx.strokeLineShape(new Phaser.Geom.Line(pad, pad, B - pad, B - pad));
+    }
+
+    else if (win.kind === "anti") {
+      this.overlayGfx.strokeLineShape(new Phaser.Geom.Line(B - pad, pad, pad, B - pad));
     }
   }
-})();
+}
 
 window.game = new Phaser.Game({
   width: 700, // Width of the game in pixels
