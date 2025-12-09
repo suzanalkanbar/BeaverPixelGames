@@ -38,6 +38,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const allGames = Array.from(document.querySelectorAll(".game"));
   const seeMoreBtn = document.getElementById("seeMoreBtn");
 
+    if (!allGames || allGames.length === 0 || !seeMoreBtn) {
+    console.warn("No games or See More button found — skipping batch loader.");
+    return;
+  }
+
+  if (!seeMoreBtn) {
+    console.warn("see More button missing.")
+    return;
+  }
+  
   let visibleCount = 6;  
   const batchSize = 3;    
 
