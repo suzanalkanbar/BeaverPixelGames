@@ -1,10 +1,8 @@
 // https://freeasteroids.org/ <- inspiratie
 
 // TO DO
-// [ ] add player death
-// [ ] add reset after player death
-// [ ] add winning screen
 // BUG: player only vulnerable after shooting bullet
+// BUG: game screen in topleft corner in website
 
 // Create the mainScene
 class mainScene {
@@ -209,4 +207,3 @@ window.restartActiveGame = function () {
     gameover = false;
   }
 };
-

@@ -7,7 +7,7 @@ TO DO
   [ ] user input:
     [ ] rotate when arrow up OR scroll
     [ ] drop on space bar or lmb press
-    [ ] go left/ right with arrows OR follow mouse movement
+    [ ] go left/ right with arrows 
     [ ] rmb -> store in other grid thing
     [ ] block go down faster on arrow down
   [ ] delay before placing -> do with rotating u can shove it in a nook
@@ -60,12 +60,46 @@ class mainScene {
     this.lines = 0
 
     // create the blocks
-    
+    this.block = this.physics.add.image(250, 0, 'smashboy').setOrigin(0, 0)
 
+    // movement of blocks
+    this.distance = 20
+    this.staggered = 0
+
+    // input from player
+    this.arrow = this.input.keyboard.createCursorKeys()
   }
 
   update() {
 
+    if (this.staggered == (30)) {
+      this.block.y = this.block.y + this.distance
+      console.log(this.block.y)
+      this.staggered = 0;
+    }
+    this.staggered += 1
+
+    if (this.arrow.right.isDown) {
+      this.block.x += 20
+    } else if (this.arrow.left.isDown) {
+      this.block.x -= 20
+    } 
+    
+    if (this.arrow.down.isDown) {
+      this.distance = 40
+    } else {
+      this.distance = 20
+    }
+
+    if (this.block.y >= 360) {
+      this.distance = 0
+      this.block.y = 360
+    }
+    if (this.block.x >= 410) {
+      this.block.x = 410
+    } else if (this.block.x <= 250) {
+      this.block.x = 250
+    }
   }
 
   /* VVV Put any other functions and code down here VVV */
@@ -91,7 +125,7 @@ window.game = new Phaser.Game({
   height: 400, // Height of the game in pixels
   backgroundColor: '#d5d5d5', // The background color (grey)
   scene: mainScene, // The name of the scene we created
-  physics: { default: 'arcade' , arcade: { debug: true}}, // The physics engine to use
+  physics: { default: 'arcade', arcade: { debug: true } }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
 
