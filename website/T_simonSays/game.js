@@ -160,7 +160,7 @@ class mainScene {
     
     // score
     let style = { font: '20px Arial', fill: '#ffffff'}
-    this.scoreText = this.add.text(20, 20, 'score: ' + this.score, style)
+    this.scoreText = this.add.text(20, 20, 'Score: ' + this.score, style)
     
     let buttonStyle = {
       font: '32px Arial',

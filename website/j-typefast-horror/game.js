@@ -5,6 +5,7 @@ class mainScene {
   preload() {
     this.load.image('background', 'j-typefast-horror/assets/scary background.png')
     this.load.image('arrow', 'j-typefast-horror/assets/arrow down.png')
+    this.load.image('cover', 'j-typefast-horror/assets/cover text.png')
 
     this.load.spritesheet('foxy jumpscare', 'j-typefast-horror/assets/foxy jumpscare.png',
       {frameWidth: 700, frameHeight: 400}
@@ -28,10 +29,11 @@ class mainScene {
     });
 
 
-    this.introText = ['You wake up in an abandoned warehouse, confused', 'Suddenly you hear a voice over a speaker say:', 'I want to play a little game', 'show me your typing skills, and if you\'re fast enough i will let you live', 'good luck']
+    this.introText = ['You wake up in an abandoned warehouse, confused', 'Suddenly you hear a voice over a speaker say:', '"I want to play a little game"', 'show me your typing skills, and if you\'re fast enough i will let you live', 'good luck']
     this.secondDialogue = ['Congrats on surviving the first round', 'perhaps you are good enough to survive', 'But don\'t get your hopes up', 'There is still a long way to go', 'So get ready for the next round']
 
     this.testText = [{letter: 'Y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'O', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}]
+    this.secondSentence = [{letter: 'F', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'v', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'm', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'k', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'm', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'k', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ',', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'c', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}]
 
     this.index = 0
     this.endIndex = this.testText.length - 1
@@ -69,44 +71,88 @@ class mainScene {
   /* VVV Put any other functions and code down here VVV */
 
   typing(key){
-    if(key == this.testText[this.index].letter){
-      console.log('key correct')
-      this.testText[this.index].color = 'green'
-      this.style = { font: '15px Helvetica', fill: this.testText[this.index].color }
-      this.ArrayText = this.add.text(this.testText[this.index].x, this.arrayY, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
-      if(this.index < this.endIndex){
-        this.index++
-        this.arrow.x = this.testText[this.index].x
-        if(this.index == 57){
-          this.arrow.y = 345
-          this.arrayY += 15
+    if(this.currentSentence == 1){
+      if(key == this.testText[this.index].letter){
+        console.log('key correct')
+        this.testText[this.index].color = 'green'
+        this.style = { font: '15px Helvetica', fill: this.testText[this.index].color }
+        this.ArrayText = this.add.text(this.testText[this.index].x, this.arrayY, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
+        if(this.index < this.endIndex){
+          this.index++
+          this.arrow.x = this.testText[this.index].x
+          if(this.index == 57){
+            this.arrow.y = 345
+            this.arrayY += 15
+          }
+        }else{
+          this.timer.setColor('green')
+          this.timer.setText('YOU HAD ' + this.timeLeft + ' SECONDS LEFT')
+          this.totalMistakes += this.mistakes
+          this.mistakes = 0
+          this.arrow.destroy()
+          this.delayTimer.remove()
+          this.delayTimer = this.time.addEvent({
+              delay: 3000,
+              callback: ()=>{
+                  this.currentSentence += 1
+                  this.index = 0
+                  this.projectSentence()
+                
+              },
+            })
         }
       }else{
-        this.timer.setColor('green')
-        this.timer.setText('YOU HAD ' + this.timeLeft + ' SECONDS LEFT')
-        this.totalMistakes += this.mistakes
-        this.mistakes = 0
-        this.arrow.visible = false
-        this.delayTimer.remove()
-        this.keyInput.destroy()
-        this.delayTimer = this.time.addEvent({
-            delay: 3000,
-            callback: ()=>{
-                this.currentSentence += 1
-                this.index = 0
-                this.projectSentence()
-              
-            },
-          })
-      }
-    }else{
-      console.log('wrong key')
-      this.testText[this.index].color = 'red'
-      this.mistakes++
-      this.mistakeText.setText(this.mistakes + ' mistakes')
-      this.style = { font: '15px Helvetica', fill: this.testText[this.index].color }
-      this.ArrayText = this.add.text(this.testText[this.index].x, this.arrayY, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
-    } 
+        console.log('wrong key')
+        this.testText[this.index].color = 'red'
+        this.mistakes++
+        this.mistakeText.setText(this.mistakes + ' mistakes')
+        this.style = { font: '15px Helvetica', fill: this.testText[this.index].color }
+        this.ArrayText = this.add.text(this.testText[this.index].x, this.arrayY, this.testText[this.index].letter, this.style).setOrigin(0.5, 0.5)
+      } 
+    }else if(this.currentSentence == 3){
+      this.endIndex = this.secondSentence.length - 1
+      console.log('start typing sentence 2')
+      if(key == this.secondSentence[this.index].letter){
+        console.log('key correct')
+        this.secondSentence[this.index].color = 'green'
+        this.style = { font: '15px Helvetica', fill: this.secondSentence[this.index].color }
+        this.ArrayText = this.add.text(this.secondSentence[this.index].x, this.arrayY, this.secondSentence[this.index].letter, this.style).setOrigin(0.5, 0.5)
+        if(this.index < this.endIndex){
+          this.index++
+          this.arrow.x = this.secondSentence[this.index].x
+          if(this.index == 57){
+            this.arrow.y = 345
+            this.arrayY += 15
+          }
+        }else{
+          this.timer.setColor('green')
+          this.timer.setText('YOU HAD ' + this.timeLeft + ' SECONDS LEFT')
+          this.totalMistakes += this.mistakes
+          this.mistakes = 0
+          this.arrow.destroy()
+          this.delayTimer.remove()
+          this.delayTimer = this.time.addEvent({
+              delay: 3000,
+              callback: ()=>{
+                  this.currentSentence += 1
+                  this.index = 0
+                  this.projectSentence()
+                
+              },
+            })
+        }
+      }else{
+        console.log('wrong key')
+        this.secondSentence[this.index].color = 'red'
+        this.mistakes++
+        if(this.currentSentence > 1){
+          this.timeLeft--
+        }
+        this.mistakeText.setText(this.mistakes + ' mistakes')
+        this.style = { font: '15px Helvetica', fill: this.secondSentence[this.index].color }
+        this.ArrayText = this.add.text(this.secondSentence[this.index].x, this.arrayY, this.secondSentence[this.index].letter, this.style).setOrigin(0.5, 0.5)
+      } 
+    }
   }
 
   projectSentence(){
@@ -154,6 +200,7 @@ class mainScene {
 
     this.arrow = this.add.image(this.testText[this.index].x, 330, 'arrow').setOrigin(0.5, 0.5)
       
+    this.timer.setText(this.timeLeft + ' SECONDS LEFT')
       this.delayTimer = this.time.addEvent({
             delay: 1000,
             callback: ()=>{
@@ -167,6 +214,10 @@ class mainScene {
             repeat: this.timeLeft - 1
           })
     }else if(this.currentSentence == 2){
+      this.timeLeft = 30
+      this.letterX = 70
+      this.letterY = 340
+      this.arrayY = 340
       this.delayTimer = this.time.addEvent({
             delay: 3000,
             callback: ()=>{
@@ -182,7 +233,36 @@ class mainScene {
             repeat: this.secondDialogue.length
           })
     }else if(this.currentSentence == 3){
-      this.timer.setText('next Sentence')
+      this.add.image(350, 350, 'cover').setOrigin(0.5, 0.5)
+      
+      
+      for(let i = 0; i < this.secondSentence.length; i++){
+        this.style = { font: '15px Helvetica', fill: this.secondSentence[i].color }
+        this.ArrayText = this.add.text(this.letterX, this.letterY, this.secondSentence[i].letter, this.style).setOrigin(0.5, 0.5)
+        this.secondSentence[i].x = this.letterX
+        this.letterX += 10
+        if(i == 57){
+          this.letterX = 70
+          this.letterY += 15
+        }
+      }
+
+      this.arrow = this.add.image(this.secondSentence[this.index].x, 330, 'arrow').setOrigin(0.5, 0.5)
+
+
+      this.timer.setText(this.timeLeft + ' SECONDS LEFT')
+      this.delayTimer = this.time.addEvent({
+            delay: 1000,
+            callback: ()=>{
+              this.timeLeft--
+              if(this.timeLeft < 6){
+                this.timer.setText('')
+              }else{
+              this.timer.setText(this.timeLeft + ' SECONDS LEFT')
+              }
+            },
+            repeat: this.timeLeft - 1
+          })
     }
   }
 
