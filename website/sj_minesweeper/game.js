@@ -64,7 +64,9 @@ class mainScene {
     this.physics.add.existing(this.interactiveBoard).setInteractive().on('pointerdown', this.getTile, this)
 
     this.gameGrid = []
-    this.createGrid()
+    this.createEmptyGrid()
+    this.placeMines()
+    this.placeClues()
 
     // voor single console log :3 as a treat
     this.n = 0
@@ -72,10 +74,13 @@ class mainScene {
 
   update() {
 
+    // voor single console log :3 as a treat
     if (this.n == 0) {
-      console.log(this.gameGrid)
+      console.log(this.gameGrid[0].frame.texture.key)
     }
     this.n = 1
+
+
   }
 
   /* VVV Put any other functions and code down here VVV */
@@ -90,19 +95,80 @@ class mainScene {
     object.y = this.tilesize * y + (this.screenHeight / 2 - this.height / 2 + this.tilesize / 2)
     object.type = type
 
+    object.revealed = false
+    object.flagged = false
+
     return object
   }
 
-  createGrid() {
-    for (var n = 0; n < this.rowsX; n++) {
+  createEmptyGrid() {
+    var imageName = this.TileEmpty
 
+    for (var n = 0; n < this.rowsX; n++) {
       for (var i = 0; i < this.colsY; i++) {
         this.currentTile
-        this.newTile = this.createTile(this.currentTile, n, i, this.tile_numbers[0], '.')
+        this.newTile = this.createTile(this.currentTile, n, i, imageName, '.')
 
         this.gameGrid.push(this.newTile)
       }
     }
+  }
+
+  placeMines() {
+    for (var i = 0; i < this.amount_mines; i++) {
+      while (true) {
+        var x = Phaser.Math.Between(0, this.rowsX - 1)
+        var y = Phaser.Math.Between(0, this.colsY - 1)
+        var index = y * this.colsY + x
+        //console.log(index)
+
+        if (this.gameGrid[index].type == '.') {
+          this.gameGrid[index] = this.add.image(
+            this.tilesize * x + (this.screenWidth / 2 - this.witdh / 2 + this.tilesize),
+            this.tilesize * y + (this.screenHeight / 2 - this.height / 2 + this.tilesize / 2),
+            this.TileMine) // <- change to unknown when not testing. this.TileMine when testing
+            .setScale(this.tilescale)
+          this.gameGrid[index].type = 'X'
+          //console.log(this.gameGrid[index])
+          break
+        }
+      }
+    }
+  }
+
+  placeClues() {
+    for (var x = 0; x < this.rowsX; x++) {
+      for (var y = 0; y < this.colsY; y++) {
+        var currentIndex = y * this.colsY + x
+        if (this.gameGrid[currentIndex].type != 'X') {
+          this.total_mines = this.check_neighbours(x,y)
+          console.log(this.total_mines)
+        }
+      }
+    }
+  }
+
+  is_inside(x, y) {
+    return 0 <= x <= this.rowsX && 0 <= y <= this.colsY
+  }
+
+  check_neighbours(x, y) {
+    var total_mines = 0
+    for (var x_offset = -1; x_offset < 2; x_offset++) {
+      for (var y_offset = -1; y_offset < 2; y_offset++) {
+        var neighbour_x = x + x_offset
+        var neighbour_y = y + y_offset
+
+        
+        var currentIndex = neighbour_y  + neighbour_x +2
+        //console.log(currentIndex) // <- wrong!
+
+        if (this.is_inside(neighbour_x, neighbour_y) && this.gameGrid[currentIndex].type == 'X') {
+          total_mines += 1
+        }
+      }
+    }
+    return total_mines
   }
 
   getTile(input) {
