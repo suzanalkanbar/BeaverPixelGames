@@ -3,27 +3,41 @@
 class mainScene {
 
   init() {
-    this.WHITE = 0xffffff
-    this.DARKGREY = 0x5f5f5f 
-    this.LIGHTGREY = 0xc0c0c0 
-    this.GREEN = 0x29f500 
-    this.DARKGREEN = 0x0f5a00 
-    this.BLUE = 0x0000ff 
-    this.RED = 0xff0000 
-    this.YELLOW = 0x00ff00 
-    this.BGCOLOUR = 0xced25e 
+    // colours
+    this.white = 0xffffff
+    this.darkgrey = 0x5f5f5f
+    this.lightgrey = 0xc0c0c0
+    this.green = 0x29f500
+    this.darkgreen = 0x0f5a00
+    this.blue = 0x0000ff
+    this.red = 0xff0000
+    this.yellow = 0x00ff00
+    this.bgcolour = 0xced25e
+
+    // constants
+    this.tilesize = 32
+    this.rows = 15
+    this.cols = 15
+    this.amount_mines = 5 // 30 in normal game
+    this.witdh = this.tilesize * this.rows
+    this.height = this.tilesize * this.cols
+
+    this.tile_numbers = []
+    for (var i = 1; i < 9; i++) {
+      tile_nu
+    }
   }
 
   preload() {
-    
+
   }
 
   create() {
-    
+
 
   }
   update() {
-    
+
 
   }
 
