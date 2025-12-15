@@ -1,5 +1,75 @@
 let clicks = 0;
 
+function updateClickText(scene, clicks) {
+  scene.clickText.setText('Clicks: ' + clicks + 'ฅ');
+}
+
+function click(value, scene, playAnimation = true) {
+  clicks += value;
+  updateClickText(scene, clicks);
+  // Animatie wanneer je klikt
+  if (playAnimation){
+    scene.tweens.add({
+      targets: scene.lulu,
+      scaleX: 0.05,
+      scaleY: 0.05,
+      duration: 40,
+      yoyo: true
+    });
+  }
+}
+
+// Bonusses
+
+// 1. Poppy helper
+class Poppy {
+  constructor(scene, x, y, texture) {
+    this.scene = scene;
+    // this.sprite = scene.add.sprite(x, y, texture);
+    this.price = 10; // prijs om deze bonus te kopen
+    if (this.buy()) {
+      this.value = 1; // hoeveel punten 1 hit van deze bonus geeft
+      this.delay = 1; // hoe veel seconden tussen hits
+      this.addToTimer(); // start de timer om punten toe te voegen
+    }
+  }
+
+  // functie die de bonus aan de timer toevoegt
+  addToTimer() {
+    this.scene.time.addEvent({
+      delay: this.delay * 1000, // s --> ms, deze functie werkt met milliseconden
+      callback: this.hit,
+      callbackScope: this,
+      loop: true
+    });
+  }
+    
+  hit() {
+    click(this.value, this.scene);
+    // this.hitAnimation();
+  }
+
+  hitAnimation(){
+    // Animatie wanneer de bonus een hit maakt
+  }
+
+  buy() {
+    if (clicks >= this.price) {
+      clicks -= this.price;
+      updateClickText(this.scene, clicks);
+      return true;
+    }
+  }
+
+  // functie om de sprite te vernietigen
+  destroy() {
+    this.sprite.destroy();
+  }
+
+}
+
+// De game
+
 const mainScene = new Phaser.Scene('mainScene');
 
 mainScene.preload = function () {
@@ -8,9 +78,11 @@ mainScene.preload = function () {
 
 mainScene.create = function () {
   // counter teksyt
-  this.clickText = this.add.text(350, 30, 'Clicks: 0', {
+  this.clickText = this.add.text(350, 30, 'Clicks: 0ฅ', {
     fontSize: '24px',
-    color: '#ffffff'
+    color: '#ffffff',
+    stroke: '#383838ff',
+    strokeThickness: 1
   }).setOrigin(0.5);
 
 
@@ -22,19 +94,26 @@ mainScene.create = function () {
 
   // Click handler
   this.lulu.on('pointerdown', () => {
-    clicks++;
-    this.clickText.setText('Clicks: ' + clicks);
-
-    // Animatie wanneer je klikt
-    this.tweens.add({
-      targets: this.lulu,
-      scaleX: 0.95,
-      scaleY: 0.95,
-      duration: 60,
-      yoyo: true
-    });
+    click(1, this, this.lulu);
+    // poppy = new Poppy(this, 0, 0, 'lulu');
   });
-};
+
+  // SHOP
+  poppy = new Poppy(this, 0, 0, 'lulu');
+  const button = this.add.text(550, 100, 'Buy Poppy for ' + String(poppy.price) + ' ฅ', {
+    fontSize: '24px',
+    color: '#ffffff',
+    backgroundColor: '#77c2eeff',
+    padding: { x: 10, y: 5 }
+  })
+  .setOrigin(0.5)
+  .setInteractive({ useHandCursor: true });
+
+  // onclick
+  button.on('pointerdown', () => {
+    poppy = new Poppy(this, 0, 0, 'lulu');
+  });
+}
 
 window.game = new Phaser.Game({
   width: 700,
