@@ -4,7 +4,6 @@ class mainScene {
 
   preload() {
     this.load.image('ground', 't_dinoGame/assets/ground.png')
-    // this.load.image('beaver', 't_dinoGame/assets/beaver.png')
     this.load.image('treeTrunk', 't_dinoGame/assets/treeTrunk.png')
     this.load.image('game-over', 't_dinoGame/assets/game-over.png')
     this.load.image('restart', 't_dinoGame/assets/restart.png')
@@ -31,7 +30,8 @@ class mainScene {
     this.respawnTime = 0
     this.score = 0
     this.highscore = 0
-    this.isGameRunning = true
+    this.isGameRunning = false
+    this.gameStart = false
 
     this.forest = this.add.tileSprite (0, 400, 1400, 400, 'forest')
     .setOrigin(0, 1)
@@ -96,9 +96,19 @@ class mainScene {
     // this.handleHighscore()
 
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
+
+    // pause the physics until the game starts
+    this.physics.pause() 
     
   }
 
+  startGame() {
+    this.gameStart = true
+    this.isGameRunning = true
+    this.physics.resume()
+    this.beaver.setVelocityY(-1300)
+
+  }
   handleScore() {
     this.time.addEvent({
       delay:1000/10,
@@ -148,15 +158,24 @@ class mainScene {
       this.beaver.setVelocityY(0)
       this.beaver.body.height = 115
       this.beaver.body.offset.y = 0
-      this.physics.resume()
+      // this.physics.resume()
       this.obstacles.clear(true, true)
-      this.isGameRunning = true
+
+      this.isGameRunning = false
+      this.gameStart = false
+      this.physics.pause()
+
       this.gameOverScreen.setAlpha(0)
       this.anims.resumeAll()
       this.gameSpeed = 7
     })
 
     this.input.keyboard.on('keydown_SPACE', () => {
+
+      if (!this.gameStart) {
+        this.startGame()
+        return
+      }
 
       // no jumping allowed while in the air
       if (!this.beaver.body.onFloor()) {return}
