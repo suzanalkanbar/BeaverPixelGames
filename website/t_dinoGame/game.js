@@ -99,13 +99,14 @@ class mainScene {
 
     // pause the physics until the game starts
     this.physics.pause() 
-    
+    this.anims.pauseAll()
   }
 
   startGame() {
     this.gameStart = true
     this.isGameRunning = true
     this.physics.resume()
+    this.anims.resumeAll()
     this.beaver.setVelocityY(-1300)
 
   }
