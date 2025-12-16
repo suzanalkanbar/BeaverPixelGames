@@ -126,6 +126,36 @@ class mainScene {
     this.pants1.on('pointerdown', () => {
       this.pantsOn(0)
     })
+
+    this.pants2 = this.add.image(80, 790, 'pants', 1).setOrigin(0.5, 0.5).setInteractive()
+    this.pants2.input.hitArea.setTo(20, 210, 200, 120)
+    this.pants2.on('pointerdown', () => {
+      this.pantsOn(1)
+    })
+
+    this.pants3 = this.add.image(80, 930, 'pants', 2).setOrigin(0.5, 0.5).setInteractive()
+    this.pants3.input.hitArea.setTo(20, 210, 200, 65)
+    this.pants3.on('pointerdown', () => {
+      this.pantsOn(2)
+    })
+
+    this.shoes1 = this.add.image(80, 930, 'shoes', 0).setOrigin(0.5, 0.5).setInteractive()
+    this.shoes1.input.hitArea.setTo(20, 320, 200, 40)
+    this.shoes1.on('pointerdown', () => {
+      this.shoesOn(0)
+    })
+
+    this.shoes3 = this.add.image(80, 980, 'shoes', 2).setOrigin(0.5, 0.5).setInteractive()
+    this.shoes3.input.hitArea.setTo(20, 320, 200, 40)
+    this.shoes3.on('pointerdown', () => {
+      this.shoesOn(2)
+    })
+
+    this.shoes5 = this.add.image(80, 1050, 'shoes', 4).setOrigin(0.5, 0.5).setInteractive()
+    this.shoes5.input.hitArea.setTo(20, 300, 200, 60)
+    this.shoes5.on('pointerdown', () => {
+      this.shoesOn(4)
+    })
     
     //right side//
     this.womanClothes = this.add.rectangle(625, 200, 200, 400, 0xff1afa)
@@ -165,6 +195,31 @@ class mainScene {
       this.shirtOn(3)
       this.currentShirt.depth = 1
     })
+
+    this.shirt7 = this.add.image(620, 600, 'shirts', 6).setOrigin(0.5, 0.5).setInteractive()
+    this.shirt7.input.hitArea.setTo(70, 100, 200, 270)
+    this.shirt7.on('pointerdown', () => {
+      this.shirtOn(6)
+      this.currentShirt.depth = 1
+    })
+
+    this.pants4 = this.add.image(620, 780, 'pants', 3).setOrigin(0.5, 0.5).setInteractive()
+    this.pants4.input.hitArea.setTo(20, 210, 200, 120)
+    this.pants4.on('pointerdown', () => {
+      this.pantsOn(3)
+    })
+
+    this.shoes2 = this.add.image(620, 800, 'shoes', 1).setOrigin(0.5, 0.5).setInteractive()
+    this.shoes2.input.hitArea.setTo(20, 320, 200, 40)
+    this.shoes2.on('pointerdown', () => {
+      this.shoesOn(1)
+    })
+
+    this.shoes4 = this.add.image(620, 900, 'shoes', 3).setOrigin(0.5, 0.5).setInteractive()
+    this.shoes4.input.hitArea.setTo(20, 300, 200, 60)
+    this.shoes4.on('pointerdown', () => {
+      this.shoesOn(3)
+    })
     //end clothes//
     
     this.man = this.add.image(350, 200, 'man').setOrigin(0.5, 0.5)
@@ -176,12 +231,13 @@ class mainScene {
     this.currentHat = this.add.image(350, 32, 'hats', 2).setOrigin(0.5, 0.5)
     this.currentShirt = this.add.image(350, 200, 'shirts', 2).setOrigin(0.5, 0.5)
     this.currentShirt.depth = -0.9
-    this.currentPants = this.add.image(350, 200, 'pants', 2).setOrigin(0.5, 0.5)
+    this.currentPants = this.add.image(350, 200, 'pants', 1).setOrigin(0.5, 0.5)
     this.currentPants.depth = -0.8
     this.currentShoes = this.add.image(350, 199, 'shoes', 2).setOrigin(0.5, 0.5)
+    this.currentShoes.depth = -0.85
 
     this.arrow = this.input.keyboard.createCursorKeys()
-    this.clothesSpeed = 2
+    this.clothesSpeed = 3
   
   }
   update() {
@@ -200,8 +256,19 @@ class mainScene {
       this.shirt4.y -= this.clothesSpeed
       this.shirt5.y -= this.clothesSpeed
       this.shirt6.y -= this.clothesSpeed
+      this.shirt7.y -= this.clothesSpeed
 
       this.pants1.y -= this.clothesSpeed
+      this.pants2.y -= this.clothesSpeed
+      this.pants3.y -= this.clothesSpeed
+      this.pants4.y -= this.clothesSpeed
+
+      this.shoes1.y -= this.clothesSpeed
+      this.shoes2.y -= this.clothesSpeed
+      this.shoes3.y -= this.clothesSpeed
+      this.shoes4.y -= this.clothesSpeed
+      this.shoes5.y -= this.clothesSpeed
+
     }else if(this.arrow.up.isDown && this.hat1.y < 25){
       this.hat1.y += this.clothesSpeed
       this.hat2.y += this.clothesSpeed
@@ -216,8 +283,18 @@ class mainScene {
       this.shirt4.y += this.clothesSpeed
       this.shirt5.y += this.clothesSpeed
       this.shirt6.y += this.clothesSpeed
+      this.shirt7.y += this.clothesSpeed
 
       this.pants1.y += this.clothesSpeed
+      this.pants2.y += this.clothesSpeed
+      this.pants3.y += this.clothesSpeed
+      this.pants4.y += this.clothesSpeed
+
+      this.shoes1.y += this.clothesSpeed
+      this.shoes2.y += this.clothesSpeed
+      this.shoes3.y += this.clothesSpeed
+      this.shoes4.y += this.clothesSpeed
+      this.shoes5.y += this.clothesSpeed
     }
     
 
@@ -245,6 +322,7 @@ class mainScene {
   shoesOn(index){
     this.currentShoes.destroy()
     this.currentShoes = this.add.image(350, 200, 'shoes', index).setOrigin(0.5, 0.5)
+    this.currentShoes.depth = -0.85
   }
 
 }
