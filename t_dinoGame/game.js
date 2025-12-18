@@ -168,7 +168,7 @@ class mainScene {
 
       this.gameOverScreen.setAlpha(0)
       this.anims.resumeAll()
-      this.gameSpeed = 7
+      this.gameSpeed = 8
     })
 
     this.input.keyboard.on('keydown_SPACE', () => {
@@ -191,6 +191,7 @@ class mainScene {
 
       // no crawling allowed while in the air
       if (!this.beaver.body.onFloor()) {return}
+      if (this.gameSpeed == 0) {return}
 
       this.beaver.anims.play('crawl', true)
       this.beaver.body.height = 75
