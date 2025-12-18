@@ -5,13 +5,12 @@ class mainScene {
   init() {
     // colours
     this.white = 0xffffff
-    this.darkgrey = 0x5f5f5f
+    this.darkgrey = 0x5f5f5f // none used under here.... under where? ahhaahhah
     this.lightgrey = 0xc0c0c0
-    this.green = 0x29f500
     this.darkgreen = 0x0f5a00
     this.blue = 0x0000ff
     this.red = 0xff0000
-    this.yellow = 0x00ff00
+    this.green = 0x00ff00
     this.bgcolour = 0xced25e
 
     // constants
