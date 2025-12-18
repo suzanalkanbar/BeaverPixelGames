@@ -7,6 +7,7 @@ class mainScene {
     this.load.image('background', 'j-pikmin_Mario/assets/landscape.png')
     this.load.image('easterEgg', 'j-pikmin_Mario/assets/my_avatar-1.png.png')
     this.load.image('bench', 'j-pikmin_Mario/assets/bench.png')
+    this.load.image('next', 'j-pikmin_Mario/assets/next.png')
 
     this.load.spritesheet('walking', 
       'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
@@ -56,7 +57,20 @@ class mainScene {
     this.flowered = false;
     this.invincible = false;
     this.levelComplete = false;
-    this.level = 1;
+    this.level = 2;
+
+    this.nextLevelButton = this.add.image(0, 300, 'next').setOrigin(0.5, 0.5).setInteractive().on('pointerdown', () => {
+      this.player.visible = true
+      this.redOnion.destroy()
+      this.level += 1
+      this.player.x = 3750
+      this.cameras.main.scrollX = this.player.x - 350
+      this.levelCompleteText.setText('')
+      this.levelComplete = false
+      this.backgroundMusic = this.sound.add('distant spring')
+      this.backgroundMusic.play({loop: true})
+    })
+    this.nextLevelButton.visible = false
 
     this.arrow = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
@@ -352,10 +366,41 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
-
-
-
     // end of the first level //
+
+    // start second level //
+    this.grassX += this.spritelength * 14
+    console.log(this.grassX)
+
+    //back wall
+    for(let i = 0; i < 16; i++){
+    this.grass.create(this.grassX - this.spritelength, this.grassY, 'grass', 50)
+    this.grassY -= this.spritelength
+    }
+
+    
+    //straight
+    this.grassY = 360
+    for(let i = 0; i < 13; i++){
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'grass', 50)
+      this.grassX += this.spritelength
+    }
+
+    //stairs up
+    for(let i = 0; i < 15; i++){
+      this.grassY -= this.spritelength
+      this.grass.create(this.grassX, this.grassY, 'grass', 13)
+      this.amount = (400 - this.grassY) / this.spritelength
+      for(let a = 0; a < this.amount; a++){
+        this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
+      }
+      this.grassX += this.spritelength
+    }
+
+
+    // end of the second level //
+
 
     this.physics.add.collider(this.player, this.grass)
     this.physics.add.collider(this.player, this.egg,)
@@ -375,12 +420,21 @@ class mainScene {
       this.levelCompleteText.setText('level ' + this.level + ' complete')
       this.levelCompleteText.visible = true
       this.physics.world.colliders.getActive().find(function(i){return i.name == 'onion'}).destroy();
+
       this.delayTimer = this.time.addEvent({
           delay: 3200,
           callback: ()=>{
             this.player.visible = false
             this.redOnion.setVelocityY(-50)
-            this.level += 0.5
+          },
+          loop: false
+        })
+
+    this.nextLevel = this.time.addEvent({
+          delay: 8000,
+          callback: ()=>{
+            this.nextLevelButton.visible = true
+            this.nextLevelButton.x = this.player.x
           },
           loop: false
         })
@@ -477,6 +531,11 @@ class mainScene {
 
     if(this.player.y >= 400){
       this.death()
+    }
+    if(this.player.y <= -50){
+      
+      //teleport to sky level//
+
     }
 
     if (this.physics.overlap(this.player, this.nectar)) {
@@ -612,7 +671,7 @@ class mainScene {
   }
 
   death(){
-    this.flowered = false;
+    if(this.level == 1){
     this.nectar.destroy()
     this.egg.setFrame(0)
     this.egg.visible = true
@@ -621,9 +680,16 @@ class mainScene {
     this.bulborb.visible = true
     this.bulborb.enableBody()
     this.player.x = 200
-    this.cameras.main.scrollX = this.player.x - 350
     this.player.y = 310
+    }else if(this.level == 2){
+      this.player.x = 3750
+      this.player.y = 310
+    }
+
+    this.cameras.main.scrollX = this.player.x - 350
+    this.flowered = false;
     this.sound.play('cry')
+    
   }
 
 }
