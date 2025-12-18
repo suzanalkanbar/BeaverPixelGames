@@ -6,7 +6,10 @@ class mainScene {
     this.load.image('background', 'j-typefast-horror/assets/scary background.png')
     this.load.image('arrow', 'j-typefast-horror/assets/arrow down.png')
     this.load.image('cover', 'j-typefast-horror/assets/cover text.png')
-
+    
+    this.load.spritesheet('house', 'j-typefast-horror/assets/house.png',
+      {frameWidth: 700, frameHeight: 420}
+    )
     this.load.spritesheet('foxy jumpscare', 'j-typefast-horror/assets/foxy jumpscare.png',
       {frameWidth: 700, frameHeight: 400}
     )
@@ -18,6 +21,12 @@ class mainScene {
 
   create() {
     this.background = this.add.image(350, 200, 'background').setOrigin(0.5, 0.5)
+    this.theLight = this.add.image(350, 200, 'house', 0).setOrigin(0.5, 0.5)
+    this.theLight.depth = 10
+    this.theLight.visible = false
+    this.house = this.add.image(350, 200, 'house', 7).setOrigin(0.5, 0.5)
+    this.house.depth = 9
+    this.house.visible = false
 
     this.foxyScare = this.physics.add.sprite(350, 200, 'foxy jumpscare', 0).setOrigin(0.5, 0.5)
     this.foxyScare.depth = -1
@@ -32,10 +41,11 @@ class mainScene {
     this.introText = ['You wake up in an abandoned warehouse, confused', 'Suddenly you hear a voice over a speaker say:', '"I want to play a little game"', 'show me your typing skills, and if you\'re fast enough i will let you live', 'good luck']
     this.secondDialogue = ['Congrats on surviving the first round', 'perhaps you are good enough to escape', 'But don\'t get your hopes up', 'There is still a long way to go', 'So get ready for the next round']
     this.thirdDialogue = ['it seems you are quite the formidable opponent', 'but alas', 'because this final challenge will be so hard', 'even I have no change of beating it', 'so good luck', 'HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA']
+    this.finalDialogue = ['you wake up and are surprised to see you are back home', 'confused you wonder how you got here', 'last thing you remember is finishing that last sentence', 'then suddenly everything went white', 'you think to yourself', 'was it even real, or just a dream', 'you shrug of the thought and let out a sigh of relief', 'i\'m finally back home']
 
     this.testText = [{letter: 'Y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'b', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'O', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}]
     this.secondSentence = [{letter: 'F', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'v', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'm', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'k', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'm', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'k', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ',', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'c', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'S', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'm', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'g', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'g', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'v', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}]
-    this.thirdSentence = [{letter: 'W', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'S', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: '\'', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'j', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'G', color: 'white', x: 0}, {letter: 'I', color: 'white', x: 0}, {letter: 'V', color: 'white', x: 0}, {letter: 'E', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'U', color: 'white', x: 0}, {letter: 'P', color: 'white', x: 0}, {letter: '!', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'Y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: '\'', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'm', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'k', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'S', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'N', color: 'white', x: 0}, {letter: 'O', color: 'white', x: 0}, {letter: '!', color: 'white', x: 0}]
+    this.thirdSentence = [{letter: 'W', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'S', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'w', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'd', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'j', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'G', color: 'white', x: 0}, {letter: 'I', color: 'white', x: 0}, {letter: 'V', color: 'white', x: 0}, {letter: 'E', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'U', color: 'white', x: 0}, {letter: 'P', color: 'white', x: 0}, {letter: '!', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'Y', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'u', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'r', color: 'white', x: 0}, {letter: 'e', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'g', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'n', color: 'white', x: 0}, {letter: 'g', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'f', color: 'white', x: 0}, {letter: 'a', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 'l', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'h', color: 'white', x: 0}, {letter: 'i', color: 'white', x: 0}, {letter: 's', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'S', color: 'white', x: 0}, {letter: 't', color: 'white', x: 0}, {letter: 'o', color: 'white', x: 0}, {letter: 'p', color: 'white', x: 0}, {letter: '.', color: 'white', x: 0}, {letter: ' ', color: 'white', x: 0}, {letter: 'N', color: 'white', x: 0}, {letter: 'O', color: 'white', x: 0}, {letter: '!', color: 'white', x: 0}]
 
     this.index = 0
     this.endIndex = this.testText.length - 1
@@ -57,6 +67,8 @@ class mainScene {
     if (Phaser.Math.Between(0, 10000) == 1) {
         this.sound.play('laugh')
     }
+
+    
 
     if(this.timeLeft < 1){
       this.timer.setColor('red')
@@ -165,7 +177,7 @@ class mainScene {
         if(this.index < this.endIndex){
           this.index++
           this.arrow.x = this.thirdSentence[this.index].x
-          if(this.index == 57){
+          if(this.index == 56){
             this.arrow.y = 345
             this.arrayY += 15
           }
@@ -310,7 +322,7 @@ class mainScene {
             repeat: this.timeLeft - 1
           })
     }else if(this.currentSentence == 4){
-      this.timeLeft = 30
+      this.timeLeft = 50
       this.letterX = 70
       this.letterY = 340
       this.arrayY = 340
@@ -341,7 +353,7 @@ class mainScene {
         this.ArrayText = this.add.text(this.letterX, this.letterY, this.thirdSentence[i].letter, this.style).setOrigin(0.5, 0.5)
         this.thirdSentence[i].x = this.letterX
         this.letterX += 10
-        if(i == 57){
+        if(i == 56){
           this.letterX = 70
           this.letterY += 15
         }
@@ -363,9 +375,58 @@ class mainScene {
             },
             repeat: this.timeLeft - 1
           })
+    }else if(this.currentSentence == 6){
+      this.index = 0
+      this.theLight.visible = true
+      this.delayTimer = this.time.addEvent({
+            delay: 1000,
+            callback: ()=>{
+              if(this.index < 7){
+                this.theLight.setFrame(this.index)
+              }else if (this.index == 7){
+                this.house.visible = true
+                this.theLight.setAlpha(0.8)
+              }else if (this.index == 8){
+                this.theLight.setAlpha(0.5)
+              }else if (this.index == 9){
+                this.theLight.setAlpha(0.3)
+              }else if (this.index == 10){
+                this.theLight.setAlpha(0.1)
+              }else if(this.index == 12){
+                this.currentSentence += 1
+                this.index = 0
+                this.projectSentence()
+              }
+              
+              this.index++
+            },
+            repeat: 12
+          })
+    }else if(this.currentSentence == 7){
+                this.timer.setColor('black')
+                this.theLight.setAlpha(1).setFrame(6)
+                this.timer.setText(this.finalDialogue[this.index])
+                this.timer.depth = 11
+                this.delayTimer = this.time.addEvent({
+                delay: 3000,
+                callback: ()=>{
+                  this.timer.setColor('black')
+                  this.timer.setText(this.finalDialogue[this.index])
+                  this.index++
+                  if(this.index > this.finalDialogue.length){
+                    this.currentSentence +=  1
+                    this.index = 0
+                    this.projectSentence()
+                  }
+                },
+                repeat: this.finalDialogue.length - 1
+              })
+    }else if(this.currentSentence == 8){
+      this.timer.setText('Congrats')
+      this.totalMistakeText = this.add.text(350, 220, 'Total mistakes: ' + this.totalMistakes, { font: '15px Helvetica', fill: '#000000ff' }).setOrigin(0.5, 0.5)
+      this.totalMistakeText.depth = 12
     }
   }
-
 }
 
 // Create the game
