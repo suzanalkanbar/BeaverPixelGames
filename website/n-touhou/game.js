@@ -23,6 +23,8 @@ class mainScene {
         */
         const edgeLeft = this.add.rectangle(100, 200, 200, 400, 0x000000)
         const edgeRight = this.add.rectangle(600, 200, 200, 400, 0x000000)
+        const healthBar = this.add.rectangle(575, 375, 50, 350, 0x00ff00).setOrigin(0, 1)
+        this.healthBar = this.physics.add.existing(healthBar)
         const reimu = this.add.rectangle(350, 350, 10, 10, 0xff0000)
         this.reimuHitbox = this.physics.add.existing(reimu)
         this.flandreHitbox = this.physics.add.sprite(350, 100, 'flandreHitbox')
@@ -33,7 +35,11 @@ class mainScene {
         this.eneBullet = this.add.group({ defaultKey: 'bullet' })
         this.Timer = 0
         this.score = 0
-        this.scoreText = this.add.text(20, 20, 'score: ' + this.score, { font: '20px Arial', fill: '#fff' });
+        this.gameOver = false
+        this.lives = 3
+        this.invuln = false
+        this.enemyHealth = 1000
+        this.phase = 1
     }
 
 
@@ -42,62 +48,95 @@ class mainScene {
         This method is called 60 times per second after create() 
         It will handle all the game's logic, like movements
         */
-       if(this.gameOver = true){
-        this.gameOverText = this.add.text(350,200,'GAME OVER',{font:'40px Arial',fill:'#f00'})
-       }else{
-        var pointer = this.input.activePointer
-        if (pointer.x > 200 && pointer.x < 500) {
-            if (this.distance(pointer, this.reimuHitbox) > 10) {
-                this.follow(this.reimuHitbox, pointer)
-            } else {
-                this.reimuHitbox.x = pointer.x
-                this.reimuHitbox.y = pointer.y
+        if (this.gameOver == true) {
+            this.gameOverText = this.add.text(350, 200, 'GAME OVER', { font: '40px Arial', fill: '#f00' }).setOrigin(0.5,0.5)
+        } else if (this.victory == true) {
+            this.victoryText = this.add.text(350, 200, 'You Win!', { font: '40px Arial', fill: '#ff0' }).setOrigin(0.5,0.5)
+        }
+        else {
+            var pointer = this.input.activePointer
+            if (pointer.x > 200 && pointer.x < 500) {
+                if (this.distance(pointer, this.reimuHitbox) > 10) {
+                    this.follow(this.reimuHitbox, pointer)
+                } else {
+                    this.reimuHitbox.x = pointer.x
+                    this.reimuHitbox.y = pointer.y
+                }
             }
-        }
-        this.fireCooldown = 7
-        this.Timer++
-        if (this.Timer % this.fireCooldown == 0) {
-            this.bulletl.create(this.reimuHitbox.x - 6, this.reimuHitbox.y - 5, 'bullet')
-            this.bulletm.create(this.reimuHitbox.x - 6, this.reimuHitbox.y, 'bullet')
-            this.bulletm.create(this.reimuHitbox.x, this.reimuHitbox.y, 'bullet')
-            this.bulletm.create(this.reimuHitbox.x + 6, this.reimuHitbox.y, 'bullet')
-            this.bulletr.create(this.reimuHitbox.x + 6, this.reimuHitbox.y - 5, 'bullet')
-        }
-        if (this.Timer % 60 == 0) {
-            this.enemyFire()
-        }
-        if (this.Timer % 180 == 0) {
-            this.flandreDestination.x = Math.round(Math.random() * 250 + 225)
-            this.flandreDestination.y = Math.round(Math.random() * 100 + 25)
-        }
-        if (this.distance(this.flandreDestination, this.flandreHitbox) < 10) {
-            this.flandreHitbox.x = this.flandreDestination.x
-            this.flandreHitbox.y = this.flandreDestination.y
-        } else {
-            this.follow(this.flandreHitbox, this.flandreDestination)
-        }
-        Phaser.Actions.IncXY(this.bulletl.getChildren(), -1.5, -11)
-        Phaser.Actions.IncY(this.bulletm.getChildren(), -12)
-        Phaser.Actions.IncXY(this.bulletr.getChildren(), 1.5, -11)
-        let enemyBulletList = this.eneBullet.getChildren()
-        for (let i=0;i<enemyBulletList.length;i++){
-            enemyBulletList[i].x += enemyBulletList[i].velocity[0]
-            enemyBulletList[i].y += enemyBulletList[i].velocity[1]
-            enemyBulletList[i].velocity[0] += enemyBulletList[i].acceleration[0]
-            enemyBulletList[i].velocity[1] += enemyBulletList[i].acceleration[1]
-        }
-        this.killOob(this.bulletl)
-        this.killOob(this.bulletm)
-        this.killOob(this.bulletr)
-        this.killOob(this.eneBullet)
-        this.hitEnemy(this.bulletl)
-        this.hitEnemy(this.bulletm)
-        this.hitEnemy(this.bulletr)
+            this.fireCooldown = 7
+            this.Timer++
+            if (this.Timer % this.fireCooldown == 0) {
+                this.bulletl.create(this.reimuHitbox.x - 6, this.reimuHitbox.y - 5, 'bullet')
+                this.bulletm.create(this.reimuHitbox.x - 6, this.reimuHitbox.y, 'bullet')
+                this.bulletm.create(this.reimuHitbox.x, this.reimuHitbox.y, 'bullet')
+                this.bulletm.create(this.reimuHitbox.x + 6, this.reimuHitbox.y, 'bullet')
+                this.bulletr.create(this.reimuHitbox.x + 6, this.reimuHitbox.y - 5, 'bullet')
+            }
+            if (this.Timer % 60 == 0) {
+                this.enemyFire()
+            }
+            if (this.Timer % 180 == 0) {
+                this.flandreDestination.x = Math.round(Math.random() * 250 + 225)
+                this.flandreDestination.y = Math.round(Math.random() * 100 + 25)
+            }
+            if (this.distance(this.flandreDestination, this.flandreHitbox) < 10) {
+                this.flandreHitbox.x = this.flandreDestination.x
+                this.flandreHitbox.y = this.flandreDestination.y
+            } else {
+                this.follow(this.flandreHitbox, this.flandreDestination)
+            }
+            Phaser.Actions.IncXY(this.bulletl.getChildren(), -1.5, -11)
+            Phaser.Actions.IncY(this.bulletm.getChildren(), -12)
+            Phaser.Actions.IncXY(this.bulletr.getChildren(), 1.5, -11)
+            let enemyBulletList = this.eneBullet.getChildren()
+            for (let i = 0; i < enemyBulletList.length; i++) {
+                enemyBulletList[i].x += enemyBulletList[i].velocity[0]
+                enemyBulletList[i].y += enemyBulletList[i].velocity[1]
+                if (enemyBulletList[i].type == 'straight') {
+                } else {
+                    if (enemyBulletList[i].type == 'homing') {
+                        if (this.reimuHitbox.x > enemyBulletList[i].x) {
+                            if (this.reimuHitbox.y > enemyBulletList[i].y) {
+                                enemyBulletList[i].acceleration = [0.01, 0.01]
+                            } else { enemyBulletList[i].acceleration = [0.01, -0.01] }
+                        }
+                        if (this.reimuHitbox.x < enemyBulletList[i].x) {
+                            if (this.reimuHitbox.y > enemyBulletList[i].y) {
+                                enemyBulletList[i].acceleration = [-0.01, 0.01]
+                            } else { enemyBulletList[i].acceleration = [-0.01, -0.01] }
+                        }
+                    }
+                    enemyBulletList[i].velocity[0] += enemyBulletList[i].acceleration[0]
+                    enemyBulletList[i].velocity[1] += enemyBulletList[i].acceleration[1]
+                }
+            }
+            this.killOob(this.bulletl)
+            this.killOob(this.bulletm)
+            this.killOob(this.bulletr)
+            this.killOob(this.eneBullet)
+            this.hitEnemy(this.bulletl)
+            this.hitEnemy(this.bulletm)
+            this.hitEnemy(this.bulletr)
+            if (!this.invuln) {
+                this.hitPlayer(this.eneBullet)
+            }
+            if (this.enemyHealth > 0) {
+                this.enemyHealth = 1000 - this.score
+                this.healthBar.displayHeight = (this.enemyHealth / 1000) * 350
+            } else if (this.phase == 1) {
+                this.phase = 2
+                this.score -= 1000
+                this.enemyHealth = 1000
+                this.healthBar.displayHeight = (this.enemyHealth / 1000) * 350
+            } else {
+                this.victory = true
+            }
 
 
 
 
-    }}
+        }
+    }
 
     /* VVV Put any other functions and code down here VVV */
     distance(one, two) {
@@ -115,32 +154,41 @@ class mainScene {
     killOob(groupy) {
         let listy = groupy.getChildren()
         for (let i = 0; i < listy.length; i++) {
-            if (listy[i].y < 0 || listy[i].x < 200 || listy[i].x > 500) {
+            if (listy[i].y < 0 || listy[i].x < 200 || listy[i].x > 500 || listy[i].y > 400) {
                 listy[i].destroy()
             }
         }
     }
-    hitPlayer(groupy){
+    hitPlayer(groupy) {
         let listy = groupy.getChildren()
-        let up = this.reimuHitbox.y- 5
-        let down = this.reimuHitbox.y+5
-        let right = this.reimuHitbox.x+5
-        let left = this.reimuHitbox.x-5
+        let up = this.reimuHitbox.y - 5
+        let down = this.reimuHitbox.y + 5
+        let right = this.reimuHitbox.x + 5
+        let left = this.reimuHitbox.x - 5
         for (let i = 0; i < listy.length; i++) {
             if (this.checkOverlap(listy[i], up, down, right, left)) {
                 this.die()
             }
-    }}
-    die(){
-        this.lives -=1
-        this.reimuHitbox.setAlpha(0)
-        if(this.lives == 0){
-            this.gameOver = true
-        }else {
-            this.reimuHitbox.setAlpha(0.5)
-            this.invuln = true
-            
         }
+    }
+    die() {
+        this.lives -= 1
+        this.reimuHitbox.setAlpha(0)
+        if (this.lives < 0) {
+            this.gameOver = true
+        } else {
+            this.invuln = true
+            this.gonetime = this.time.addEvent({ delay: 500, callback: this.respawn, callbackScope: this })
+
+        }
+    }
+    respawn() {
+        this.reimuHitbox.setAlpha(0.5)
+        this.timer = this.time.addEvent({ delay: 1000, callback: this.reActivate, callbackScope: this })
+    }
+    reActivate() {
+        this.invuln = false
+        this.reimuHitbox.setAlpha(1)
     }
     hitEnemy(groupy) {
         let listy = groupy.getChildren()
@@ -152,7 +200,6 @@ class mainScene {
             if (this.checkOverlap(listy[i], up, down, right, left)) {
                 this.score += 1
                 listy[i].destroy()
-                this.scoreText.setText('score: ' + this.score)
             }
         }
     }
@@ -164,28 +211,77 @@ class mainScene {
         }
         return false
     }
-    enemyFire(){
-        if (Math.floor(Math.random()*1) == 0){
+    enemyFire() {
+        let attack = Math.floor(Math.random() * 3)
+        if (attack == 0) {
+            this.sidesAttack()
+        } else if (attack == 1) {
             this.circleAttack()
+        } else if (attack = 2) {
+            this.homingAttack()
         }
     }
     circleAttack() {
         let speeds = []
         for (let i = 0; i < 16; i++) {
-            speeds.push(this.vector(2,i*22.5))
+            speeds.push(this.vector(2, i * 22.5))
             this.eneBullet.create(this.flandreHitbox.x, this.flandreHitbox.y, 'redBullet')
         }
         let listy = this.eneBullet.getChildren()
-        for (let i = 0; i<listy.length;i++){
-            if(listy[i].velocity == undefined){
-                listy[i].velocity = speeds[i%speeds.length]
-                listy[i].acceleration = [0,0]
+        for (let i = 0; i < listy.length; i++) {
+            if (listy[i].velocity == undefined) {
+                listy[i].velocity = speeds[i % speeds.length]
+                listy[i].type = 'straight'
+                listy[i].acceleration = [0, 0]
             }
         }
     }
-    vector(speed,angle){
-        let radians = angle*(Math.PI/180)
-        return[speed*Math.cos(radians),speed*Math.sin(radians)]
+    sidesAttack() {
+        let speeds = []
+        for (let i = 0; i < 8; i++) {
+            speeds.push(this.vector(1, 0))
+            this.eneBullet.create(200, 40 + 40 * i, 'orangeBullet')
+        }
+        let listy = this.eneBullet.getChildren()
+        for (let i = 0; i < listy.length; i++) {
+            if (listy[i].velocity == undefined) {
+                listy[i].velocity = speeds[i % speeds.length]
+                listy[i].type = 'straight'
+                listy[i].acceleration = [0, 0]
+            }
+        }
+        speeds = []
+        for (let i = 0; i < 8; i++) {
+            speeds.push(this.vector(1, 180))
+            this.eneBullet.create(500, 60 + 40 * i, 'orangeBullet')
+        }
+        listy = this.eneBullet.getChildren()
+        for (let i = 0; i < listy.length; i++) {
+            if (listy[i].velocity == undefined) {
+                listy[i].velocity = speeds[i % speeds.length]
+                listy[i].type = 'straight'
+                listy[i].acceleration = [0, 0]
+            }
+        }
+    }
+    homingAttack() {
+        let speeds = []
+        for (let i = 0; i < 4; i++) {
+            speeds.push(this.vector(1, 45 + i * 90))
+            this.eneBullet.create(this.flandreHitbox.x, this.flandreHitbox.y, 'yellowBullet')
+        }
+        let listy = this.eneBullet.getChildren()
+        for (let i = 0; i < listy.length; i++) {
+            if (listy[i].velocity == undefined) {
+                listy[i].velocity = speeds[i % speeds.length]
+                listy[i].type = 'homing'
+                listy[i].acceleration = [0, 0]
+            }
+        }
+    }
+    vector(speed, angle) {
+        let radians = angle * (Math.PI / 180)
+        return [speed * Math.cos(radians), speed * Math.sin(radians)]
     }
 }
 
