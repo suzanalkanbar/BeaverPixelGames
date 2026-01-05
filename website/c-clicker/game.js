@@ -4,18 +4,18 @@ function updateClickText(scene, clicks) {
   scene.clickText.setText('Clicks: ' + clicks + 'ฅ');
 }
 
-function click(value, scene, playAnimation = true) {
+function click(value, scene, playAnimation = true, sound_probability = 1) {
   clicks += value;
   updateClickText(scene, clicks);
   // Animatie wanneer je klikt
   if (playAnimation){
-    scene.tweens.add({
-      targets: scene.lulu,
-      scaleX: 0.05,
-      scaleY: 0.05,
-      duration: 40,
-      yoyo: true
-    });
+      scene.luluTween.restart();
+  }
+  // Geluidseffect bij klikken
+  if (Math.random() < sound_probability) {
+    const rand_int = Phaser.Math.Between(1, 4);
+    scene.sound.play('meow'+String(rand_int));
+    console.log('play sound meow'+String(rand_int));
   }
 }
 
@@ -45,7 +45,7 @@ class Poppy {
   }
     
   hit() {
-    click(this.value, this.scene);
+    click(this.value, this.scene, sound_probability=0.1);
     // this.hitAnimation();
   }
 
@@ -74,6 +74,11 @@ const mainScene = new Phaser.Scene('mainScene');
 
 mainScene.preload = function () {
   this.load.image('lulu', 'c-clicker/assets/Lulu.png');
+  this.load.audio('meow1', 'c-clicker/assets/lulu_meow-01.mp3');
+  this.load.audio('meow2', 'c-clicker/assets/lulu_meow-02.mp3');
+  this.load.audio('meow3', 'c-clicker/assets/lulu_meow-03.mp3');
+  this.load.audio('meow4', 'c-clicker/assets/lulu_meow-04.mp3');
+
 };
 
 mainScene.create = function () {
@@ -86,6 +91,7 @@ mainScene.create = function () {
   }).setOrigin(0.5);
 
 
+  // clickable afbeelding
   this.lulu = this.add.image(350, 220, 'lulu')
     .setInteractive({ useHandCursor: true });
 
@@ -96,6 +102,16 @@ mainScene.create = function () {
   this.lulu.on('pointerdown', () => {
     click(1, this, this.lulu);
     // poppy = new Poppy(this, 0, 0, 'lulu');
+  });
+
+  // create animation once
+  this.luluTween = this.tweens.add({
+    targets: this.lulu,
+    scaleX: 0.05,
+    scaleY: 0.05,
+    duration: 40,
+    yoyo: true,
+    paused: true
   });
 
   // SHOP
