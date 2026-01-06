@@ -62,7 +62,7 @@ class mainScene {
     this.flowered = false;
     this.invincible = false;
     this.levelComplete = false;
-    this.level = 2;
+    this.level = 1;
 
     this.nextLevelButton = this.add.image(0, 300, 'next').setOrigin(0.5, 0.5).setInteractive().on('pointerdown', () => {
       this.player.visible = true
@@ -568,12 +568,16 @@ class mainScene {
           this.player.setFrame(1);
         }else if(this.level == 2){
           this.player.setFrame(11);
+        }else if(this.level == 3){
+          this.player.setFrame(21);
         }
       }else if(this.delay < 30){
         if(this.level == 1){
           this.player.setFrame(2);
         }else if(this.level == 2){
           this.player.setFrame(12);
+        }else if(this.level == 3){
+          this.player.setFrame(22);
         }
       }else {
         this.delay = 0
@@ -590,12 +594,16 @@ class mainScene {
           this.player.setFrame(3);
         }else if(this.level == 2){
           this.player.setFrame(13);
+        }else if(this.level == 3){
+          this.player.setFrame(23);
         }
       }else if(this.delay < 30){
         if(this.level == 1){
           this.player.setFrame(4);
         }else if(this.level == 2){
           this.player.setFrame(14);
+        }else if(this.level == 3){
+          this.player.setFrame(24);
         }
       }else {
         this.delay = 0
@@ -609,6 +617,8 @@ class mainScene {
           this.player.setFrame(0);
         }else if(this.level == 2){
           this.player.setFrame(10);
+        }else if(this.level == 3){
+          this.player.setFrame(20);
         }
     }
 
@@ -630,12 +640,16 @@ class mainScene {
           this.player.setFrame(6);
         }else if(this.level == 2){
           this.player.setFrame(16);
+        }else if(this.level == 3){
+          this.player.setFrame(26);
         }
       }else if(this.delay < 30){
         if(this.level == 1){
           this.player.setFrame(7);
         }else if(this.level == 2){
           this.player.setFrame(17);
+        }else if(this.level == 3){
+          this.player.setFrame(27);
         }
       }else {
         this.delay = 0
@@ -652,12 +666,16 @@ class mainScene {
           this.player.setFrame(8);
         }else if(this.level == 2){
           this.player.setFrame(18);
+        }else if(this.level == 3){
+          this.player.setFrame(28);
         }
       }else if(this.delay < 30){
         if(this.level == 1){
           this.player.setFrame(9);
         }else if(this.level == 2){
           this.player.setFrame(19);
+        }else if(this.level == 3){
+          this.player.setFrame(29);
         }
       }else {
         this.delay = 0
@@ -671,6 +689,8 @@ class mainScene {
           this.player.setFrame(5);
         }else if(this.level == 2){
           this.player.setFrame(15);
+        }else if(this.level == 3){
+          this.player.setFrame(25);
         }
     }
 
