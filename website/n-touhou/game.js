@@ -38,8 +38,8 @@ class mainScene {
         this.gameOver = false
         this.lives = 3
         this.invuln = false
-        this.enemyHealth = 1000
-        this.phase = 1
+        this.enemyHealth = 250
+        this.phase = 0
     }
 
 
@@ -49,9 +49,9 @@ class mainScene {
         It will handle all the game's logic, like movements
         */
         if (this.gameOver == true) {
-            this.gameOverText = this.add.text(350, 200, 'GAME OVER', { font: '40px Arial', fill: '#f00' }).setOrigin(0.5,0.5)
+            this.gameOverText = this.add.text(350, 200, 'GAME OVER', { font: '40px Arial', fill: '#f00' }).setOrigin(0.5, 0.5)
         } else if (this.victory == true) {
-            this.victoryText = this.add.text(350, 200, 'You Win!', { font: '40px Arial', fill: '#ff0' }).setOrigin(0.5,0.5)
+            this.victoryText = this.add.text(350, 200, 'You Win!', { font: '40px Arial', fill: '#ff0' }).setOrigin(0.5, 0.5)
         }
         else {
             var pointer = this.input.activePointer
@@ -72,8 +72,14 @@ class mainScene {
                 this.bulletm.create(this.reimuHitbox.x + 6, this.reimuHitbox.y, 'bullet')
                 this.bulletr.create(this.reimuHitbox.x + 6, this.reimuHitbox.y - 5, 'bullet')
             }
-            if (this.Timer % 60 == 0) {
-                this.enemyFire()
+            if (this.phase == 5) {
+                if (this.Timer % 45 == 0) {
+                    this.enemyFire()
+                }
+            } else {
+                if (this.Timer % 60 == 0) {
+                    this.enemyFire()
+                }
             }
             if (this.Timer % 180 == 0) {
                 this.flandreDestination.x = Math.round(Math.random() * 250 + 225)
@@ -105,6 +111,8 @@ class mainScene {
                                 enemyBulletList[i].acceleration = [-0.01, 0.01]
                             } else { enemyBulletList[i].acceleration = [-0.01, -0.01] }
                         }
+                    } else if (enemyBulletList[i].type == 'wavey') {
+                        enemyBulletList[i].acceleration = [0.3 * Math.cos(this.Timer), 0.3 * Math.sin(this.Timer)]
                     }
                     enemyBulletList[i].velocity[0] += enemyBulletList[i].acceleration[0]
                     enemyBulletList[i].velocity[1] += enemyBulletList[i].acceleration[1]
@@ -121,13 +129,13 @@ class mainScene {
                 this.hitPlayer(this.eneBullet)
             }
             if (this.enemyHealth > 0) {
-                this.enemyHealth = 1000 - this.score
-                this.healthBar.displayHeight = (this.enemyHealth / 1000) * 350
-            } else if (this.phase == 1) {
-                this.phase = 2
-                this.score -= 1000
-                this.enemyHealth = 1000
-                this.healthBar.displayHeight = (this.enemyHealth / 1000) * 350
+                this.enemyHealth = 250 - this.score
+                this.healthBar.displayHeight = (this.enemyHealth / 250) * 350
+            } else if (this.phase < 5) {
+                this.phase++
+                this.score -= 250
+                this.enemyHealth = 250
+                this.healthBar.displayHeight = (this.enemyHealth / 250) * 350
             } else {
                 this.victory = true
             }
@@ -212,19 +220,47 @@ class mainScene {
         return false
     }
     enemyFire() {
-        let attack = Math.floor(Math.random() * 3)
-        if (attack == 0) {
-            this.sidesAttack()
-        } else if (attack == 1) {
+        if (this.phase == 0) {
             this.circleAttack()
-        } else if (attack = 2) {
+        } else if (this.phase == 1) {
+            if (Math.floor(Math.random() * 2) == 0) {
+                this.leftAttack()
+            } else { this.rightAttack() }
+        } else if (this.phase == 2) {
             this.homingAttack()
+        } else if (this.phase == 3) {
+            this.waveAttack()
+        } else {
+            let attack = Math.floor(Math.random() * 4)
+            if (attack == 0) {
+                this.waveAttack()
+            } else if (attack == 1) {
+                this.circleAttack()
+            } else if (attack == 2) {
+                this.homingAttack()
+            } else if (attack == 3) {
+                this.leftAttack()
+                if (this.phase == 5) {
+                    this.rightAttack()
+                }
+            } else if (attack == 4) {
+                this.rightAttack()
+                if (this.phase == 5) {
+                    this.leftAttack()
+                }
+            }
         }
     }
     circleAttack() {
         let speeds = []
-        for (let i = 0; i < 16; i++) {
-            speeds.push(this.vector(2, i * 22.5))
+        let amount = 16
+        let angle = 22.5
+        if (this.phase == 5) {
+            amount = 32
+            angle = 11.25
+        }
+        for (let i = 0; i < amount; i++) {
+            speeds.push(this.vector(2, i * angle))
             this.eneBullet.create(this.flandreHitbox.x, this.flandreHitbox.y, 'redBullet')
         }
         let listy = this.eneBullet.getChildren()
@@ -236,7 +272,7 @@ class mainScene {
             }
         }
     }
-    sidesAttack() {
+    leftAttack() {
         let speeds = []
         for (let i = 0; i < 8; i++) {
             speeds.push(this.vector(1, 0))
@@ -250,12 +286,14 @@ class mainScene {
                 listy[i].acceleration = [0, 0]
             }
         }
-        speeds = []
+    }
+    rightAttack() {
+        let speeds = []
         for (let i = 0; i < 8; i++) {
             speeds.push(this.vector(1, 180))
-            this.eneBullet.create(500, 60 + 40 * i, 'orangeBullet')
+            this.eneBullet.create(500, 60 + 40 * i, 'greenBullet')
         }
-        listy = this.eneBullet.getChildren()
+        let listy = this.eneBullet.getChildren()
         for (let i = 0; i < listy.length; i++) {
             if (listy[i].velocity == undefined) {
                 listy[i].velocity = speeds[i % speeds.length]
@@ -266,8 +304,14 @@ class mainScene {
     }
     homingAttack() {
         let speeds = []
-        for (let i = 0; i < 4; i++) {
-            speeds.push(this.vector(1, 45 + i * 90))
+        let amount = 4
+        let angle = 90
+        if (this.phase == 5) {
+            amount = 8
+            angle = 45
+        }
+        for (let i = 0; i < amount; i++) {
+            speeds.push(this.vector(1, 45 + i * angle))
             this.eneBullet.create(this.flandreHitbox.x, this.flandreHitbox.y, 'yellowBullet')
         }
         let listy = this.eneBullet.getChildren()
@@ -275,6 +319,21 @@ class mainScene {
             if (listy[i].velocity == undefined) {
                 listy[i].velocity = speeds[i % speeds.length]
                 listy[i].type = 'homing'
+                listy[i].acceleration = [0, 0]
+            }
+        }
+    }
+    waveAttack() {
+        let speeds = []
+        for (let i = 0; i < 6; i++) {
+            speeds.push(this.vector(1.5, 90))
+            this.eneBullet.create(200 + i * 50, 1, 'purpleBullet')
+        }
+        let listy = this.eneBullet.getChildren()
+        for (let i = 0; i < listy.length; i++) {
+            if (listy[i].velocity == undefined) {
+                listy[i].velocity = speeds[i % speeds.length]
+                listy[i].type = 'wavey'
                 listy[i].acceleration = [0, 0]
             }
         }
