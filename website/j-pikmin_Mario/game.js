@@ -8,9 +8,10 @@ class mainScene {
     this.load.image('easterEgg', 'j-pikmin_Mario/assets/my_avatar-1.png.png')
     this.load.image('bench', 'j-pikmin_Mario/assets/bench.png')
     this.load.image('next', 'j-pikmin_Mario/assets/next.png')
+    this.load.image('sky', 'j-pikmin_Mario/assets/sky.png')
 
     this.load.spritesheet('walking', 
-      'j-pikmin_Mario/assets/pikmin-walk-sheet.png',
+      'j-pikmin_Mario/assets/pikmin.png',
       {frameWidth: 66, frameHeight: 66})
     this.load.spritesheet('grass', 
       'j-pikmin_Mario/assets/grass-spritesheet.png',
@@ -31,6 +32,10 @@ class mainScene {
     this.load.spritesheet('nectarEgg', 
       'j-pikmin_Mario/assets/nectar egg.png',
       {frameWidth: 19, frameHeight: 27}
+    )
+    this.load.spritesheet('skyground', 
+      'j-pikmin_Mario/assets/skyground.png',
+      {frameWidth: 30, frameHeight: 30}
     )
 
     this.load.audio('cry', 'j-pikmin_Mario/assets/cry.mp3')
@@ -67,8 +72,13 @@ class mainScene {
       this.cameras.main.scrollX = this.player.x - 350
       this.levelCompleteText.setText('')
       this.levelComplete = false
-      this.backgroundMusic = this.sound.add('distant spring')
-      this.backgroundMusic.play({loop: true})
+      if(this.level == 2){
+        this.backgroundMusic = this.sound.add('forest of hope')
+        this.backgroundMusic.play({loop: true})
+      }else if(this.level == 3){
+        this.backgroundMusic = this.sound.add('forest navel')
+        this.backgroundMusic.play({loop: true})
+      }
     })
     this.nextLevelButton.visible = false
 
@@ -109,9 +119,14 @@ class mainScene {
     this.backgroundX = -350
     this.background = this.add.image(this.backgroundX, 200, 'background')
     this.background.depth = -1
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 7; i++){
       this.backgroundX += 700
       this.background = this.add.image(this.backgroundX, 200, 'background')
+      this.background.depth = -1
+    }
+    for(let i = 0; i < 7; i++){
+      this.backgroundX += 700
+      this.background = this.add.image(this.backgroundX, 200, 'sky')
       this.background.depth = -1
     }
     
@@ -370,7 +385,6 @@ class mainScene {
 
     // start second level //
     this.grassX += this.spritelength * 14
-    console.log(this.grassX)
 
     //back wall
     for(let i = 0; i < 16; i++){
@@ -395,6 +409,101 @@ class mainScene {
       for(let a = 0; a < this.amount; a++){
         this.grass.create(this.grassX, this.grassY + (this.spritelength * (a+1)) , 'grass', 50)
       }
+      this.grassX += this.spritelength
+    }
+
+
+    this.grassX = 5500
+    this.grassY = 400
+
+    //back wall
+    for(let i = 0; i < 16; i++){
+    this.grass.create(this.grassX - this.spritelength, this.grassY, 'skyground', 0)
+    this.grassY -= this.spritelength
+    }
+
+    this.grassY = 360
+
+    //straight
+    for(let i = 0; i < 13; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY -= 3 * this.spritelength
+    //hole
+    this.grassX += this.spritelength
+
+    //straight
+    for(let i = 0; i < 3; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY -= 3 * this.spritelength
+    //hole
+    this.grassX += this.spritelength * 2
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    //hole
+    this.grassX += this.spritelength * 4
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength
+    //hole
+    this.grassX += this.spritelength * 4
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY -= this.spritelength
+    //hole
+    this.grassX += this.spritelength * 5
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength * 3
+    //hole
+    this.grassX += this.spritelength * 6
+
+    //straight
+    for(let i = 0; i < 6; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY -= this.spritelength * 3
+    //hole
+    this.grassX += this.spritelength * 6
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
       this.grassX += this.spritelength
     }
 
@@ -455,9 +564,17 @@ class mainScene {
       this.player.setVelocityX(160);  
       this.cameras.main.scrollX = this.player.x - 350
        if(this.delay < 15){
-        this.player.setFrame(1);
+        if(this.level == 1){
+          this.player.setFrame(1);
+        }else if(this.level == 2){
+          this.player.setFrame(11);
+        }
       }else if(this.delay < 30){
-        this.player.setFrame(2);
+        if(this.level == 1){
+          this.player.setFrame(2);
+        }else if(this.level == 2){
+          this.player.setFrame(12);
+        }
       }else {
         this.delay = 0
       }
@@ -469,9 +586,17 @@ class mainScene {
       this.player.setVelocityX(-160);   
       this.cameras.main.scrollX = this.player.x - 350
       if(this.delay < 15){
-        this.player.setFrame(3);
+        if(this.level == 1){
+          this.player.setFrame(3);
+        }else if(this.level == 2){
+          this.player.setFrame(13);
+        }
       }else if(this.delay < 30){
-        this.player.setFrame(4);
+        if(this.level == 1){
+          this.player.setFrame(4);
+        }else if(this.level == 2){
+          this.player.setFrame(14);
+        }
       }else {
         this.delay = 0
       }
@@ -480,22 +605,38 @@ class mainScene {
       }
     }else {
       this.player.setVelocityX(0);
-      this.player.setFrame(0);
+      if(this.level == 1){
+          this.player.setFrame(0);
+        }else if(this.level == 2){
+          this.player.setFrame(10);
+        }
     }
 
     if (this.arrow.up.isDown && this.player.body.touching.down) {
       this.sound.play('jump')
       this.delay = 0
-      this.player.setVelocityY(-200);
+      if(this.level == 2){
+        this.player.setVelocityY(-250)
+      }else{
+        this.player.setVelocityY(-200);
+      }
     }
   }else if(this.flowered){
     if (this.arrow.right.isDown) {
       this.player.setVelocityX(160);
       this.cameras.main.scrollX = this.player.x - 350
        if(this.delay < 15){
-        this.player.setFrame(6);
+        if(this.level == 1){
+          this.player.setFrame(6);
+        }else if(this.level == 2){
+          this.player.setFrame(16);
+        }
       }else if(this.delay < 30){
-        this.player.setFrame(7);
+        if(this.level == 1){
+          this.player.setFrame(7);
+        }else if(this.level == 2){
+          this.player.setFrame(17);
+        }
       }else {
         this.delay = 0
       }
@@ -507,9 +648,17 @@ class mainScene {
       this.player.setVelocityX(-160);   
       this.cameras.main.scrollX = this.player.x - 350
       if(this.delay < 15){
-        this.player.setFrame(8);
+        if(this.level == 1){
+          this.player.setFrame(8);
+        }else if(this.level == 2){
+          this.player.setFrame(18);
+        }
       }else if(this.delay < 30){
-        this.player.setFrame(9);
+        if(this.level == 1){
+          this.player.setFrame(9);
+        }else if(this.level == 2){
+          this.player.setFrame(19);
+        }
       }else {
         this.delay = 0
       }
@@ -518,7 +667,11 @@ class mainScene {
       }
     }else {
       this.player.setVelocityX(0);
-      this.player.setFrame(5);
+      if(this.level == 1){
+          this.player.setFrame(5);
+        }else if(this.level == 2){
+          this.player.setFrame(15);
+        }
     }
 
     if (this.arrow.up.isDown && this.player.body.touching.down) {
@@ -535,6 +688,11 @@ class mainScene {
     if(this.player.y <= -50){
       
       //teleport to sky level//
+      this.player.x = 5700
+      this.player.y = 300
+      this.backgroundMusic.stop()
+      this.backgroundMusic = this.sound.add('distant spring')
+      this.backgroundMusic.play({loop: true})
 
     }
 
@@ -682,7 +840,7 @@ class mainScene {
     this.player.x = 200
     this.player.y = 310
     }else if(this.level == 2){
-      this.player.x = 3750
+      this.player.x = 5657
       this.player.y = 310
     }
 
