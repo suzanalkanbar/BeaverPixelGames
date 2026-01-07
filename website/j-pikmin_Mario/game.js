@@ -1,6 +1,4 @@
-// Create the mainScene
 class mainScene {
-  // The three methods currently empty
 
   preload() {
 
@@ -55,35 +53,47 @@ class mainScene {
     this.levelCompleteText.depth = 1;
     this.levelCompleteText.visible = false
 
+    // music //
+
     this.backgroundMusic = this.sound.add('forest of hope')
     this.backgroundMusic.play({loop: true})
+
+    // variables //
 
     this.delay = 0;
     this.flowered = false;
     this.invincible = false;
     this.levelComplete = false;
-    this.level = 1;
+    this.level = 2;
+
+    // next level //
 
     this.nextLevelButton = this.add.image(0, 300, 'next').setOrigin(0.5, 0.5).setInteractive().on('pointerdown', () => {
-      this.player.visible = true
-      this.redOnion.destroy()
       this.level += 1
-      this.player.x = 3750
-      this.cameras.main.scrollX = this.player.x - 350
-      this.levelCompleteText.setText('')
-      this.levelComplete = false
+      this.player.visible = true
       if(this.level == 2){
+        this.redOnion.destroy()
+        this.player.x = 3750
         this.backgroundMusic = this.sound.add('forest of hope')
         this.backgroundMusic.play({loop: true})
       }else if(this.level == 3){
+        this.player.x = 10400
+        this.player.y = 330
         this.backgroundMusic = this.sound.add('forest navel')
         this.backgroundMusic.play({loop: true})
       }
+      this.cameras.main.scrollX = this.player.x - 350
+      this.levelCompleteText.setText('')
+      this.levelComplete = false
     })
     this.nextLevelButton.visible = false
 
+    // key inputs //
+
     this.arrow = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+
+    // animations //
 
     this.anims.create({
         key: 'splash',
@@ -116,6 +126,8 @@ class mainScene {
       repeat: -1
     })
 
+    // background //
+
     this.backgroundX = -350
     this.background = this.add.image(this.backgroundX, 200, 'background')
     this.background.depth = -1
@@ -129,14 +141,25 @@ class mainScene {
       this.background = this.add.image(this.backgroundX, 200, 'sky')
       this.background.depth = -1
     }
+    for(let i = 0; i < 7; i++){
+      this.backgroundX += 700
+      this.background = this.add.image(this.backgroundX, 200, 'background')
+      this.background.depth = -1
+    }
     
-
+    // player //
     this.player = this.physics.add.sprite(200, 310, 'walking', 0);
     this.player.body.setSize(26, 66)
     this.player.body.setGravityY(300);
     this.cameras.main.scrollX = this.player.x - 350
 
+    //onions //
+
     this.redOnion = this.physics.add.sprite(3180, 315, 'onion', 0).setImmovable(true)
+
+    this.yellowOnion = this.physics.add.sprite(9177, 345, 'onion', 1).setImmovable(true)
+
+    // enemy's //
 
     this.bulborb = this.physics.add.group()
     this.bulborb = this.physics.add.sprite(600, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
@@ -144,11 +167,14 @@ class mainScene {
     this.bulborb2 = this.physics.add.sprite(2014, 328, 'bulborb', 0).setScale(1.2).setImmovable(true)
     this.moveEnemyRight()
 
+    // egg //
 
     this.egg = this.physics.add.group()
     this.egg = this.physics.add.sprite(100, 333, 'nectarEgg', 0).setImmovable(true)
     this.egg.depth = 0.1
     this.nectar = this.physics.add.sprite(-330, 390, 'easterEgg', 0).setScale(0.3)
+
+    // static groups //
 
     this.platforms = this.physics.add.staticGroup()
 
@@ -383,7 +409,8 @@ class mainScene {
 
     // end of the first level //
 
-    // start second level //
+    // start second level sky //
+
     this.grassX += this.spritelength * 14
 
     //back wall
@@ -456,13 +483,6 @@ class mainScene {
     //hole
     this.grassX += this.spritelength * 4
 
-    //straight
-    for(let i = 0; i < 2; i++){
-      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
-      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
-      this.grassX += this.spritelength
-    }
-
     this.grassY += this.spritelength
     //hole
     this.grassX += this.spritelength * 4
@@ -507,9 +527,113 @@ class mainScene {
       this.grassX += this.spritelength
     }
 
+    this.grassY += this.spritelength * 2
+    //hole
+    this.grassX += this.spritelength * 7
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength * 2
+    //hole
+    this.grassX += this.spritelength * 8
+
+    //straight
+    for(let i = 0; i < 7; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY -= this.spritelength * 3 +  (this.spritelength / 2)
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY -= this.spritelength * 3 +  (this.spritelength / 2)
+    this.grassX += this.spritelength
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength * 5
+    this.grassX += this.spritelength * 10
+
+    //straight
+    for(let i = 0; i < 3; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength 
+    this.grassX += this.spritelength * 3
+
+    //straight
+    for(let i = 0; i < 2; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength * 2
+    this.grassX += this.spritelength * 6
+
+    //straight
+    for(let i = 0; i < 7; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    this.grassY += this.spritelength * 2
+    this.grassX += this.spritelength * 2
+
+    //straight
+    for(let i = 0; i < 20; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      // this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
 
     // end of the second level //
 
+    // start third level under water //
+
+    this.grassX = 10200
+    this.grassY = 400
+
+    //back wall
+    for(let i = 0; i < 16; i++){
+    this.grass.create(this.grassX - this.spritelength, this.grassY, 'skyground', 0)
+    this.grassY -= this.spritelength
+    }
+
+    this.grassY = 380
+
+    //straight
+    for(let i = 0; i < 13; i++){
+      this.grass.create(this.grassX, this.grassY, 'skyground', 0)
+      this.grass.create(this.grassX, this.grassY + this.spritelength, 'skyground', 0)
+      this.grassX += this.spritelength
+    }
+
+    // end of the third level
+
+
+    //colliders
 
     this.physics.add.collider(this.player, this.grass)
     this.physics.add.collider(this.player, this.egg,)
@@ -519,10 +643,15 @@ class mainScene {
 
     this.physics.add.collider(this.player, this.bench)
 
+    this.physics.add.collider(this.player, this.platforms)
+
+    // onion colliders //
+
+    // red //
     this.physics.add.collider(this.player, this.redOnion, ()=>{
       this.backgroundMusic.stop()
       this.player.setVelocityX(0)
-      this.player.setFrame(0)
+      this.player.setFrame(0) // +10
       this.levelComplete = true
       this.sound.play('victory')
       this.levelCompleteText.x = this.player.x - 180
@@ -539,18 +668,54 @@ class mainScene {
           loop: false
         })
 
-    this.nextLevel = this.time.addEvent({
-          delay: 8000,
+      this.nextLevel = this.time.addEvent({
+            delay: 8000,
+            callback: ()=>{
+              this.nextLevelButton.visible = true
+              this.nextLevelButton.x = this.player.x
+            },
+            loop: false
+          })
+      }).name = 'onion'
+
+      // yellow //
+      this.physics.add.collider(this.player, this.yellowOnion, ()=>{
+      this.backgroundMusic.stop()
+      this.player.setVelocityX(0)
+      this.player.setFrame(10) // +10
+      this.levelComplete = true
+      this.sound.play('victory')
+      this.levelCompleteText.x = this.player.x - 180
+      this.levelCompleteText.setText('level ' + this.level + ' complete')
+      this.levelCompleteText.visible = true
+      this.physics.world.colliders.getActive().find(function(i){return i.name == 'yellowonion'}).destroy();
+
+      this.delayTimer = this.time.addEvent({
+          delay: 3200,
           callback: ()=>{
-            this.nextLevelButton.visible = true
-            this.nextLevelButton.x = this.player.x
+            this.player.visible = false
+            this.yellowOnion.setVelocityY(-50)
           },
           loop: false
         })
-    }).name = 'onion'
 
-    this.physics.add.collider(this.player, this.platforms);
+      this.nextLevel = this.time.addEvent({
+            delay: 8000,
+            callback: ()=>{
+              this.nextLevelButton.visible = true
+              this.nextLevelButton.x = this.player.x
+            },
+            loop: false
+          })
+      }).name = 'yellowonion'
+
+
+      // onion colliders end // 
+
+    
   }
+
+  // end of create
 
   update() {
 
@@ -862,6 +1027,9 @@ class mainScene {
     }else if(this.level == 2){
       this.player.x = 5657
       this.player.y = 310
+    }else if(this.level == 3){
+      this.player.x = 10400
+      this.player.y = 330
     }
 
     this.cameras.main.scrollX = this.player.x - 350
