@@ -585,7 +585,7 @@ box-shadow: none;
   flex: 1;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 16px 40px 16px; /* changed first padding from 120px to 16px*/
+  padding: 16px 16px 40px 16px; 
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -618,14 +618,14 @@ box-shadow: none;
 
 .gameboy-page {
   min-height: 100vh;
-  background-color: #167782;  /* jouw teal basis */
+  background-color: #167782; 
 
   /* diagonale retro lijnen */
   background-image:
     repeating-linear-gradient(
       135deg,
       #136a74  0px,
-      #136a74 30px,   /* donkere strook 16px */
+      #136a74 30px,   
       #136a74 30px,
       rgba(0,0,0,0.18) 62px 
     );
@@ -659,4 +659,60 @@ box-shadow: none;
 .see-more-btn:active {
   transform: scale(0.95);
   box-shadow: none;
+}
+
+
+
+/* advertenties */
+
+.page-with-ads{
+  display: grid;
+  grid-template-columns: 260px 1fr 260px;
+  gap: 24px;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 40px 16px;
+}
+
+.main-content{
+  min-width: 0; 
+}
+
+.side-ads{
+  position: sticky;
+  top: 120px; 
+  height: calc(100vh - 120px);
+
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.ad-card{
+  flex: 1;
+  min-height: 140px; 
+
+  display: block;
+  background: rgba(0,0,0,0.18);
+
+  background-size: cover;
+  background-position: center;
+  text-decoration: none;
+
+  transform: translateZ(0);
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.ad-card:hover{
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+
+@media (max-width: 1100px){
+  .page-with-ads{
+    grid-template-columns: 1fr;
+  }
+  .side-ads{
+    display: none;
+  }
 }

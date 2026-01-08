@@ -73,3 +73,59 @@ document.addEventListener("DOMContentLoaded", () => {
     showGames();
   });
 });
+
+
+//advertenties
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const adSlots = document.querySelectorAll(".ad-card");
+  if (!adSlots.length) return;
+
+  const ADS = [
+    { img: "imgs/hiringevent-add.jpg", url: "https://example.com/1", label: "Ad 1" },
+    { img: "imgs/summercamp-add.jpg", url: "https://example.com/2", label: "Ad 2" },
+    { img: "imgs/travel-add.avif", url: "https://example.com/3", label: "Ad 3" },
+    { img: "imgs/blackfriday-add.jpg", url: "https://example.com/4", label: "Ad 4" },
+    { img: "imgs/ijs-add.jpg", url: "https://example.com/5", label: "Ad 5" },
+    { img: "imgs/mac-add2.jpg", url: "https://example.com/6", label: "Ad 6" },
+    { img: "imgs/coke.jpg", url: "https://example.com/7", label: "Ad 7" },
+    { img: "imgs/banner-ad-example-travel.webp", url: "https://example.com/8", label: "Ad 8" },
+  ];
+
+  function randomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pickRandomAd(exceptUrl) {
+    const pool = ADS.filter(ad => ad.url !== exceptUrl);
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function applyAd(el, ad) {
+    el.style.backgroundImage = `url('${ad.img}')`;
+    el.href = ad.url;
+    el.setAttribute("aria-label", ad.label);
+  }
+
+  function scheduleNextSwap(el) {
+    const delay = randomBetween(3000, 18000); 
+
+    setTimeout(() => {
+      const currentUrl = el.href;
+      const nextAd = pickRandomAd(currentUrl);
+      applyAd(el, nextAd);
+
+      scheduleNextSwap(el);
+    }, delay);
+  }
+
+  adSlots.forEach(el => {
+    const startAd = ADS[Math.floor(Math.random() * ADS.length)];
+    applyAd(el, startAd);
+
+    setTimeout(() => {
+      scheduleNextSwap(el);
+    }, randomBetween(1000, 5000));
+  });
+});
