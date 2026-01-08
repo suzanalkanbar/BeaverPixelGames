@@ -1,13 +1,16 @@
+// Globale variabelen
+
 let clicks = 0;
-// Values to play with
-let bonus_poppy = {bought: 0, value: 1, delay: 1, price: 10}; // globale variabele voor poppy bonus. Value = aantal clicks per hit, delay = seconden tussen hits, price = kosten in clicks
-let bonus_fish = {time_interval_min: 10, time_interval_max: 60, value: 0.1, min_value:10, speed: 0.06, lifetime: 6}; // time interval in seconden tussen vissen, value = aantal clicks per vis als deel van totaal aantal clicks, lifetime = seconden dat de vis blijft bestaan
+let clicks_per_second = 0;
+// Cijfertjes om mee te spelen voor bonussen
+let bonus_poppy = { bought: 0, value: 1, delay: 1, price: 10 }; // globale variabele voor poppy bonus. Value = aantal clicks per hit, delay = seconden tussen hits, price = kosten in clicks
+let bonus_fish = { time_interval_min: 10, time_interval_max: 60, value: 0.1, min_value: 10, speed: 0.06, lifetime: 6 }; // time interval in seconden tussen vissen, value = aantal clicks per vis als deel van totaal aantal clicks, lifetime = seconden dat de vis blijft bestaan
 
 function updateClickText(scene, clicks) {
   scene.clickText.setText('Clicks: ' + clicks + 'ฅ');
 }
 
-function click(value, scene, playAnimation = true, sound_probability = 1, text_location = [350,200]) {
+function click(value, scene, playAnimation = true, sound_probability = 1, text_location = [350, 200]) {
   clicks += value;
   updateClickText(scene, clicks);
   // Animatie wanneer je klikt
@@ -51,9 +54,19 @@ class Poppy {
     if (!this.buy()) return; // probeer te kopen, als niet genoeg clicks, stop hier
     bonus_poppy.bought += 1;
     bonus_poppy.price = Math.floor(bonus_poppy.price * 1.3); // verhoog de prijs met 30% (afgerond naar beneden)
-    scene.poppyButton.setText('Buy Poppy for ' + String(bonus_poppy.price) + ' ฅ'); // update de prijs in de shop
+    scene.poppyButtonText.setText('Buy Poppy for ' + String(bonus_poppy.price) + ' ฅ'); // update de prijs in de shop
     this.addToTimer(); // start de timer om punten toe te voegen
     this.startAnimation(centerX, centerY, img);
+  }
+
+  buy() {
+    if (clicks >= bonus_poppy.price) {
+      clicks -= bonus_poppy.price;
+      updateClickText(this.scene, clicks);
+      clicks_per_second += bonus_poppy.value / bonus_poppy.delay;
+      this.scene.cpsText.setText('Stonks: ' + clicks_per_second.toFixed(1) + 'ฅ/s');
+      return true;
+    }
   }
 
   // functie die de bonus aan de timer toevoegt
@@ -99,14 +112,6 @@ class Poppy {
     // Animatie wanneer de bonus een hit maakt, bijvoorbeeld een korte size change of pootje
   }
 
-  buy() {
-    if (clicks >= bonus_poppy.price) {
-      clicks -= bonus_poppy.price;
-      updateClickText(this.scene, clicks);
-      return true;
-    }
-  }
-
   // functie om de sprite te vernietigen (indien nodig)
   destroy() {
     this.sprite.destroy();
@@ -125,7 +130,7 @@ class Fish {
     // create sprite
     this.sprite = this.scene.add.image(this.x, this.y, img).setScale(0.07).setInteractive({ useHandCursor: true });
     this.sprite.on('pointerdown', () => {
-      click(Math.max(bonus_fish.min_value, Math.floor(clicks*bonus_fish.value)), this.scene, false, 1, [this.x, this.y]);
+      click(Math.max(bonus_fish.min_value, Math.floor(clicks * bonus_fish.value)), this.scene, false, 1, [this.x, this.y]);
       this.sprite.destroy();
     });
 
@@ -139,7 +144,7 @@ class Fish {
   update(time, delta) {
     this.x += this.x_speed * delta;
     this.y += this.y_speed * delta;
-  // Horizontal bounce (0 to 370)
+    // Horizontal bounce (0 to 370)
     if (this.x < 0) {
       this.x = 0;
       this.x_speed *= -1;
@@ -147,17 +152,17 @@ class Fish {
       this.x = 370;
       this.x_speed *= -1;
     }
-  // Vertical bounce (0 to 400)
-  if (this.y < 0) {
-    this.y = 0;
-    this.y_speed *= -1;
-  } else if (this.y > 400) {
-    this.y = 400;
-    this.y_speed *= -1;
-  }
+    // Vertical bounce (0 to 400)
+    if (this.y < 0) {
+      this.y = 0;
+      this.y_speed *= -1;
+    } else if (this.y > 400) {
+      this.y = 400;
+      this.y_speed *= -1;
+    }
     this.sprite.setPosition(this.x, this.y);
   }
-  
+
 }
 
 // De game
@@ -176,8 +181,6 @@ mainScene.preload = function () {
 
 mainScene.create = function () {
   // counter tekst
-  bonus_poppy = {bought: 0, value: 1, delay: 1, price: 10}; // globale variabele voor poppy bonus. Value = aantal clicks per hit, delay = seconden tussen hits, price = kosten in clicks
-
   this.clickText = this.add.text(200, 30, 'Clicks: 0ฅ', {
     fontSize: '24px',
     color: '#ffffff',
@@ -185,7 +188,17 @@ mainScene.create = function () {
     strokeThickness: 1
   }).setOrigin(0.5);
 
+  // clicks / second tekst
+  this.cpsText = this.add.text(200, 60, 'Stonks: 0ฅ', {
+    fontSize: '18px',
+    color: '#ffffff',
+    stroke: '#383838ff',
+    strokeThickness: 1
+  }).setOrigin(0.5);
 
+  //////////////////////////////////////////////////
+  //                  LULU CLICKER                //
+  //////////////////////////////////////////////////
   // clickable afbeelding
   this.lulu = this.add.image(200, 220, 'lulu')
     .setInteractive({ useHandCursor: true });
@@ -209,7 +222,9 @@ mainScene.create = function () {
     paused: true
   });
 
-  // SHOP
+  /////////////////////////////////////////////
+  //                    SHOP                 //
+  /////////////////////////////////////////////
   this.shopRect = this.add.rectangle(
     525,   // x
     200,   // y
@@ -226,21 +241,34 @@ mainScene.create = function () {
     strokeThickness: 2
   }).setOrigin(0.5);
 
-  // POPPY
-  this.poppyButton = this.add.text(525, 100, 'Buy Poppy for ' + String(bonus_poppy.price) + ' ฅ', {
+  //// POPPY
+  this.poppyButton = this.add.rectangle(525, 100, 280, 50, 0x4596c9ff).setOrigin(0.5).setInteractive({ useHandCursor: true });
+  this.poppyButtonText = this.add.text(525, 100, 'Buy Poppy for ' + String(bonus_poppy.price) + ' ฅ', {
     fontSize: '24px',
-    color: '#ffffff',
-    backgroundColor: '#77c2eeff',
-    padding: { x: 10, y: 5 }
-  })
-    .setOrigin(0.5)
-    .setInteractive({ useHandCursor: true });
-
-  // onclick
+    color: '#ffffff'
+  }).setOrigin(0.5);
+    // onclick
   this.poppyButton.on('pointerdown', () => {
     poppy = new Poppy(this, 'poppy');
   });
-
+    // tooltip
+  const poppyInfoBG = this.add.rectangle(525, 150, 280, 50, 0xb0b0b0).setOrigin(0.5).setVisible(false);
+  const poppyInfo = this.add.text(525, 150, String(bonus_poppy.value) + ' ฅ / ' + String(bonus_poppy.delay) + ' second(s).',{
+     fontSize: '24px', 
+     color: '#ffffffff' }).setVisible(false).setOrigin(0.5);
+    // hover events (show/hide tooltip)
+  this.poppyButton.on('pointerover', () => {
+    poppyInfoBG.setVisible(true);
+    poppyInfo.setVisible(true);
+  });
+  this.poppyButton.on('pointerout', () => {
+    poppyInfo.setVisible(false);
+    poppyInfoBG.setVisible(false);
+  });
+  
+  ///////////////////////////////////////////////////
+  //                  BONUS EVENTS                 //
+  ///////////////////////////////////////////////////
   // randomly spawn fish every x to y seconds
   this.time.addEvent({
     delay: Phaser.Math.Between(bonus_fish.time_interval_min * 1000, bonus_fish.time_interval_max * 1000),
