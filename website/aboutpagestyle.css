@@ -78,3 +78,10 @@
   object-fit: cover; /* vult het rondje mooi zonder rekken */
   display: block;
 }
+
+.game-list {
+    list-style-type: disc;
+    padding-left: 0;   /* BELANGRIJK */
+    margin-left: 0;
+    text-align: left;  /* lijnt uit met tekst erboven */
+}
