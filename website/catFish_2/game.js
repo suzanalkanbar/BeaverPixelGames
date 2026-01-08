@@ -194,7 +194,7 @@ class mainScene {
         this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
 
-        this.money = 100000
+        this.money = 0
         let style = { font: '20px Arial', fill: '#fff' };
         this.scoreText = this.add.text(10, 10, 'cash: ' + this.money, style);
         this.hide(this.scoreText)

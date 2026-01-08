@@ -9,6 +9,7 @@ class mainScene {
         */
         this.load.image('bullet', 'n-touhou/assets/bullet.png')
         this.load.image('flandreHitbox', 'n-touhou/assets/flanHitbox.png')
+        this.load.image('supercat','n-touhou/assets/supercat.png')
         let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
         for (let i = 0; i < colors.length; i++) {
             this.load.image(colors[i] + 'Bullet', 'n-touhou/assets/' + colors[i] + 'Bullet.png')
@@ -25,8 +26,11 @@ class mainScene {
         const edgeRight = this.add.rectangle(600, 200, 200, 400, 0x000000)
         const healthBar = this.add.rectangle(575, 375, 50, 350, 0x00ff00).setOrigin(0, 1)
         this.healthBar = this.physics.add.existing(healthBar)
-        const reimu = this.add.rectangle(350, 350, 10, 10, 0xff0000)
-        this.reimuHitbox = this.physics.add.existing(reimu)
+        this.reimuHitbox = this.physics.add.sprite(350,350, 'supercat')
+        this.lifeText = this.add.text(50,350,'Lives:', {font: '12px Arial',fill: '#fff'}).setOrigin(0.5,0.5)
+        this.life1 = this.physics.add.sprite(80,350, 'supercat')
+        this.life2 = this.physics.add.sprite(100,350, 'supercat')
+        this.life3 = this.physics.add.sprite(120,350, 'supercat')
         this.flandreHitbox = this.physics.add.sprite(350, 100, 'flandreHitbox')
         this.flandreDestination = { x: 350, y: 100 }
         this.bulletl = this.add.group({ defaultKey: 'bullet' })
@@ -40,6 +44,13 @@ class mainScene {
         this.invuln = false
         this.enemyHealth = 250
         this.phase = 0
+        this.gameOverText = this.add.text(350, 200, 'GAME OVER', { font: '40px Arial', fill: '#f00' }).setOrigin(0.5, 0.5)
+        this.gameOverText.setAlpha(0)
+        this.victoryText = this.add.text(350, 200, 'You Win!', { font: '40px Arial', fill: '#ff0' }).setOrigin(0.5, 0.5)
+        this.victoryText.setAlpha(0)
+        this.bestTimeText = this.add.text(20, 20, 'Best Time: --', { font: '12px Arial', fill: '#fff' }).setOrigin(0,0)
+        this.bestTime = 9000000000
+        this.timeText = this.add.text(20,40,'Current Time: --', { font: '12px Arial', fill: '#fff' }).setOrigin(0,0)
     }
 
 
@@ -49,9 +60,36 @@ class mainScene {
         It will handle all the game's logic, like movements
         */
         if (this.gameOver == true) {
-            this.gameOverText = this.add.text(350, 200, 'GAME OVER', { font: '40px Arial', fill: '#f00' }).setOrigin(0.5, 0.5)
+            this.gameOverText.setAlpha(1)
+            let enemyBulletList = this.eneBullet.getChildren()
+            for (let i = 0; i < enemyBulletList.length; i++) {
+                enemyBulletList[i].x += enemyBulletList[i].velocity[0]
+                enemyBulletList[i].y += enemyBulletList[i].velocity[1]
+            }
+            Phaser.Actions.IncXY(this.bulletl.getChildren(), -1.5, -11)
+            Phaser.Actions.IncY(this.bulletm.getChildren(), -12)
+            Phaser.Actions.IncXY(this.bulletr.getChildren(), 1.5, -11)
+            this.killOob(this.bulletl)
+            this.killOob(this.bulletm)
+            this.killOob(this.bulletr)
+            this.killOob(this.eneBullet)
+
         } else if (this.victory == true) {
-            this.victoryText = this.add.text(350, 200, 'You Win!', { font: '40px Arial', fill: '#ff0' }).setOrigin(0.5, 0.5)
+            if(Math.floor(this.Timer/60) < this.bestTime){
+                this.bestTime = Math.floor(this.Timer/60)
+                this.bestTimeText.setText('Best Time: '+this.bestTime)
+            }
+            this.victoryText.setAlpha(1)
+            let enemyBulletList = this.eneBullet.getChildren()
+            for (let i = 0; i < enemyBulletList.length; i++) {
+                enemyBulletList[i].destroy()
+            }
+            Phaser.Actions.IncXY(this.bulletl.getChildren(), -1.5, -11)
+            Phaser.Actions.IncY(this.bulletm.getChildren(), -12)
+            Phaser.Actions.IncXY(this.bulletr.getChildren(), 1.5, -11)
+            this.killOob(this.bulletl)
+            this.killOob(this.bulletm)
+            this.killOob(this.bulletr)
         }
         else {
             var pointer = this.input.activePointer
@@ -65,6 +103,7 @@ class mainScene {
             }
             this.fireCooldown = 7
             this.Timer++
+            this.timeText.setText('Current Time: '+ Math.floor(this.Timer/60))
             if (this.Timer % this.fireCooldown == 0) {
                 this.bulletl.create(this.reimuHitbox.x - 6, this.reimuHitbox.y - 5, 'bullet')
                 this.bulletm.create(this.reimuHitbox.x - 6, this.reimuHitbox.y, 'bullet')
@@ -180,6 +219,13 @@ class mainScene {
         }
     }
     die() {
+        if(this.lives == 3){
+            this.life3.setAlpha(0)
+        } else if(this.lives==2){
+            this.life2.setAlpha(0)
+        } else {
+            this.life1.setAlpha(0)
+        }
         this.lives -= 1
         this.reimuHitbox.setAlpha(0)
         if (this.lives < 0) {
@@ -274,7 +320,7 @@ class mainScene {
     }
     leftAttack() {
         let speeds = []
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 10; i++) {
             speeds.push(this.vector(1, 0))
             this.eneBullet.create(200, 40 + 40 * i, 'orangeBullet')
         }
@@ -289,9 +335,9 @@ class mainScene {
     }
     rightAttack() {
         let speeds = []
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 10; i++) {
             speeds.push(this.vector(1, 180))
-            this.eneBullet.create(500, 60 + 40 * i, 'greenBullet')
+            this.eneBullet.create(500, 20 + 40 * i, 'greenBullet')
         }
         let listy = this.eneBullet.getChildren()
         for (let i = 0; i < listy.length; i++) {
@@ -325,9 +371,15 @@ class mainScene {
     }
     waveAttack() {
         let speeds = []
-        for (let i = 0; i < 6; i++) {
+        let amount = 6
+        let distance = 50
+        if(this.phase == 5){
+            amount = 13
+            distance = 25
+        }
+        for (let i = 0; i < amount; i++) {
             speeds.push(this.vector(1.5, 90))
-            this.eneBullet.create(200 + i * 50, 1, 'purpleBullet')
+            this.eneBullet.create(200 + i * distance, 1, 'purpleBullet')
         }
         let listy = this.eneBullet.getChildren()
         for (let i = 0; i < listy.length; i++) {
