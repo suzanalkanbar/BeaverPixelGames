@@ -4,6 +4,8 @@ let clicks = 0;
 let clicks_per_second = 0;
 // Cijfertjes om mee te spelen voor bonussen
 let bonus_poppy = { bought: 0, value: 1, delay: 1, price: 10 }; // globale variabele voor poppy bonus. Value = aantal clicks per hit, delay = seconden tussen hits, price = kosten in clicks
+let bonus_momo = { bought: 0, value: 10, delay: 5, price: 50 }; // globale variabele voor momo bonus. Value = aantal clicks per hit, delay = seconden tussen hits, price = kosten in clicks
+let bonus_eevee = { bought: 0, value: 100, delay: 10, price: 500 }; // globale variabele voor eevee bonus. Value = aantal clicks per hit, delay = seconden tussen hits, price = kosten in clicks
 let bonus_fish = { time_interval_min: 10, time_interval_max: 60, value: 0.1, min_value: 10, speed: 0.06, lifetime: 6 }; // time interval in seconden tussen vissen, value = aantal clicks per vis als deel van totaal aantal clicks, lifetime = seconden dat de vis blijft bestaan
 
 function updateClickText(scene, clicks) {
@@ -23,9 +25,10 @@ function click(value, scene, playAnimation = true, sound_probability = 1, text_l
     scene.sound.play('meow' + String(rand_int));
   }
   // Text effect bij klikken
+  var text_size = 20+value*0.3; // grootte van de tekst gebaseerd op de waarde van de click
   const clickText = scene.add.text(text_location[0], text_location[1], "+" + String(value),
     {
-      fontSize: '20px',
+      fontSize: text_size + 'px',
       fontFamily: 'Arial',
       color: '#ffffff',
       stroke: '#000000',
@@ -79,7 +82,7 @@ class Poppy {
     });
   }
 
-  // animation
+  // Orbit animatie
   startAnimation(centerX, centerY, img) {
     // orbit parameters
     this.center = { x: centerX, y: centerY };
@@ -112,12 +115,155 @@ class Poppy {
     // Animatie wanneer de bonus een hit maakt, bijvoorbeeld een korte size change of pootje
   }
 
-  // functie om de sprite te vernietigen (indien nodig)
-  destroy() {
-    this.sprite.destroy();
+
+}
+
+// 2. Momo helper
+class Momo {
+  constructor(scene, img, centerX = 200, centerY = 200) {
+    this.scene = scene;
+    // this.sprite = scene.add.sprite(x, y, texture);
+    if (!this.buy()) return; // probeer te kopen, als niet genoeg clicks, stop hier
+    bonus_momo.bought += 1;
+    bonus_momo.price = Math.floor(bonus_momo.price * 1.3); // verhoog de prijs met 30% (afgerond naar beneden)
+    scene.momoButtonText.setText('Buy Momo for ' + String(bonus_momo.price) + ' ฅ'); // update de prijs in de shop
+    this.addToTimer(); // start de timer om punten toe te voegen
+    this.startAnimation(centerX, centerY, img);
+  }
+
+  buy() {
+    if (clicks >= bonus_momo.price) {
+      clicks -= bonus_momo.price;
+      updateClickText(this.scene, clicks);
+      clicks_per_second += bonus_momo.value / bonus_momo.delay;
+      this.scene.cpsText.setText('Stonks: ' + clicks_per_second.toFixed(1) + 'ฅ/s');
+      return true;
+    }
+  }
+
+  // functie die de bonus aan de timer toevoegt
+  addToTimer() {
+    this.scene.time.addEvent({
+      delay: bonus_momo.delay * 1000, // s --> ms, deze functie werkt met milliseconden
+      callback: this.hit,
+      callbackScope: this,
+      loop: true
+    });
+  }
+
+  // Orbit animatie
+  startAnimation(centerX, centerY, img) {
+    // orbit parameters
+    this.center = { x: centerX, y: centerY };
+    this.radius = 150;
+    this.angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
+    this.speed = -0.0015; // radians per ms
+
+    // create sprite at correct orbit position
+    const x = this.center.x + Math.cos(this.angle) * this.radius;
+    const y = this.center.y + Math.sin(this.angle) * this.radius;
+
+    this.sprite = this.scene.add.image(x, y, img).setScale(0.2);
+    // register for updates
+    this.scene.events.on('update', this.update, this);
+  }
+
+  update(time, delta) {
+    this.angle += this.speed * delta;
+    const x = this.center.x + Math.cos(this.angle) * this.radius;
+    const y = this.center.y + Math.sin(this.angle) * this.radius;
+    this.sprite.setPosition(x, y);
+  }
+
+  hit() {
+    click(bonus_momo.value, this.scene, false, 0.6, [this.sprite.x, this.sprite.y]);
+    // this.hitAnimation();
+  }
+
+  hitAnimation() {
+    // Animatie wanneer de bonus een hit maakt, bijvoorbeeld een korte size change of pootje
   }
 
 }
+
+
+// 3. Eevee helper
+class Eevee {
+  constructor(scene, img) {
+    this.scene = scene;
+    // this.sprite = scene.add.sprite(x, y, texture);
+    if (!this.buy()) return; // probeer te kopen, als niet genoeg clicks, stop hier
+    bonus_eevee.bought += 1;
+    bonus_eevee.price = Math.floor(bonus_eevee.price * 1.3); // verhoog de prijs met 30% (afgerond naar beneden)
+    scene.eeveeButtonText.setText('Buy Eevee for ' + String(bonus_eevee.price) + ' ฅ'); // update de prijs in de shop
+    this.addToTimer(); // start de timer om punten toe te voegen
+    this.startAnimation(img);
+  }
+
+  buy() {
+    if (clicks >= bonus_eevee.price) {
+      clicks -= bonus_eevee.price;
+      updateClickText(this.scene, clicks);
+      clicks_per_second += bonus_eevee.value / bonus_eevee.delay;
+      this.scene.cpsText.setText('Stonks: ' + clicks_per_second.toFixed(1) + 'ฅ/s');
+      return true;
+    }
+  }
+
+  // functie die de bonus aan de timer toevoegt
+  addToTimer() {
+    this.scene.time.addEvent({
+      delay: bonus_eevee.delay * 1000, // s --> ms, deze functie werkt met milliseconden
+      callback: this.hit,
+      callbackScope: this,
+      loop: true
+    });
+  }
+
+  // Slide animatie
+  startAnimation(img) {
+    var startX = Math.random() *370;
+    var startY = 365;
+    this.sprite = this.scene.add.image(startX, startY, img).setScale(0.25);
+
+    this.speed = 0.2;      // pixels per ms
+    this.minX = 0;    // linker grens
+    this.maxX = 370;       // rechter grens
+
+    this.scene.events.on('update', this.update, this);
+  }
+
+  update(time, delta) {
+    // beweeg sprite
+    this.sprite.x += this.speed * delta;
+
+    // rechterrand bereikt
+    if (this.sprite.x >= this.maxX) {
+      this.sprite.x = this.maxX;
+      this.speed *= -1; // omkeren
+      this.sprite.flipX = true; // de sprite omdraaien
+    }
+
+    // linkerrand bereikt
+    if (this.sprite.x <= this.minX) {
+      this.sprite.x = this.minX;
+      this.speed *= -1; // omkeren
+      this.sprite.flipX = false; // de sprite terugdraaien
+    }
+  }
+
+  hit() {
+    click(bonus_eevee.value, this.scene, false, 0.8, [this.sprite.x, this.sprite.y]);
+    // this.hitAnimation();
+  }
+
+  hitAnimation() {
+    // Animatie wanneer de bonus een hit maakt, bijvoorbeeld een korte size change of pootje
+  }
+
+
+}
+
 
 class Fish {
   constructor(scene, img) {
@@ -141,6 +287,8 @@ class Fish {
       this.sprite.destroy();
     }, [], this);
   }
+
+  // Animatie om de vis te laten stuiteren binnen het speelvlak
   update(time, delta) {
     this.x += this.x_speed * delta;
     this.y += this.y_speed * delta;
@@ -177,6 +325,8 @@ mainScene.preload = function () {
   this.load.audio('meow4', 'c-clicker/assets/lulu_meow-04.mp3');
   this.load.image('poppy', 'c-clicker/assets/PoppyHead.png');
   this.load.image('fish', 'c-clicker/assets/vis.png');
+  this.load.image('momo', 'c-clicker/assets/Momo.png');
+  this.load.image('eevee', 'c-clicker/assets/Eevee.png');
 };
 
 mainScene.create = function () {
@@ -195,6 +345,10 @@ mainScene.create = function () {
     stroke: '#383838ff',
     strokeThickness: 1
   }).setOrigin(0.5);
+
+  // we willen dat de tekst altijd bovenop andere dingen staat
+this.clickText.setDepth(1);
+  this.cpsText.setDepth(1);
 
   //////////////////////////////////////////////////
   //                  LULU CLICKER                //
@@ -253,7 +407,7 @@ mainScene.create = function () {
   });
     // tooltip
   const poppyInfoBG = this.add.rectangle(525, 150, 280, 50, 0xb0b0b0).setOrigin(0.5).setVisible(false);
-  const poppyInfo = this.add.text(525, 150, String(bonus_poppy.value) + ' ฅ / ' + String(bonus_poppy.delay) + ' second(s).',{
+  const poppyInfo = this.add.text(525, 150, String(bonus_poppy.value) + 'ฅ / ' + String(bonus_poppy.delay) + ' s',{
      fontSize: '24px', 
      color: '#ffffffff' }).setVisible(false).setOrigin(0.5);
     // hover events (show/hide tooltip)
@@ -264,6 +418,57 @@ mainScene.create = function () {
   this.poppyButton.on('pointerout', () => {
     poppyInfo.setVisible(false);
     poppyInfoBG.setVisible(false);
+  });
+
+   //// MOMO
+  this.momoButton = this.add.rectangle(525, 200, 280, 50, 0x4596c9ff).setOrigin(0.5).setInteractive({ useHandCursor: true });
+  this.momoButtonText = this.add.text(525, 200, 'Buy Momo for ' + String(bonus_momo.price) + ' ฅ', {
+    fontSize: '24px',
+    color: '#ffffff'
+  }).setOrigin(0.5);
+    // onclick
+  this.momoButton.on('pointerdown', () => {
+    momo = new Momo(this, 'momo');
+  });
+    // tooltip
+  const momoInfoBG = this.add.rectangle(525, 250, 280, 50, 0xb0b0b0).setOrigin(0.5).setVisible(false);
+  const momoInfo = this.add.text(525, 250, String(bonus_momo.value) + 'ฅ / ' + String(bonus_momo.delay) + 's',{
+     fontSize: '24px', 
+     color: '#ffffffff' }).setVisible(false).setOrigin(0.5);
+    // hover events (show/hide tooltip)
+  this.momoButton.on('pointerover', () => {
+    momoInfoBG.setVisible(true);
+    momoInfo.setVisible(true);
+  });
+  this.momoButton.on('pointerout', () => {
+    momoInfo.setVisible(false);
+    momoInfoBG.setVisible(false);
+  });
+
+
+  //// Eevee
+  this.eeveeButton = this.add.rectangle(525, 300, 280, 50, 0x4596c9ff).setOrigin(0.5).setInteractive({ useHandCursor: true });
+  this.eeveeButtonText = this.add.text(525, 300, 'Buy Eevee for ' + String(bonus_eevee.price) + ' ฅ', {
+    fontSize: '24px',
+    color: '#ffffff'
+  }).setOrigin(0.5);
+    // onclick
+  this.eeveeButton.on('pointerdown', () => {
+    eevee = new Eevee(this, 'eevee');
+  });
+    // tooltip
+  const eeveeInfoBG = this.add.rectangle(525, 350, 280, 50, 0xb0b0b0).setOrigin(0.5).setVisible(false);
+  const eeveeInfo = this.add.text(525, 350, String(bonus_eevee.value) + 'ฅ / ' + String(bonus_eevee.delay) + 's',{
+     fontSize: '24px', 
+     color: '#ffffffff' }).setVisible(false).setOrigin(0.5);
+    // hover events (show/hide tooltip)
+  this.eeveeButton.on('pointerover', () => {
+    eeveeInfoBG.setVisible(true);
+    eeveeInfo.setVisible(true);
+  });
+  this.eeveeButton.on('pointerout', () => {
+    eeveeInfo.setVisible(false);
+    eeveeInfoBG.setVisible(false);
   });
   
   ///////////////////////////////////////////////////
