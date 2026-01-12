@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gameboy</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="gameboy-page">
+
+    <header class="site-header">
+        <header>
+            <nav class="nav" aria-label="Hoofdnavigatie">
+                <a class="logo" href="index.html">
+                    <img src="imgs/logo.png" alt="Logo" />
+                    </a>
+
+                <!-- Burgermenu -->
+                <button class="burger-menu" id="burger" aria-controls="nav-links" aria-expanded="false">
+                    <span class="burger-box" aria-hidden="true">
+                        <span class="burger-line"></span>
+                        <span class="burger-line"></span>
+                        <span class="burger-line"></span>
+                    </span>
+                    <span class="visually-hidden">Menu</span>
+                </button>
+
+                <!-- Hoofdmenu -->
+                <ul id="nav-links" class="menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#theGames">Games</a></li>
+                    <li><a href="aboutpage.html">About</a></li>
+                </ul>
+
+                <div class="account">
+                    <a class="login" href="login.html">Login</a>
+                    <a class="signUp" href="registreren.html">Sign up</a>
+
+                </div>
+            </nav>
+        </header>
+
+        <main class="gameboy-main">
+            <h1></h1>
+
+            <section class="console-wrap">
+                <div class="console">
+                    <div class="console-screen" id="console-screen">
+                    </div>
+
+                        <div class="console-buttons">
+                            <button class="btn small" id="btn-reset">RESET</button>
+                            <button class="btn small" id="btn-start">START</button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.14.0/dist/phaser.min.js"></script>
+        <script src="gameboy.js"></script>
+</body>
+
+</html>

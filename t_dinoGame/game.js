@@ -191,6 +191,7 @@ class mainScene {
 
       // no crawling allowed while in the air
       if (!this.beaver.body.onFloor()) {return}
+      // no crawling allowed when game over
       if (this.gameSpeed == 0) {return}
 
       this.beaver.anims.play('crawl', true)

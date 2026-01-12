@@ -5,7 +5,6 @@ class mainScene {
     startGame () {
       this.score = 0
       this.scoreText.setText('Score: ' + this.score)
-      this.highscoreText.setText('Highscore: ' + this.highscore)
       this.pattern = []
       this.aiTurn = true
       this.time.delayedCall(1000, this.aiMakingPattern, [], this)
@@ -20,12 +19,6 @@ class mainScene {
       this.scoreText.setText('Score: ' + this.score)
       this.startButton.setText('Restart')
       this.startButton.visible = true
-      
-      // return the tiles to their original position
-      this.yellow.setPosition(280, 130)
-      this.red.setPosition(420, 130)
-      this.blue.setPosition(280, 270) 
-      this.green.setPosition(420, 270)
     }
 
       setupTile(colorName) {
@@ -39,8 +32,8 @@ class mainScene {
 
         tile.isAnimating = true
         this.playerPattern.push(colorName)
-        // console.log('the pattern of the player: ' + this.playerPattern)
-        this.tileSoundPlay(colorName)
+        console.log(this.playerPattern)
+        
         
         this.tweens.add({
         targets: tile,
@@ -60,13 +53,12 @@ class mainScene {
       if (this.aiTurn == true){    
     const newColor = Phaser.Utils.Array.GetRandom(this.colors) // newColor is a random color
     this.pattern.push(newColor) // add random color to the array
-    // console.log('The pattern of the AI: ' + this.pattern)
+    console.log(this.pattern)
     this.patternIndex = 0
     this.playerpattern = []
     this.aiTurn = false
 
     this.time.delayedCall(500, this.showAIPattern, [], this)
-
       }
     }
 
@@ -77,15 +69,10 @@ class mainScene {
 
       if (playerColor !== correctColor){
         this.gameOver ()
-
       }
-      // you only get a score when you reached the same array length as the pattern array of the AI
       else if(this.playerPattern.length == this.pattern.length){
         this.score++
         this.scoreText.setText('Score: ' + this.score)
-        this.updateHighscore()
-        this.otherTilePos()
-        this.highscoreText.setText('Highscore: ' + this.highscore)
         this.playerTurn = false
         this.aiTurn = true
         this.time.delayedCall(2000, this.aiMakingPattern, [], this)
@@ -93,13 +80,10 @@ class mainScene {
     }
 
     showAIPattern(){
-      // every color is tweening until the full length of the array is completed
       if (this.patternIndex < this.pattern.length){
         const colorName = this.pattern[this.patternIndex]
         const tile = this[colorName]
 
-        this.tileSoundPlay(colorName)
-        
         this.tweens.add({
         targets: tile,
         duration: 300, 
@@ -114,7 +98,6 @@ class mainScene {
         
         })
     }
-    // after showing the pattern it's the player's turn, with their index and array reset 
     else {
           this.playerTurn = true
           this.playerPattern = []
@@ -122,29 +105,7 @@ class mainScene {
         }
   }
 
-  // only update the highscore when the score is higher than the highscore
-  updateHighscore() {
-    if(this.score >= this.highscore){
-      this.highscore = this.score
-    }
-  }
-  
-  // play the sound when a tile is tweening
-  tileSoundPlay(colorName){
-    this.colorToPlay = colorName
-      this.playIt = this.sound.add(this.colorToPlay)
-      this.playIt.play()
-    }
 
-    //When you reach a score of 10 the tiles are positioned differently
-   otherTilePos(){
-      if (this.score >= 10){
-    this.yellow.setPosition(420, 270)
-    this.red.setPosition(280, 130)
-    this.blue.setPosition(420, 130) 
-    this.green.setPosition(280, 270)
-      }
-    }
 
 
   preload() {
@@ -153,17 +114,10 @@ class mainScene {
     It will load all the assets, like sprites and sounds
     */
 
-    // load the tiles 
     this.load.image('red', 't_simonSays/assets/red.jpg')
     this.load.image('blue', 't_simonSays/assets/blue.jpg')
     this.load.image('yellow', 't_simonSays/assets/yellow.jpg')
     this.load.image('green', 't_simonSays/assets/green.jpg')
-
-    // load the sounds for each tile
-    this.load.audio('red', 't_simonSays/assets/red.mp3')
-    this.load.audio('blue', 't_simonSays/assets/blue.mp3')
-    this.load.audio('yellow', 't_simonSays/assets/yellow.mp3')
-    this.load.audio('green', 't_simonSays/assets/green.mp3')
   }
 
   create() {
@@ -180,9 +134,7 @@ class mainScene {
     this.aiTurn = false
     this.playerTurn = false
     this.score = 0
-    this.highscore = 0
 
-    // the x and y center of the canvas
     const centerX = 350
     const centerY = 200
     
@@ -194,6 +146,11 @@ class mainScene {
     this.blue = this.physics.add.sprite(280, 270, 'blue')
     this.green = this.physics.add.sprite(420, 270, 'green')
 
+    //make sure the tiles are immovable
+    this.yellow.body.setImmovable(true)
+    this.red.body.setImmovable(true)
+    this.blue.body.setImmovable(true)
+    this.green.body.setImmovable(true)
 
     // set the colors interactive
     this.setupTile('yellow')
@@ -201,12 +158,10 @@ class mainScene {
     this.setupTile('blue')
     this.setupTile('green')
     
-    // score and highscore
+    // score
     let style = { font: '20px Arial', fill: '#ffffff'}
     this.scoreText = this.add.text(20, 20, 'Score: ' + this.score, style)
-    this.highscoreText = this.add.text (20, 40, 'Highscore: ' + this.highscore, style)
     
-    //the start/reset button
     let buttonStyle = {
       font: '32px Arial',
       fill: '#1a1a2e',
@@ -228,6 +183,8 @@ class mainScene {
     this.gameOverText = this.add.text(215, 175, 'GAME OVER', gameOverStyle)
     this.gameOverText.visible = false
     
+
+
   } // end create()
   
   
@@ -243,7 +200,7 @@ class mainScene {
 } // end class mainscene
 
 // Create the game
-new Phaser.Game({
+window.game = new Phaser.Game({
   width: 700, // Width of the game in pixels
   height: 400, // Height of the game in pixels
   backgroundColor: '#000000ff', // The background color
@@ -251,4 +208,11 @@ new Phaser.Game({
   physics: { default: 'arcade' }, // The physics engine to use
   parent: 'game', // Create the game inside the <div id="game"> 
 });
+
+window.restartActiveGame = function () {
+  if (window.game && window.game.scene.scenes[0]) {
+      window.game.scene.scenes[0].scene.restart();
+      gameover = false;
+  }
+};
 
