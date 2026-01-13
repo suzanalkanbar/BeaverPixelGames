@@ -240,7 +240,8 @@ to{
       rgba(0,0,0,.45),
       rgba(0,0,0,.45)
     ),
-    url("./imgs/animal-crossing-new-horizons-nintendo-switch-2-edition-scree_7hjg.jpg");
+    url("./imgs/pikmin_background.png");
+    /* url("./imgs/animal-crossing-new-horizons-nintendo-switch-2-edition-scree_7hjg.jpg"); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -256,6 +257,16 @@ to{
   text-align: center; color: #fff;
   padding: 0 20px;
   flex-wrap: wrap;
+  position: relative;
+
+}
+
+
+.hero-click {
+  position: absolute;
+  inset: 0;             
+  z-index: 5;
+  cursor: pointer;
 }
 
 
@@ -267,9 +278,6 @@ to{
   font-size: clamp(16px, 2.2vw, 20px); 
   margin: 0; opacity: .9; 
 }
-
-
-
 
 
 
@@ -685,6 +693,7 @@ box-shadow: none;
 
   display: flex;
   flex-direction: column;
+  z-index: 10;
   
 }
 

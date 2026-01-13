@@ -322,7 +322,7 @@ class mainScene {
             repeat: this.timeLeft - 1
           })
     }else if(this.currentSentence == 4){
-      this.timeLeft = 50
+      this.timeLeft = 30
       this.letterX = 70
       this.letterY = 340
       this.arrayY = 340

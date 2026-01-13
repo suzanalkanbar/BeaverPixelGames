@@ -19,114 +19,147 @@ class mainScene {
 
   create() {
 
+    // een array met de 10 verschillende kaarten (x2)
+    this.cardValues = Phaser.Utils.Array.Shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) 
+
+
+    this.firstCard = null
+    this.secondCard = null
+    this.canMove = true
+
+    this.score = 0
+    this.matches = 0
+
+    this.scoreText = this.add.text(20, 15, 'Tries: 0', {fontSize: '20px', font: '900 25px Courier'})
+    this.matchesText = this.add.text (500, 15, 'Matches: 0/10', {fontSize: '20px', font: '900 25px Courier'})
+
+    let index = 0
+    // 4 rijen en 5 kolommen
+    for (let row = 0; row < 4; row++){
+      for (let column = 0; column < 5; column++){
+        let cardNumber = this.cardValues[index]
+        this.placeCard(column, row, cardNumber)
+        index++
+      }
+    }
     
 
-    
-
-    // // x and y coordinates
-    // const card1 = this.add.image(68, 68, 'backside')
-    // // change the scale so it fits the card
-    // card1.setScale(68/587)
-
-    // card1.setInteractive({useHandCursor: true})
-
-    // card1.on('pointerdown', ()=>{
-    //   this.flip(card1, 'card1')
-    // })
-
-    // const card2 = this.add.image(146, 68, 'backside')
-    // card2.setScale(68/587)
-
-    // card2.setInteractive({useHandCursor: true})
-
-    // card2.on('pointerdown', ()=>{
-    //   this.flip(card2, 'card2')
-    // })
-   this.placeCard(1, 1)
-   this.placeCard(2, 1)
-   this.placeCard(3, 1)
-   this.placeCard(4, 1)
-   this.placeCard(5, 1)
-   this.placeCard(6, 2)
-   this.placeCard(7, 2)
-   this.placeCard(8, 2)
-   this.placeCard(9, 2)
-   this.placeCard(10, 2)
   }
 
 
-  placeCard(number, rowNumber)
+  placeCard(column, row, cardNumber)
     {
-      this.xCoor = 100*number
+      this.xCoor = 100 + (column * 120)
+      this.yCoor = 80 + (row * 80)
     
-      if (number >= 6){
-        this.xCoor = (100*number)-340
-      }
-      const card = this.add.image(this.xCoor + 50, (100* rowNumber), 'backside')
+      const card = this.add.image(this.xCoor, this.yCoor, 'backside')
       card.setScale(68/587)
       card.setInteractive({useHandCursor: true})
+
+      card.cardId = cardNumber
+
       card.on('pointerdown', ()=>{
-      this.flip(card, ('card' + number))
-      
-    })
+      this.handleClick(card)
+      })
     
-    // }
+    
   }
 
     
-  
-
-   flip(card, source)
-    {
-        const timeline = this.tweens.timeline({
-            onComplete: () => {
-                timeline.destroy()
-            }
-        })
-        timeline.add({
-            targets: card,
-            scale: 68/587,
-            duration: 300
-        })
-
-        timeline.add({
-            targets: card,
-            scaleX: 0,
-            duration: 300,
-            delay: 200,
-            onComplete: () => {
-                card.setTexture(source)
-            }
-        })
-
-        timeline.add({
-            targets: card,
-            scaleX: 68/587,
-            duration: 300,
-            delay: 200
-        })
-
-        timeline.add({
+  flipToFront(card) {
+    this.tweens.add({
+      targets: card,
+      scaleX: 0,
+      duration: 150,
+      onComplete: () => {
+        card.setTexture('card' + card.cardId)
+        this.tweens.add({
           targets: card,
-          scaleX: 0,
-          duration: 300,
-          delay: 200,
-          onComplete: () => {
-            card.setTexture('backside')
-          }
-          })
+          scaleX: 68/587,
+          duration: 150
+        })
+      }
+    })
+  }
 
-          timeline.add({
-            targets: card,
-            scaleX: 68/587,
-            duration: 300,
-            delay: 200
-          })
+   flipToBack(card) {
+    this.tweens.add({
+      targets: card,
+      scaleX: 0,
+      duration: 150,
+      onComplete: () => {
+        card.setTexture('backside')
+        this.tweens.add({
+          targets: card,
+          scaleX: 68/587,
+          duration: 150
+        })
+      }
+    })
+  }
 
-        
+    handleClick(card) {
+      if (!this.canMove || card.isFlipped) return
 
-        timeline.play()
+      card.isFlipped = true
+      this.flipToFront(card)
+
+      if (!this.firstCard) {
+        this.firstCard = card
+      } 
+      else {
+        this.secondCard = card
+        this.canMove = false
+        this.checkMatch()
+      }
     }
+
+    gameOver(){
+      this.add.text(350, 200, 'Victory!', {fontSize: '150px', font: '900 100px Courier'})
+          .setOrigin(0.5)
+      
+          this.restartButton = this.add.text (350, 350, 'Restart', {fontSize: '150px', font: '900 30px Courier'})
+          .setOrigin(0.5)
+          .setInteractive({ useHandCursor: true })
+
+          this.restartButton.on('pointerdown', () => {
+            this.scene.restart()
+          })
+    }
+
+
+    checkMatch() {
+
+      this.score++
+      this.scoreText.setText('Tries: ' + this.score)
+
+      if (this.firstCard.cardId == this.secondCard.cardId) {
+        this.matches++
+        this.matchesText.setText('Matches:' + this.matches + '/10')
+
+        this.firstCard = null
+        this.secondCard = null
+        this.canMove = true
+
+        if (this.matches == 10){
+          this.gameOver()
+        }
+      }
+      else {
+        this.time.delayedCall(1000, () => {
+          this.flipToBack(this.firstCard)
+          this.flipToBack(this.secondCard)
+          this.firstCard.isFlipped = false
+          this.secondCard.isFlipped = false
+          this.firstCard = null
+          this.secondCard = null
+          this.canMove = true
+        })
+
+      }
+    }
+
+
     
 
   update() {

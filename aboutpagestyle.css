@@ -43,6 +43,12 @@
   margin-top: 2rem;
 }
 
+.introduction-link {
+    text-decoration: none; /* verwijdert de underline */
+    color: inherit;        /* behoudt de normale tekstkleur */
+    display: inline-block; /* zodat de hele box klikbaar blijft */
+}
+
 .introduction {
   background-color: #f7bd2ae8;
   border: 2px solid #ddd; /* rand om de boxjes*/
